@@ -15,7 +15,11 @@ class PID {
     int GetMode() const;
     int GetDirection() const;
   private:
-
+    void Initialize();
+    double kp;
+    double ki;
+    double kd;
+    int controllerDirection;
 };
 
 #endif /*PID_H*/
