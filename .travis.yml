@@ -1,4 +1,3 @@
-./configure && make && make test
 install: true
 language: cpp
 compiler: gcc
