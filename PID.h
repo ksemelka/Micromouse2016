@@ -8,13 +8,7 @@ class PID {
 
     bool Compute();                       // * Performs the PID calculation. It should be
                                           //   called every time loop() cycles.
-
-    void SetOutputLimits(double, double); // clamps the output to a specific range.
-
-    // Display functions
-    double GetKp() const;			// These functions query the pid for internal values.
-    double GetKi() const;
-    double GetKd() const;
+    
   private:
     void SetTunings(double, double, double);  // Used in constructor
 

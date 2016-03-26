@@ -1,4 +1,5 @@
 #include "PID.h"
+#include <Arduino.h>
 
 PID::PID(double* Input, double* Output, double* Setpoint, double Kp, double Ki, double Kd) {
   myOutput = Output;
@@ -44,10 +45,6 @@ bool PID::Compute() {
    }
    else { return false; }
 }
-
-double PID::GetKp() const { return kp; }
-double PID::GetKi() const { return ki; }
-double PID::GetKd() const { return kd; }
 
 void PID::SetTunings(double Kp, double Ki, double Kd) {
   double SampleTimeInSec = ((double)SampleTime) / 1000;
