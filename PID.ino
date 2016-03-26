@@ -1,5 +1,17 @@
 #include "PID.h"
 
+PID::PID(double*, double*, double*, double, double, double) {
+
+}
+
+bool PID::Compute() {
+
+}
+
+void SetOutputLimits(double, double) {
+  
+}
+
 double PID::GetKp() const {
   return kp;
 }
@@ -10,10 +22,6 @@ double PID::GetKi() const {
 
 double PID::GetKd() const {
   return kd;
-}
-
-int PID::GetDirection() const {
-
 }
 
 void PID::Initialize() {
