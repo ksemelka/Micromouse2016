@@ -12,7 +12,6 @@ class PID {
     double GetKp() const;						  // These functions query the pid for interal values.
     double GetKi() const;
     double GetKd() const;
-    int GetMode() const;
     int GetDirection() const;
   private:
     void Initialize();
