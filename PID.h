@@ -3,22 +3,14 @@
 
 class PID {
   public:
-  //Constants used in some of the functions below
-    #define AUTOMATIC 1
-    #define MANUAL  0
-    #define DIRECT  0
-    #define REVERSE  1
-
-    double GetKp() const;						  // These functions query the pid for interal values.
+    double GetKp() const;						  // These functions query the pid for internal values.
     double GetKi() const;
     double GetKd() const;
-    int GetDirection() const;
   private:
     void Initialize();
     double kp;
     double ki;
     double kd;
-    int controllerDirection;
 };
 
 #endif /*PID_H*/
