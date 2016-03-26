@@ -5,17 +5,12 @@ PID::PID(double* Input, double* Output, double* Setpoint, double Kp, double Ki, 
   myInput = Input;
   mySetpoint = Setpoint;
 
-  PID::SetOutputLimits(0, 255);
   PID::SetTunings(Kp, Ki, Kd);
 
   lastTime = millis() - SampleTime;
 }
 
 bool PID::Compute() {
-
-}
-
-void PID::SetOutputLimits(double, double) {
 
 }
 
@@ -29,10 +24,6 @@ double PID::GetKi() const {
 
 double PID::GetKd() const {
   return kd;
-}
-
-void PID::Initialize() {
-
 }
 
 void PID::SetTunings(double Kp, double Ki, double Kd) {
