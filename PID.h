@@ -16,7 +16,6 @@ class PID {
     double GetKi() const;
     double GetKd() const;
   private:
-    void Initialize();
     void SetTunings(double, double, double);  // Used in constructor
 
     double kp;        // Proportional tuning value
@@ -30,7 +29,7 @@ class PID {
 
     unsigned long lastTime;
     double ITerm, lastInput;
-    double outMin, outMax;
+    const double outMin = 0, outMax = 255;
     const double SampleTime = 100.0;
 };
 
