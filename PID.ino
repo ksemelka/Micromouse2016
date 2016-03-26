@@ -10,8 +10,39 @@ PID::PID(double* Input, double* Output, double* Setpoint, double Kp, double Ki, 
   lastTime = millis() - SampleTime;
 }
 
-bool PID::Compute() {
+/* Compute() **********************************************************************
+ *   This function should be called every time "void loop()" executes. The function
+ *   will decide for itself whether a new pid Output needs to be computed.
+ *   Returns true when the output is computed, false when nothing has been done.
+ **********************************************************************************/
 
+bool PID::Compute() {
+  unsigned long now = millis();
+  unsigned long timeChange = (now - lastTime);
+  if (timeChange >= SampleTime) {
+     /*Compute all the working error variables*/
+	   double input = *myInput;
+     double error = *mySetpoint - input;
+     ITerm += (ki * error);
+
+     if (ITerm > outMax) { ITerm= outMax; }
+     else if (ITerm < outMin) { ITerm= outMin; }
+
+     double dInput = (input - lastInput);
+
+     /*Compute PID Output*/
+     double output = kp * error + ITerm- kd * dInput;
+
+	   if (output > outMax) { output = outMax; }
+     else if (output < outMin) { output = outMin; }
+	   *myOutput = output;
+
+     /*Remember some variables for next time*/
+     lastInput = input;
+     lastTime = now;
+	   return true;
+   }
+   else { return false; }
 }
 
 double PID::GetKp() const { return kp; }
