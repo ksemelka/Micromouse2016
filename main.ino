@@ -1,17 +1,18 @@
-// PT == PHOTOTRANSISTOR
 #include "Motors.h"
-#include "PTs.h"
+#include "Sensors.h"
 #include "LEDs.h"
 #include "PID.h"
 #include "Floodfill.h"
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
+Sensors sensors(leftPT, frontPT, rightPT);
+
 void setup() {
   Serial.begin(9600);
   delay(1000);
   initializeMotors();
-  initializePTs();
+
 //  initializeLEDs();
 }
 //volatile int encoderValue=0;
@@ -40,12 +41,11 @@ void setup() {
 void loop() {
   goForward();
 
-  getPTReadings();
-  printPTReadings();
+  sensors.view();
   Serial.println();
 
-  mapPTReadings();
-  printMappedValues();
+//  mapPTReadings();
+//  printMappedValues();
   Serial.println();
 
 //  outputMappedValuesToLEDs();
