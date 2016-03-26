@@ -25,6 +25,11 @@ class PID {
     double *myOutput;             //   This creates a hard link between the variables and the
     double *mySetpoint;           //   PID, freeing the user from having to constantly tell us
                                   //   what these values are. With pointers we'll just know.
+
+    unsigned long lastTime;
+    double ITerm, lastInput;
+    unsigned int SampleTime = 100;
+    double outMin, outMax;
 };
 
 #endif /*PID_H*/
