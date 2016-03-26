@@ -14,20 +14,12 @@ bool PID::Compute() {
 
 }
 
-double PID::GetKp() const {
-  return kp;
-}
-
-double PID::GetKi() const {
-  return ki;
-}
-
-double PID::GetKd() const {
-  return kd;
-}
+double PID::GetKp() const { return kp; }
+double PID::GetKi() const { return ki; }
+double PID::GetKd() const { return kd; }
 
 void PID::SetTunings(double Kp, double Ki, double Kd) {
-  double SampleTimeInSec = SampleTime / 1000;
+  double SampleTimeInSec = ((double)SampleTime) / 1000;
   kp = Kp;
   ki = Ki * SampleTimeInSec;
   kd = Kd / SampleTimeInSec;

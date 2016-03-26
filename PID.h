@@ -30,7 +30,7 @@ class PID {
     unsigned long lastTime;
     double ITerm, lastInput;
     const double outMin = 0, outMax = 255;
-    const double SampleTime = 100.0;
+    unsigned long SampleTime = 100.0;
 };
 
 #endif /*PID_H*/
