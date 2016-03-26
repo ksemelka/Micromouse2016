@@ -3,7 +3,16 @@
 
 class PID {
   public:
-    double GetKp() const;						  // These functions query the pid for internal values.
+    PID(double*, double*, double*,        // * Constructor. Links the PID to the Input, Output, and
+        double, double, double);          //   Setpoint. Tuning parameters are also set here.
+
+    bool Compute();                       // * Performs the PID calculation. It should be
+                                          //   called every time loop() cycles.
+
+    void SetOutputLimits(double, double); // clamps the output to a specific range.
+
+    // Display functions
+    double GetKp() const;			// These functions query the pid for internal values.
     double GetKi() const;
     double GetKd() const;
   private:
@@ -11,6 +20,11 @@ class PID {
     double kp;
     double ki;
     double kd;
+
+    double *myInput;              // * Pointers to the Input, Output, and Setpoint variables.
+    double *myOutput;             //   This creates a hard link between the variables and the
+    double *mySetpoint;           //   PID, freeing the user from having to constantly tell us
+                                  //   what these values are. With pointers we'll just know.
 };
 
 #endif /*PID_H*/
