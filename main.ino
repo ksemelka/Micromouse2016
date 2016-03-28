@@ -18,13 +18,6 @@ void setup() {
   delay(1000);
 }
 
-//void loop() {
-//  Serial.print("Starting\n");
-//  delay(3000);
-//  Serial.print("Encoder Value=");
-//  Serial.println(encoderValue);
-//}
-
 void loop() {
   motors.goForward();
 
