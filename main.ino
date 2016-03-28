@@ -6,6 +6,12 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
+// Values for how far the mouse should be from walls
+int targetFront;
+int thresholdFront;
+int targetSide;
+int thresholdSide;
+
 volatile int encoderValue = 0;
 Motors motors;
 Sensors sensors(leftPT, frontPT, rightPT);
