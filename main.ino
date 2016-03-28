@@ -7,7 +7,7 @@
 #include <avr/interrupt.h>
 
 volatile int encoderValue = 0;
-Motors motors();
+Motors motors;
 Sensors sensors(leftPT, frontPT, rightPT);
 void count(void); // code for counting the increasing values of encoder ticks
 
