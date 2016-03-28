@@ -1,6 +1,6 @@
 #ifndef MOTORS_H
 #define MOTORS_H
-#include <Ardiuno.h>
+#include <Arduino.h>
 
 const byte LEFTMotorEN = 5;
 const byte LEFTlogic1 = 6;

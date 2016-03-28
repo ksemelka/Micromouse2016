@@ -1,6 +1,8 @@
 #include "Motors.h"
 #include <Arduino.h>
 
+extern int encoderValue;
+
 Motors::Motors() {
   pinMode(LEFTMotorEN, OUTPUT);  // Initialize left motor
   pinMode(LEFTlogic1, OUTPUT);
