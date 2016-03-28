@@ -84,8 +84,24 @@ class Motors {
       digitalWrite(RIGHTlogic2, LOW);
     }
 
-    void turnLeft() {                     // IDEA: Figure out how many ticks of an encoder it takes to turn 90 degrees
+    void turnLeft() {
+      rotateCCW();
+      while(true) {
+        if (count > 94) {
+          count = 0;
+          break;
+        }
+      }
+    }
 
+    void turnRight() {
+      rotateCW();
+      while(true) {
+        if (count > 94) {
+          count = 0;
+          break;
+        }
+      }
     }
 
     void rotateCCW() {
