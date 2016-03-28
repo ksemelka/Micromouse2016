@@ -24,105 +24,16 @@ const byte encoderRIGHT_B = A5; // Right encoder Output B
 
 class Motors {
   public:
-    Motors() {
-      pinMode(LEFTMotorEN, OUTPUT);  // Initialize left motor
-      pinMode(LEFTlogic1, OUTPUT);
-      pinMode(LEFTlogic2, OUTPUT);
-
-      digitalWrite(LEFTMotorEN, LOW);
-
-      pinMode(RIGHTMotorEN, OUTPUT);  // Initialize right motor
-      pinMode(RIGHTlogic1, OUTPUT);
-      pinMode(RIGHTlogic2, OUTPUT);
-
-      digitalWrite(RIGHTMotorEN, LOW);
-
-      pinMode(encoderLEFT_A, INPUT);  // Initialize left encoder
-      pinMode(encoderLEFT_B, INPUT);
-
-      pinMode(encoderRIGHT_A, INPUT); // Initialize right encoder
-      pinMode(encoderRIGHT_B, INPUT);
-    }
-    void halt() {
-      digitalWrite(LEFTMotorEN, LOW);
-      digitalWrite(RIGHTMotorEN, LOW);
-    }
-    // void coast() {
-    //   digitalWrite(LEFTMotorEN, HIGH);
-    //   digitalWrite(LEFTlogic1, LOW);
-    //   digitalWrite(LEFTlogic2, LOW);
-    //
-    //   digitalWrite(RIGHTMotorEN, HIGH);
-    //   digitalWrite(RIGHTlogic1, LOW);
-    //   digitalWrite(RIGHTlogic2, LOW);
-    // }
-    // void brake() {
-    //   digitalWrite(LEFTMotorEN, HIGH);
-    //   digitalWrite(LEFTlogic1, HIGH);
-    //   digitalWrite(LEFTlogic2, HIGH);
-    //
-    //   digitalWrite(RIGHTMotorEN, HIGH);
-    //   digitalWrite(RIGHTlogic1, HIGH);
-    //   digitalWrite(RIGHTlogic2, HIGH);
-    // }
-    void goForward() {
-      digitalWrite(LEFTMotorEN, HIGH);
-      digitalWrite(LEFTlogic1, HIGH);
-      digitalWrite(LEFTlogic2, LOW);
-
-      digitalWrite(RIGHTMotorEN, HIGH);
-      digitalWrite(RIGHTlogic1, LOW);
-      digitalWrite(RIGHTlogic2, HIGH);
-    }
-    void goBackward() {                       // FIXME:20 This doesn't work, makes it go forwards instead
-      digitalWrite(LEFTMotorEN, HIGH);
-      digitalWrite(LEFTlogic1, LOW);
-      digitalWrite(LEFTlogic2, HIGH);
-
-      digitalWrite(RIGHTMotorEN, HIGH);
-      digitalWrite(RIGHTlogic1, HIGH);
-      digitalWrite(RIGHTlogic2, LOW);
-    }
-
-    void turnLeft() {
-      rotateCCW();
-      while(true) {
-        if (encoderValue > 94) {
-          encoderValue = 0;
-          break;
-        }
-      }
-    }
-
-    void turnRight() {
-      rotateCW();
-      while(true) {
-        if (encoderValue > 94) {
-          encoderValue = 0;
-          break;
-        }
-      }
-    }
-
-    void rotateCCW() {
-      digitalWrite(LEFTMotorEN, HIGH);
-      digitalWrite(LEFTlogic1, LOW);
-      digitalWrite(LEFTlogic2, HIGH);
-
-      digitalWrite(RIGHTMotorEN, HIGH);
-      digitalWrite(RIGHTlogic1, LOW);
-      digitalWrite(RIGHTlogic2, HIGH);
-    }
-
-    void rotateCW() {
-      digitalWrite(LEFTMotorEN, HIGH);
-      digitalWrite(LEFTlogic1, HIGH);
-      digitalWrite(LEFTlogic2, LOW);
-
-      digitalWrite(RIGHTMotorEN, HIGH);
-      digitalWrite(RIGHTlogic1, HIGH);
-      digitalWrite(RIGHTlogic2, LOW);
-    }
+    Motors();
+    void halt();
+    // void coast();
+    // void break();
+    void goForward();
+    void goBackward();
+    void turnLeft();
+    void turnRight();
+    void rotateCCW();
+    void rotateCW();
 };
 
 
