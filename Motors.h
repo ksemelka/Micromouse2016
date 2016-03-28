@@ -87,8 +87,8 @@ class Motors {
     void turnLeft() {
       rotateCCW();
       while(true) {
-        if (count > 94) {
-          count = 0;
+        if (encoderValue > 94) {
+          encoderValue = 0;
           break;
         }
       }
@@ -97,8 +97,8 @@ class Motors {
     void turnRight() {
       rotateCW();
       while(true) {
-        if (count > 94) {
-          count = 0;
+        if (encoderValue > 94) {
+          encoderValue = 0;
           break;
         }
       }
