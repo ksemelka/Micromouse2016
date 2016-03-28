@@ -6,22 +6,17 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
+volatile int encoderValue = 0;
 Motors motors();
 Sensors sensors(leftPT, frontPT, rightPT);
+void count(void); // code for counting the increasing values of encoder ticks
 
 void setup() {
   Serial.begin(9600);
   Serial.print("Starting...\n");
+  attachInterrupt(encoderRIGHT_A, count, FALLING);
   delay(1000);
 }
-volatile int encoderValue = 0;
-
-void count(void); // code for counting the increasing values of encoder ticks
-//void setup() {
-//  Serial.begin(9600);
-//  attachInterrupt(encoderRIGHT_A, count, FALLING);
-//  encoderValue=0;
-//}
 
 //void loop() {
 //  Serial.print("Starting\n");
