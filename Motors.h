@@ -1,5 +1,6 @@
 #ifndef MOTORS_H
 #define MOTORS_H
+#include <Ardiuno.h>
 
 const byte LEFTMotorEN = 5;
 const byte LEFTlogic1 = 6;
@@ -83,11 +84,28 @@ class Motors {
       digitalWrite(RIGHTlogic2, LOW);
     }
 
-    // TODO: Implement turnLeft() and turnRight() functions
-
     void turnLeft() {                     // IDEA: Figure out how many ticks of an encoder it takes to turn 90 degrees
-      digitalWrite(LEFTMotorEN, LOW);
+
+    }
+
+    void rotateCCW() {
+      digitalWrite(LEFTMotorEN, HIGH);
+      digitalWrite(LEFTlogic1, LOW);
+      digitalWrite(LEFTlogic2, HIGH);
+
       digitalWrite(RIGHTMotorEN, HIGH);
+      digitalWrite(RIGHTlogic1, LOW);
+      digitalWrite(RIGHTlogic2, HIGH);
+    }
+
+    void rotateCW() {
+      digitalWrite(LEFTMotorEN, HIGH);
+      digitalWrite(LEFTlogic1, HIGH);
+      digitalWrite(LEFTlogic2, LOW);
+
+      digitalWrite(RIGHTMotorEN, HIGH);
+      digitalWrite(RIGHTlogic1, HIGH);
+      digitalWrite(RIGHTlogic2, LOW);
     }
 };
 
