@@ -70,6 +70,8 @@ void Motors::goBackward() {                       // FIXME:20 This doesn't work,
 
 void Motors::turnLeft() {
   rotateCCW();
+  Serial.print("Encoder Value=");
+  Serial.println(encoderValue);
   while(true) {
     if (encoderValue > 94) {
       encoderValue = 0;
@@ -80,6 +82,8 @@ void Motors::turnLeft() {
 
 void Motors::turnRight() {
   rotateCW();
+  Serial.print("Encoder Value=");
+  Serial.println(encoderValue);
   while(true) {
     if (encoderValue > 94) {
       encoderValue = 0;
