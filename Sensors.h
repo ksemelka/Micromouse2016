@@ -1,9 +1,9 @@
 #ifndef SENSORS_H
 #define SENSORS_H
 
-const byte leftPT = A0;
+const byte rightPT = A0;
 const byte frontPT = A1;
-const byte rightPT = A2;
+const byte leftPT = A2;
 
 class Sensors {
   public:
@@ -51,9 +51,9 @@ class Sensors {
     int frontMappedValue;
     int rightMappedValue;
 
-    const int estimatedHighestValueLeft = 800;      // FIXME:10 These are wrong, fix wiring first
-    const int estimatedHighestValueFront = 1030;   // The pin can't even read above 1023
-    const int estimatedHighestValueRight = 200;
+    const int estimatedHighestValueLeft = 950;
+    const int estimatedHighestValueFront = 970;
+    const int estimatedHighestValueRight = 970;
 };
 
 #endif  /*SENSORS_H*/
