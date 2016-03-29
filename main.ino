@@ -3,14 +3,9 @@
 #include "LEDs.h"
 #include "PID.h"
 #include "Floodfill.h"
+#include "State.h"
 #include <avr/io.h>
 #include <avr/interrupt.h>
-
-// Values for how far the mouse should be from walls
-int targetFront;
-int thresholdFront;
-int targetSide;
-int thresholdSide;
 
 volatile int RIGHT_PinALast = 0;
 volatile int encoderValue = 0;
