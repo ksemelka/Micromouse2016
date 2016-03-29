@@ -13,14 +13,18 @@ class Sensors {
       pinMode(rightPT, INPUT);
     }
     void view() {
-      getPTReadings();
+      readSensors();
       printPTReadings();
     }
-    void getPTReadings() {
+    void readSensors() {
       leftPTReading = analogRead(leftPT);
       frontPTReading = analogRead(frontPT);
       rightPTReading = analogRead(rightPT);
     }
+    unsigned int getLeftPTReading() const { return leftPTReading; }
+    unsigned int getFrontPTReading() const { return frontPTReading; }
+    unsigned int getRightPTReading() const { return rightPTReading; }
+
     void printPTReadings() const {
       Serial.print("Left sensor: ");
       Serial.print(leftPTReading);
