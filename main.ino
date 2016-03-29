@@ -23,10 +23,13 @@ void setup() {
 }
 
 void loop() {
-  motors.turnRight();
-  delay(1000);
-  motors.turnLeft();
-//  sensors.view();
+//  motors.turnRight();
+//  delay(1000);
+//  motors.turnLeft();
+  if (!(millis() % 100)) {
+    sensors.view();
+    determineState();
+  }
 }
 
 void count() {
