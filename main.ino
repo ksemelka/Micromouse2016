@@ -21,10 +21,9 @@ void count(void); // code for counting the increasing values of encoder ticks
 
 void setup() {
   Serial.begin(9600);
-  delay(100);
-  Serial.print("Starting...\n");
   attachInterrupt(4, count, FALLING); // encoderRIGHT_A
   attachInterrupt(2, count, FALLING); // encoderLEFT_A
+  Serial.print("Starting...\n");
   delay(1000);
 }
 
