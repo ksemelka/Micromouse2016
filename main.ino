@@ -6,37 +6,23 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
-Motors motors();
+// Values for how far the mouse should be from walls
+int targetFront;
+int thresholdFront;
+int targetSide;
+int thresholdSide;
+
+volatile int encoderValue = 0;
+Motors motors;
 Sensors sensors(leftPT, frontPT, rightPT);
+void count(void); // code for counting the increasing values of encoder ticks
 
 void setup() {
   Serial.begin(9600);
+  Serial.print("Starting...\n");
+  attachInterrupt(encoderRIGHT_A, count, FALLING);
   delay(1000);
-
-//  initializeLEDs();
 }
-//volatile int encoderValue=0;
-//
-//void count(void); // code for counting the increasing values of encoder ticks
-//void setup() {
-//  Serial.begin(9600);
-//  Serial.print("Start");
-//  pinMode(encoderRIGHT_A, INPUT);
-//  attachInterrupt(encoderRIGHT_A, count, FALLING);
-//  encoderValue=0;
-//}
-
-//void loop() {
-//  Serial.print("Starting\n");
-//  delay(3000);
-//  Serial.print("Encoder Value=");
-//  Serial.println(encoderValue);
-//  while (true) {
-//    if (encoderValue > 500) {
-//      break;
-//    }
-//  }
-//}
 
 void loop() {
   motors.goForward();
@@ -49,12 +35,12 @@ void loop() {
   Serial.println();
 
 //  outputMappedValuesToLEDs();
-   delay(2000);
+   delay(1000);
    motors.halt();
-   delay(2000);
+   delay(1000);
    motors.goBackward();
  }
 
-//void count() {
-//  encoderValue++;
-//}
+void count() {
+  encoderValue++;
+}

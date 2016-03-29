@@ -1,5 +1,6 @@
 #ifndef LEDS_H
 #define LEDS_H
+#include <Arduino.h>
 
 //const byte leftLED;  // FIXME: Connect LEDs to Arduino pins
 //const byte middleLED;
