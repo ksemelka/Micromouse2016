@@ -3,6 +3,7 @@
 #include "LEDs.h"
 #include "PID.h"
 #include "Floodfill.h"
+#include "State.h"
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
