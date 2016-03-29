@@ -61,7 +61,7 @@ void determineState() {
 }
 
 /*
-  ************
+  *******************************************************
   0 == undefined
   1 == FRONT                (Shouldn't happen, undefined)
   2 == RIGHT                (Shouldn't happen, undefined)
@@ -70,6 +70,7 @@ void determineState() {
   5 == LEFT + FRONT         (Turn right)
   6 == LEFT + RIGHT         (Go forward)
   7 == LEFT + RIGHT + FRONT (Dead end)
+  *******************************************************
 */
 
 #endif /*STATE_H*/
