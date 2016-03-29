@@ -2,6 +2,7 @@
 #include <Arduino.h>
 
 extern int encoderValue;
+extern int RIGHT_PinALast;
 
 Motors::Motors() {
   pinMode(LEFTMotorEN, OUTPUT);  // Initialize left motor
@@ -38,15 +39,15 @@ void Motors::halt() {
 //   digitalWrite(RIGHTlogic2, LOW);
 // }
 //
-// void Motors::break() {
-//   digitalWrite(LEFTMotorEN, HIGH);
-//   digitalWrite(LEFTlogic1, HIGH);
-//   digitalWrite(LEFTlogic2, HIGH);
-//
-//   digitalWrite(RIGHTMotorEN, HIGH);
-//   digitalWrite(RIGHTlogic1, HIGH);
-//   digitalWrite(RIGHTlogic2, HIGH);
-// }
+ void Motors::brake() {
+   digitalWrite(LEFTMotorEN, HIGH);
+   digitalWrite(LEFTlogic1, HIGH);
+   digitalWrite(LEFTlogic2, HIGH);
+
+   digitalWrite(RIGHTMotorEN, HIGH);
+   digitalWrite(RIGHTlogic1, HIGH);
+   digitalWrite(RIGHTlogic2, HIGH);
+ }
 
 void Motors::goForward() {
   digitalWrite(LEFTMotorEN, HIGH);
@@ -58,7 +59,7 @@ void Motors::goForward() {
   digitalWrite(RIGHTlogic2, HIGH);
 }
 
-void Motors::goBackward() {                       // FIXME:20 This doesn't work, makes it go forwards instead
+void Motors::goBackward() {
   digitalWrite(LEFTMotorEN, HIGH);
   digitalWrite(LEFTlogic1, LOW);
   digitalWrite(LEFTlogic2, HIGH);
@@ -69,45 +70,59 @@ void Motors::goBackward() {                       // FIXME:20 This doesn't work,
 }
 
 void Motors::turnLeft() {
+  encoderValue = 0;
   rotateCCW();
-  Serial.print("Encoder Value=");
-  Serial.println(encoderValue);
   while(true) {
-    if (encoderValue > 94) {
-      encoderValue = 0;
+    if (RIGHT_PinALast < encoderValue) {
+      RIGHT_PinALast++;
+      if (!(RIGHT_PinALast % 10)) {
+        Serial.println(RIGHT_PinALast);
+      }
+    }
+    if (encoderValue > 230) {
+      brake();
+      RIGHT_PinALast = 0;
       break;
     }
   }
 }
 
 void Motors::turnRight() {
+  encoderValue = 0;
   rotateCW();
-  Serial.print("Encoder Value=");
-  Serial.println(encoderValue);
   while(true) {
-    if (encoderValue > 94) {
-      encoderValue = 0;
+    if (RIGHT_PinALast < encoderValue) {
+      RIGHT_PinALast++;
+      if (!(RIGHT_PinALast % 10)) {
+        Serial.println(RIGHT_PinALast);
+      }
+    }
+    if (encoderValue > 230) {
+      brake();
+      RIGHT_PinALast = 0;
       break;
     }
   }
 }
 
-void Motors::rotateCCW() {
-  digitalWrite(LEFTMotorEN, HIGH);
+void Motors::rotateCW() {
+  Serial.println("Rotating CW");
+  analogWrite(LEFTMotorEN, 255);
   digitalWrite(LEFTlogic1, LOW);
   digitalWrite(LEFTlogic2, HIGH);
 
-  digitalWrite(RIGHTMotorEN, HIGH);
+  analogWrite(RIGHTMotorEN, 255);
   digitalWrite(RIGHTlogic1, LOW);
   digitalWrite(RIGHTlogic2, HIGH);
 }
 
-void Motors::rotateCW() {
-  digitalWrite(LEFTMotorEN, HIGH);
+void Motors::rotateCCW() {
+  Serial.println("Rotating CCW");
+  analogWrite(LEFTMotorEN, 255);
   digitalWrite(LEFTlogic1, HIGH);
   digitalWrite(LEFTlogic2, LOW);
 
-  digitalWrite(RIGHTMotorEN, HIGH);
+  analogWrite(RIGHTMotorEN, 255);
   digitalWrite(RIGHTlogic1, HIGH);
   digitalWrite(RIGHTlogic2, LOW);
 }

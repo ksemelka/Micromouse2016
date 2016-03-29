@@ -7,14 +7,13 @@ class Motors {
     Motors();
     void halt();
     // void coast();
-     void brake();
+    void brake();
     void goForward();
     void goBackward();
     void turnLeft();
     void turnRight();
     void rotateCCW();
     void rotateCW();
-    void readEncoders();
 
   private:
     const byte LEFTMotorEN = 6;
