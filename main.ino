@@ -26,7 +26,7 @@ void loop() {
 //  motors.turnRight();
 //  delay(1000);
 //  motors.turnLeft();
-  if (!(millis() % 100)) {
+  if (!(millis() % 100)) {  // Prevent Serial buffer from being overloaded
     sensors.view();
     determineState();
   }
