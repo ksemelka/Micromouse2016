@@ -64,12 +64,12 @@ void determineState() {
   *******************************************************
   0 == undefined
   1 == FRONT                (Shouldn't happen, undefined)
-  2 == RIGHT                (Shouldn't happen, undefined)
+  2 == RIGHT                (Forward until wall)
   3 == FRONT + RIGHT        (Turn left)
-  4 == LEFT                 (Shouldn't happen, undefined)
+  4 == LEFT                 (Forward until wall)
   5 == LEFT + FRONT         (Turn right)
   6 == LEFT + RIGHT         (Go forward)
-  7 == LEFT + RIGHT + FRONT (Dead end)
+  7 == LEFT + RIGHT + FRONT (Dead end, turn around)
   *******************************************************
 */
 
