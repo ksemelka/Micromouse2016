@@ -3,7 +3,6 @@
 #include "LEDs.h"
 #include "PID.h"
 #include "Floodfill.h"
-#include "State.h"
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
@@ -13,35 +12,34 @@ int thresholdFront;
 int targetSide;
 int thresholdSide;
 
+volatile int RIGHT_PinALast = 0;
 volatile int encoderValue = 0;
+
 Motors motors;
 Sensors sensors(leftPT, frontPT, rightPT);
 void count(void); // code for counting the increasing values of encoder ticks
 
 void setup() {
   Serial.begin(9600);
+  delay(100);
   Serial.print("Starting...\n");
-  attachInterrupt(encoderRIGHT_A, count, FALLING);
+  attachInterrupt(4, count, FALLING); // encoderRIGHT_A
+  attachInterrupt(2, count, FALLING); // encoderLEFT_A
   delay(1000);
 }
 
 void loop() {
-  motors.goForward();
-
-  sensors.view();
-  Serial.println();
-
-//  sensors.mapPTReadings();
-//  sensors.printMappedValues();
-  Serial.println();
-
-//  outputMappedValuesToLEDs();
-   delay(1000);
-   motors.halt();
-   delay(1000);
-   motors.goBackward();
- }
+  motors.turnRight();
+  delay(1000);
+  motors.turnLeft();
+//  sensors.view();
+}
 
 void count() {
   encoderValue++;
+}
+
+void printEncoderValues() {
+  Serial.print("Encoder Value: ");
+  Serial.println(encoderValue);
 }
