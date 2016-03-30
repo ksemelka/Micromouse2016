@@ -1,7 +1,8 @@
 #include "Motors.h"
 #include <Arduino.h>
 
-extern int encoderValue;
+extern int encoderValueLeft;
+extern int encoderValueRight;
 extern int RIGHT_PinALast;
 
 Motors::Motors() {
@@ -70,16 +71,17 @@ void Motors::goBackward() {
 }
 
 void Motors::turnLeft() {
-  encoderValue = 0;
+  encoderValueLeft = 0;
+  encoderValueRight = 0;
   rotateCCW();
   while(true) {
-    if (RIGHT_PinALast < encoderValue) {
+    if (RIGHT_PinALast < encoderValueRight) {
       RIGHT_PinALast++;
       if (!(RIGHT_PinALast % 10)) {
         Serial.println(RIGHT_PinALast);
       }
     }
-    if (encoderValue > 230) {
+    if (encoderValueRight > 230) {
       brake();
       RIGHT_PinALast = 0;
       break;
@@ -88,16 +90,36 @@ void Motors::turnLeft() {
 }
 
 void Motors::turnRight() {
-  encoderValue = 0;
+  encoderValueLeft = 0;
+  encoderValueRight = 0;
   rotateCW();
   while(true) {
-    if (RIGHT_PinALast < encoderValue) {
+    if (RIGHT_PinALast < encoderValueRight) {
       RIGHT_PinALast++;
       if (!(RIGHT_PinALast % 10)) {
         Serial.println(RIGHT_PinALast);
       }
     }
-    if (encoderValue > 230) {
+    if (encoderValueLeft + encoderValueRight > 450) {
+      brake();
+      RIGHT_PinALast = 0;
+      break;
+    }
+  }
+}
+
+void Motors::turnAround() {
+  encoderValueLeft = 0;
+  encoderValueRight = 0;
+  rotateCW();
+  while(true) {
+    if (RIGHT_PinALast < encoderValueRight) {
+      RIGHT_PinALast++;
+      if (!(RIGHT_PinALast % 10)) {
+        Serial.println(RIGHT_PinALast);
+      }
+    }
+    if (encoderValueLeft + encoderValueRight > 1000) {
       brake();
       RIGHT_PinALast = 0;
       break;
