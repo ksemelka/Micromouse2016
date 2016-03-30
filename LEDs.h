@@ -4,11 +4,13 @@
 
 extern const byte ledPin;
 
-void blink() {
-  turnLEDOn();
-  delay(500);
-  turnLEDOff();
-  delay(500);
+void blink(byte numTimes) {
+  while (numTimes-- != 0) {
+    turnLEDOn();
+    delay(500);
+    turnLEDOff();
+    delay(500);
+  }
 }
 
 void turnLEDOn() {
