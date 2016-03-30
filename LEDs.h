@@ -25,8 +25,6 @@ void blink(byte numTimes) {
   }
 }
 
-
-
 //const byte leftLED;  // FIXME: Connect LEDs to Arduino pins
 //const byte middleLED;
 //const byte rightLED;
