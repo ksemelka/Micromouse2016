@@ -2,7 +2,11 @@
 #define LEDS_H
 #include <Arduino.h>
 
-extern const byte ledPin;
+const byte ledPin = 13;
+
+void initializeOnboardLED() {
+  pinMode(ledPin, OUTPUT);    // Initialize onboard LED
+}
 
 void blink(byte numTimes) {
   while (numTimes-- != 0) {
