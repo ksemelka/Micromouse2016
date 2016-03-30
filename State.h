@@ -35,25 +35,25 @@ void determineState() {
     case 0:
       Serial.println("Error: 0");
       break;
-    case 1:
+    case FRONT:
       Serial.println("FRONT");
       break;
-    case 2:
+    case RIGHT:
       Serial.println("RIGHT");
       break;
-    case 4:
+    case LEFT:
       Serial.println("LEFT");
       break;
-    case 3:
+    case FRONT + RIGHT:
       Serial.println("FRONT + RIGHT");
       break;
-    case 5:
+    case FRONT + LEFT:
       Serial.println("FRONT + LEFT");
       break;
-    case 6:
+    case RIGHT + LEFT:
       Serial.println("RIGHT + LEFT");
       break;
-    case 7:
+    case FRONT + LEFT + RIGHT:
       Serial.println("FRONT + LEFT + RIGHT");
       break;
     default:
@@ -68,44 +68,30 @@ void navigate() {
       motors.halt();
       blink(3);
       break;
-
-    // ***FRONT***
     case FRONT:
-      if (random(millis()) % 2) {
+      if (random(millis()) % 2) {   // Turn left or right randomly
         motors.turnLeft();
       }
       else {
         motors.turnRight();
       }
       break;
-
-    // ***RIGHT***
-    case 2:
+    case RIGHT:
       motors.turnLeft();
       break;
-
-    // ***LEFT***
-    case 4:
+    case LEFT:
       motors.turnRight();
       break;
-
-    // ***FRONT + RIGHT***
-    case 3:
+    case FRONT + RIGHT:
       motors.turnLeft();
       break;
-
-    // ***FRONT + LEFT***
-    case 5:
+    case FRONT + LEFT:
       motors.turnRight();
       break;
-
-    // ***RIGHT + LEFT***
-    case 6:
+    case RIGHT + LEFT:
       motors.goForward();
       break;
-
-    // ***FRONT + RIGHT + LEFT***
-    case 7:
+    case FRONT + RIGHT + LEFT:
       motors.turnAround();
       break;
     default:
