@@ -31,6 +31,10 @@ void loop() {
 //  motors.turnRight();
 //  delay(1000);
 //  motors.turnLeft();
+  sensors.readSensors();
+  if (sensors.getFrontPTReading() > 950) {  // Prevent motor driver from burning out
+    motors.brake();
+  }
   if (!(millis() % 100)) {  // Prevent Serial buffer from being overloaded
     sensors.view();
     determineState();
