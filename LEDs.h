@@ -8,6 +8,14 @@ void initializeOnboardLED() {
   pinMode(ledPin, OUTPUT);    // Initialize onboard LED
 }
 
+void turnLEDOn() {
+  digitalWrite(ledPin, HIGH);
+}
+
+void turnLEDOff() {
+  digitalWrite(ledPin, LOW);
+}
+
 void blink(byte numTimes) {
   while (numTimes-- != 0) {
     turnLEDOn();
@@ -17,13 +25,7 @@ void blink(byte numTimes) {
   }
 }
 
-void turnLEDOn() {
-  digitalWrite(ledPin, HIGH);
-}
 
-void turnLEDOff() {
-  digitalWrite(ledPin, LOW);
-}
 
 //const byte leftLED;  // FIXME: Connect LEDs to Arduino pins
 //const byte middleLED;
