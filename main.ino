@@ -16,7 +16,6 @@ extern const byte encoderRIGHT_A;
 
 Motors motors;
 Sensors sensors(leftPT, frontPT, rightPT);
-void count(); // code for counting the increasing values of encoder ticks
 
 void setup() {
   initializeOnboardLED();
