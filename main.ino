@@ -20,6 +20,7 @@ void count(void); // code for counting the increasing values of encoder ticks
 
 void setup() {
   pinMode(ledPin, OUTPUT);    // Initialize onboard LED
+  randomSeed(analogRead(0));  // Seeds using random analog noise on unconnected pin
   Serial.begin(9600);
   attachInterrupt(encoderLEFT_A, count, FALLING);
   attachInterrupt(encoderLEFT_A, count, FALLING);
