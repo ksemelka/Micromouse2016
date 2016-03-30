@@ -10,9 +10,9 @@
 extern Sensors sensors;
 extern Motors motors;
 // Values for how far the mouse should be from walls
-const int targetFront;
+//const int targetFront;
 const int thresholdFront = 280;
-const int targetSide;
+//const int targetSide;
 const int thresholdSide = 150;
 
 byte state() {
@@ -70,12 +70,12 @@ void navigate() {
       break;
 
     // ***FRONT***
-    case 1:
+    case FRONT:
       if (random(millis()) % 2) {
-        turnLeft();
+        motors.turnLeft();
       }
       else {
-        turnRight();
+        motors.turnRight();
       }
       break;
 
