@@ -2,6 +2,23 @@
 #define LEDS_H
 #include <Arduino.h>
 
+extern const byte ledPin;
+
+void blink() {
+  turnLEDOn();
+  delay(500);
+  turnLEDOff();
+  delay(500);
+}
+
+void turnLEDOn() {
+  digitalWrite(ledPin, HIGH);
+}
+
+void turnLEDOff() {
+  digitalWrite(ledPin, LOW);
+}
+
 //const byte leftLED;  // FIXME: Connect LEDs to Arduino pins
 //const byte middleLED;
 //const byte rightLED;
