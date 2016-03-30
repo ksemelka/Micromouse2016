@@ -105,6 +105,24 @@ void Motors::turnRight() {
   }
 }
 
+void Motors::turnAround() {
+  encoderValue = 0;
+  rotateCW();
+  while(true) {
+    if (RIGHT_PinALast < encoderValue) {
+      RIGHT_PinALast++;
+      if (!(RIGHT_PinALast % 10)) {
+        Serial.println(RIGHT_PinALast);
+      }
+    }
+    if (encoderValue > 500) {
+      brake();
+      RIGHT_PinALast = 0;
+      break;
+    }
+  }
+}
+
 void Motors::rotateCW() {
   Serial.println("Rotating CW");
   analogWrite(LEFTMotorEN, 255);

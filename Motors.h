@@ -12,6 +12,7 @@ class Motors {
     void goBackward();
     void turnLeft();
     void turnRight();
+    void turnAround();
     void rotateCCW();
     void rotateCW();
 
