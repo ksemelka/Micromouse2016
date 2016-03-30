@@ -1,12 +1,14 @@
 #ifndef STATE_H
 #define STATE_H
 #include <Arduino.h>
+#include "LEDs.h"
 
 #define FRONT 1
 #define RIGHT 2
 #define LEFT 4
 
 extern Sensors sensors;
+extern Motors motors;
 // Values for how far the mouse should be from walls
 int targetFront;
 const int thresholdFront = 280;
@@ -35,13 +37,13 @@ void determineState() {
       Serial.println("Error: 0");
       break;
     case 1:
-      Serial.println("Error: 1 (FRONT)");
+      Serial.println("FRONT");
       break;
     case 2:
-      Serial.println("Error: 2 (RIGHT)");
+      Serial.println("RIGHT");
       break;
     case 4:
-      Serial.println("Error: 4 (LEFT)");
+      Serial.println("LEFT");
       break;
     case 3:
       Serial.println("FRONT + RIGHT");
@@ -57,6 +59,41 @@ void determineState() {
       break;
     default:
       Serial.println("ERROR: Default");
+  }
+}
+
+void navigate() {
+  switch (state()) {
+    case 0:
+      Serial.println("Error: 0");
+      break;
+    case 1:
+      Serial.println("Error: 1 (FRONT)");
+      break;
+    case 2:
+      Serial.println("Error: 2 (RIGHT)");
+      break;
+    case 4:
+      Serial.println("Error: 4 (LEFT)");
+      break;
+
+    // FRONT + RIGHT
+    case 3:
+      motors.turnLeft();
+      break;
+
+    // FRONT + LEFT
+    case 5:
+      motors.turnRight();
+      break;
+    case 6:
+      Serial.println("RIGHT + LEFT");
+      break;
+    case 7:
+      Serial.println("FRONT + LEFT + RIGHT");
+      break;
+    default:
+      motors.goForward();
   }
 }
 
