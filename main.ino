@@ -8,6 +8,13 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
+int error = 0;
+
+void calculateError() {
+  sensors.readSensors();
+  error = sensors.getRightPTReading() - sensors.getLeftPTReading();
+}
+
 volatile int RIGHT_PinALast = 0;
 volatile int encoderValueLeft = 0;
 volatile int encoderValueRight = 0;
@@ -26,10 +33,7 @@ void setup() {
 }
 
 void loop() {
-//  motors.turnRight();
-//  delay(1000);
-//  motors.turnLeft();
-  sensors.readSensors();
+  motors.goForwardProportional(calculateError());
   if (sensors.getFrontPTReading() > 950) {  // Prevent motor driver from burning out
     motors.brake();
   }
