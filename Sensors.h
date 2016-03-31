@@ -26,12 +26,12 @@ class Sensors {
     unsigned int getRightPTReading() const { return rightPTReading; }
 
     void printPTReadings() const {
-      Serial.print("Left sensor: ");
-      Serial.print(leftPTReading);
-      Serial.print("\tFront sensor: ");
-      Serial.print(frontPTReading);
-      Serial.print("\tRight sensor: ");
-      Serial.println(rightPTReading);
+      Serial1.print("Left sensor: ");
+      Serial1.print(leftPTReading);
+      Serial1.print("\tFront sensor: ");
+      Serial1.print(frontPTReading);
+      Serial1.print("\tRight sensor: ");
+      Serial1.println(rightPTReading);
     }
     void mapPTReadings() {
       leftMappedValue = map(leftPTReading, 0, estimatedHighestValueLeft, 0, 255);
@@ -39,12 +39,12 @@ class Sensors {
       rightMappedValue = map(rightPTReading, 0, estimatedHighestValueRight, 0, 255);
     }
     void printMappedValues() const {
-      Serial.print("Left mapped value: ");
-      Serial.print(leftMappedValue);
-      Serial.print("\tFront mapped value: ");
-      Serial.print(frontMappedValue);
-      Serial.print("\tRight mapped value: ");
-      Serial.println(rightMappedValue);
+      Serial1.print("Left mapped value: ");
+      Serial1.print(leftMappedValue);
+      Serial1.print("\tFront mapped value: ");
+      Serial1.print(frontMappedValue);
+      Serial1.print("\tRight mapped value: ");
+      Serial1.println(rightMappedValue);
     }
   private:
     unsigned int leftPTReading;

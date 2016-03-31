@@ -33,38 +33,38 @@ byte state() {
 void determineState() {
   switch (state()) {
     case 0:
-      Serial.println("Error: 0");
+      Serial1.println("Error: 0");
       break;
     case FRONT:
-      Serial.println("FRONT");
+      Serial1.println("FRONT");
       break;
     case RIGHT:
-      Serial.println("RIGHT");
+      Serial1.println("RIGHT");
       break;
     case LEFT:
-      Serial.println("LEFT");
+      Serial1.println("LEFT");
       break;
     case FRONT + RIGHT:
-      Serial.println("FRONT + RIGHT");
+      Serial1.println("FRONT + RIGHT");
       break;
     case FRONT + LEFT:
-      Serial.println("FRONT + LEFT");
+      Serial1.println("FRONT + LEFT");
       break;
     case RIGHT + LEFT:
-      Serial.println("RIGHT + LEFT");
+      Serial1.println("RIGHT + LEFT");
       break;
     case FRONT + LEFT + RIGHT:
-      Serial.println("FRONT + LEFT + RIGHT");
+      Serial1.println("FRONT + LEFT + RIGHT");
       break;
     default:
-      Serial.println("ERROR: Default");
+      Serial1.println("ERROR: Default");
   }
 }
 
 void navigate() {
   switch (state()) {
     case 0:
-      Serial.println("Error: 0");
+      Serial1.println("Error: 0");
       motors.halt();
       blink(3);
       break;
