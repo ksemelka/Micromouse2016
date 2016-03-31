@@ -2,6 +2,11 @@
 #define MOTORS_H
 #include <Arduino.h>
 
+#define encoderLEFT_A   2  // Left encoder output channel
+#define encoderLEFT_B   3  // Left encoder output B
+#define encoderRIGHT_A  4  // Right encoder output channel
+#define encoderRIGHT_B  5  // Right encoder Output B
+
 class Motors {
   public:
     Motors();
@@ -15,12 +20,6 @@ class Motors {
     void turnAround();
     void rotateCCW();
     void rotateCW();
-    
-    const byte encoderLEFT_A = 2;  // Left encoder output channel
-    const byte encoderLEFT_B = 3;  // Left encoder output B
-
-    const byte encoderRIGHT_A = 4; // Right encoder output channel
-    const byte encoderRIGHT_B = 5; // Right encoder Output B
 
   private:
     const byte LEFTMotorEN = 6;
