@@ -9,9 +9,9 @@
 #include <avr/interrupt.h>
 
 #define OFFSET 0
-int error = 0;
 
 int calculateError() {
+  int error = 0;
   sensors.readSensors();
   error = sensors.getRightPTReading() - sensors.getLeftPTReading() - OFFSET;
   return error;
