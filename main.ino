@@ -11,9 +11,10 @@
 #define OFFSET 0
 int error = 0;
 
-void calculateError() {
+int calculateError() {
   sensors.readSensors();
   error = sensors.getRightPTReading() - sensors.getLeftPTReading() - OFFSET;
+  return error;
 }
 
 volatile int RIGHT_PinALast = 0;
