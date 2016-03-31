@@ -11,8 +11,6 @@
 volatile int RIGHT_PinALast = 0;
 volatile int encoderValueLeft = 0;
 volatile int encoderValueRight = 0;
-extern const byte encoderLEFT_A;
-extern const byte encoderRIGHT_A;
 
 Motors motors;
 Sensors sensors(leftPT, frontPT, rightPT);
@@ -21,8 +19,8 @@ void setup() {
   initializeOnboardLED();
   randomSeed(analogRead(0));  // Seeds using random analog noise on unconnected pin
   Serial.begin(9600);
-  attachInterrupt(motors.encoderLEFT_A, countLeft, FALLING);
-  attachInterrupt(motors.encoderRIGHT_A, countRight, FALLING);
+  attachInterrupt(encoderLEFT_A, countLeft, FALLING);
+  attachInterrupt(encoderRIGHT_A, countRight, FALLING);
   Serial.print("Starting...\n");
   delay(1000);
 }
