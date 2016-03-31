@@ -14,6 +14,7 @@ class Motors {
     // void coast();
     void brake();
     void goForward();
+    void goForwardProportional(int);
     void goBackward();
     void turnLeft();
     void turnRight();
