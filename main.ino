@@ -8,11 +8,12 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
+#define OFFSET 0
 int error = 0;
 
 void calculateError() {
   sensors.readSensors();
-  error = sensors.getRightPTReading() - sensors.getLeftPTReading();
+  error = sensors.getRightPTReading() - sensors.getLeftPTReading() - OFFSET;
 }
 
 volatile int RIGHT_PinALast = 0;
