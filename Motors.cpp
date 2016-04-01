@@ -61,16 +61,6 @@ void Motors::goForward() {
   digitalWrite(RIGHTlogic2, HIGH);
 }
 
-void Motors::goForwardProportional(int error) {
-  analogWrite(LEFTMotorEN, 80 - error);
-  digitalWrite(LEFTlogic1, HIGH);
-  digitalWrite(LEFTlogic2, LOW);
-
-  analogWrite(RIGHTMotorEN, 80 + error);
-  digitalWrite(RIGHTlogic1, LOW);
-  digitalWrite(RIGHTlogic2, HIGH);
-}
-
 void Motors::goBackward() {
   digitalWrite(LEFTMotorEN, HIGH);
   digitalWrite(LEFTlogic1, LOW);
@@ -170,6 +160,16 @@ void Motors::rotateCCW() {
   analogWrite(RIGHTMotorEN, 150);
   digitalWrite(RIGHTlogic1, HIGH);
   digitalWrite(RIGHTlogic2, LOW);
+}
+
+void Motors::goForwardProportional(int error) {
+  analogWrite(LEFTMotorEN, 80 - error);
+  digitalWrite(LEFTlogic1, HIGH);
+  digitalWrite(LEFTlogic2, LOW);
+
+  analogWrite(RIGHTMotorEN, 80 + error);
+  digitalWrite(RIGHTlogic1, LOW);
+  digitalWrite(RIGHTlogic2, HIGH);
 }
 
 void Motors::traverseCell() {
