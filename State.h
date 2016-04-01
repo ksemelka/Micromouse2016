@@ -53,7 +53,7 @@ byte state() {
   return currentState;
 }
 
-void determineState() {
+void printState() {
   switch (state()) {
     case 0:
       Serial1.println("STATE: 0");
@@ -85,7 +85,7 @@ void determineState() {
 }
 
 void navigate() {
-  determineState();
+  printState();
   switch (state()) {
     case 0:
       blink(1);
