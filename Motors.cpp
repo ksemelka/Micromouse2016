@@ -113,7 +113,7 @@ void Motors::turnRight() {
     if (RIGHT_PinALast < encoderValueRight) {
       RIGHT_PinALast++;
     }
-    if (!()(LEFT_PinALast + RIGHT_PinALast) % 10)) {
+    if (!((LEFT_PinALast + RIGHT_PinALast) % 10)) {
       Serial1.println(LEFT_PinALast + RIGHT_PinALast);
     }
     if (encoderValueLeft + encoderValueRight > 335) {
