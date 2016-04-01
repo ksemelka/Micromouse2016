@@ -176,7 +176,7 @@ void Motors::traverseCell() {
   encoderValueLeft = 0;
   encoderValueRight = 0;
   while (encoderValueLeft + encoderValueRight < encoderTicksPerCell) {
-    // goForwardProportional(calculateError());
-    goForward();
+    goForwardProportional(calculateError());
+    // goForward();
   }
 }

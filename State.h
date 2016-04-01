@@ -17,16 +17,37 @@ const int thresholdFront = 100;
 const int targetSide = 400;
 const int thresholdSide = 100;
 
+bool wallToTheFront() {
+  if (sensors.getFrontPTReading() > thresholdFront) {
+    return true;
+  }
+  return false;
+}
+
+bool wallToTheRight() {
+  if (sensors.getRightPTReading() > thresholdSide) {
+    return true;
+  }
+  return false;
+}
+
+bool wallToTheLeft() {
+  if (sensors.getLeftPTReading() > thresholdSide) {
+    return true;
+  }
+  return false;
+}
+
 byte state() {
   byte currentState = 0;
   sensors.readSensors();
-  if (sensors.getFrontPTReading() > thresholdFront) {
+  if (wallToTheFront()) {
     currentState += FRONT;
   }
-  if (sensors.getRightPTReading() > thresholdSide) {
+  if (wallToTheRight()) {
     currentState += RIGHT;
   }
-  if (sensors.getLeftPTReading() > thresholdSide) {
+  if (wallToTheLeft()) {
     currentState += LEFT;
   }
   return currentState;

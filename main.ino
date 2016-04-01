@@ -14,8 +14,18 @@ int calculateError() {
   const double kp = .3;   // Proportional tuning value
   int error = 0;
   sensors.readSensors();
-  error = sensors.getRightPTReading() - sensors.getLeftPTReading() - OFFSET;
-  error *= kp
+  if (wallToTheRight() && wallToTheLeft()) {
+    error = sensors.getRightPTReading() - sensors.getLeftPTReading() - OFFSET;
+    error *= kp;
+  }
+  else if (wallToTheRight() && !wallToTheLeft()) {
+    error = targetSide - sensors.getRightPTReading();
+    error *= kp;
+  }
+  else if (wallToTheLeft() && !wallToTheRight()) {
+    error = targetSide - sensors.getLeftPTReading();
+    error *= kp;
+  }
   return error;
 }
 
