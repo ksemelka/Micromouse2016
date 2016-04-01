@@ -11,21 +11,19 @@
 #define OFFSET 0
 
 int calculateError() {
-  const double kp = .3;   // Proportional tuning value
+  const double kp = .1;   // Proportional tuning value
   int error = 0;
   sensors.readSensors();
   if (wallToTheRight() && wallToTheLeft()) {
     error = sensors.getRightPTReading() - sensors.getLeftPTReading() - OFFSET;
-    error *= kp;
   }
   else if (wallToTheRight() && !wallToTheLeft()) {
     error = targetSide - sensors.getRightPTReading();
-    error *= kp;
   }
   else if (wallToTheLeft() && !wallToTheRight()) {
     error = targetSide - sensors.getLeftPTReading();
-    error *= kp;
   }
+  error *= kp;
   return error;
 }
 
