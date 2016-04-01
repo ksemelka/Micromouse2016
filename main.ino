@@ -22,6 +22,9 @@ volatile int RIGHT_PinALast = 0;
 volatile int encoderValueLeft = 0;
 volatile int encoderValueRight = 0;
 
+void checkIfTooClose();
+bool isTooClose();
+
 Motors motors;
 Sensors sensors(leftPT, frontPT, rightPT);
 
@@ -36,6 +39,7 @@ void setup() {
 }
 
 void loop() {
+  checkIfTooClose();
   motors.goForwardProportional(calculateError());
   if (sensors.getFrontPTReading() > 950) {  // Prevent motor driver from burning out
     motors.brake();
@@ -57,4 +61,22 @@ void countRight() {
 void printEncoderValues() {
   Serial1.print("Encoder Value: ");
   Serial1.println(encoderValueLeft);
+}
+
+void checkIfTooClose() {
+  if (isTooClose()) {
+    while (true) {
+      Serial1.println("Stopped: Too close");
+      blink(1);
+    }
+  }
+ }
+
+bool isTooClose() {
+  sensors.readSensors();
+  if (sensors.getFrontPTReading() > 964) {  // Prevent motor driver from burning out
+    motors.brake();
+    return true;
+  }
+  return false;
 }
