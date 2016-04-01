@@ -9,7 +9,6 @@
 
 extern Sensors sensors;
 extern Motors motors;
-extern int calculateError();
 
 // Values for how far the mouse should be from walls
 const int targetFront = 300;

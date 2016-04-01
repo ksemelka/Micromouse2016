@@ -1,5 +1,6 @@
 #include "Motors.h"
 #include "Sensors.h"
+#include "PID.h"
 #include <Arduino.h>
 
 extern int calculateError();
@@ -176,7 +177,7 @@ void Motors::traverseCell() {
   encoderValueLeft = 0;
   encoderValueRight = 0;
   while (encoderValueLeft + encoderValueRight < encoderTicksPerCell) {
-    goForwardProportional(calculateError());
+    goForwardProportional(PID.calculateError());
     // goForward();
   }
   brake();
