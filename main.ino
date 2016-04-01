@@ -2,7 +2,7 @@
 #include "Sensors.h"
 #include "LEDs.h"
 #include "PID.h"
-#include "Floodfill.h"
+//#include "Floodfill.h"
 #include "State.h"
 #include "Maze.h"
 #include <avr/io.h>
@@ -11,8 +11,11 @@
 volatile int RIGHT_PinALast = 0;
 volatile int encoderValueLeft = 0;
 volatile int encoderValueRight = 0;
-extern const byte encoderLEFT_A;
-extern const byte encoderRIGHT_A;
+//extern const byte encoderLEFT_A;
+//extern const byte encoderRIGHT_A;
+
+void checkIfTooClose();
+bool isTooClose();
 
 Motors motors;
 Sensors sensors(leftPT, frontPT, rightPT);
@@ -20,25 +23,27 @@ Sensors sensors(leftPT, frontPT, rightPT);
 void setup() {
   initializeOnboardLED();
   randomSeed(analogRead(0));  // Seeds using random analog noise on unconnected pin
-  Serial.begin(9600);
+  Serial1.begin(9600);
   attachInterrupt(motors.encoderLEFT_A, countLeft, FALLING);
   attachInterrupt(motors.encoderRIGHT_A, countRight, FALLING);
-  Serial.print("Starting...\n");
+  Serial1.print("Starting...\n");
   delay(1000);
 }
 
 void loop() {
-//  motors.turnRight();
-//  delay(1000);
-//  motors.turnLeft();
+  
   sensors.readSensors();
-  if (sensors.getFrontPTReading() > 950) {  // Prevent motor driver from burning out
-    motors.brake();
-  }
+  checkIfTooClose();
   if (!(millis() % 100)) {  // Prevent Serial buffer from being overloaded
     sensors.view();
     determineState();
   }
+//  motors.turnRight();
+//  
+//  delay(1500);
+//  checkIfTooClose();
+  motors.goForward();
+  delay(1000);
 }
 
 void countLeft() {
@@ -50,6 +55,25 @@ void countRight() {
 }
 
 void printEncoderValues() {
-  Serial.print("Encoder Value: ");
-  Serial.println(encoderValueLeft);
+  Serial1.print("Encoder Value: ");
+  Serial1.println(encoderValueLeft);
 }
+
+void checkIfTooClose() {
+  if (isTooClose()) {
+    while (true) {
+      Serial1.println("Stopped: Too close");
+      blink(1);
+    }
+  }
+}
+
+bool isTooClose() {
+  sensors.readSensors();
+  if (sensors.getFrontPTReading() > 964) {  // Prevent motor driver from burning out
+    motors.brake();
+    return true;
+  }
+  return false;
+}
+

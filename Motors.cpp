@@ -75,13 +75,13 @@ void Motors::turnLeft() {
   encoderValueRight = 0;
   rotateCCW();
   while(true) {
-    if (RIGHT_PinALast < encoderValueRight) {
+    if (RIGHT_PinALast < encoderValueRight + encoderValueLeft) {
       RIGHT_PinALast++;
       if (!(RIGHT_PinALast % 10)) {
-        Serial.println(RIGHT_PinALast);
+        Serial1.println(RIGHT_PinALast);
       }
     }
-    if (encoderValueRight > 230) {
+    if (encoderValueRight + encoderValueLeft > 365) {
       brake();
       RIGHT_PinALast = 0;
       break;
@@ -94,13 +94,13 @@ void Motors::turnRight() {
   encoderValueRight = 0;
   rotateCW();
   while(true) {
-    if (RIGHT_PinALast < encoderValueRight) {
+    if (RIGHT_PinALast < encoderValueRight + encoderValueLeft) {
       RIGHT_PinALast++;
       if (!(RIGHT_PinALast % 10)) {
-        Serial.println(RIGHT_PinALast);
+        Serial1.println(RIGHT_PinALast);
       }
     }
-    if (encoderValueLeft + encoderValueRight > 450) {
+    if (encoderValueLeft + encoderValueRight > 335) {
       brake();
       RIGHT_PinALast = 0;
       break;
@@ -116,10 +116,10 @@ void Motors::turnAround() {
     if (RIGHT_PinALast < encoderValueRight) {
       RIGHT_PinALast++;
       if (!(RIGHT_PinALast % 10)) {
-        Serial.println(RIGHT_PinALast);
+        Serial1.println(RIGHT_PinALast);
       }
     }
-    if (encoderValueLeft + encoderValueRight > 1000) {
+    if (encoderValueLeft + encoderValueRight > 910) {
       brake();
       RIGHT_PinALast = 0;
       break;
@@ -128,23 +128,23 @@ void Motors::turnAround() {
 }
 
 void Motors::rotateCW() {
-  Serial.println("Rotating CW");
-  analogWrite(LEFTMotorEN, 255);
+  Serial1.println("Rotating CW");
+  analogWrite(LEFTMotorEN, 150);
   digitalWrite(LEFTlogic1, LOW);
   digitalWrite(LEFTlogic2, HIGH);
 
-  analogWrite(RIGHTMotorEN, 255);
+  analogWrite(RIGHTMotorEN, 150);
   digitalWrite(RIGHTlogic1, LOW);
   digitalWrite(RIGHTlogic2, HIGH);
 }
 
 void Motors::rotateCCW() {
-  Serial.println("Rotating CCW");
-  analogWrite(LEFTMotorEN, 255);
+  Serial1.println("Rotating CCW");
+  analogWrite(LEFTMotorEN, 150);
   digitalWrite(LEFTlogic1, HIGH);
   digitalWrite(LEFTlogic2, LOW);
 
-  analogWrite(RIGHTMotorEN, 255);
+  analogWrite(RIGHTMotorEN, 150);
   digitalWrite(RIGHTlogic1, HIGH);
   digitalWrite(RIGHTlogic2, LOW);
 }

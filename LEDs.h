@@ -19,9 +19,9 @@ void turnLEDOff() {
 void blink(byte numTimes) {
   while (numTimes-- != 0) {
     turnLEDOn();
-    delay(500);
+    delay(250);
     turnLEDOff();
-    delay(500);
+    delay(250);
   }
 }
 
