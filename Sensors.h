@@ -7,7 +7,7 @@ const byte leftPT = A2;
 
 class Sensors {
   public:
-     Sensors(const byte leftPT, const byte frontPT, const byte rightPT) {
+    Sensors(const byte leftPT, const byte frontPT, const byte rightPT) {
       pinMode(leftPT, INPUT);        // Initialize phototransistors
       pinMode(frontPT, INPUT);
       pinMode(rightPT, INPUT);
@@ -58,6 +58,10 @@ class Sensors {
     const int estimatedHighestValueLeft = 950;
     const int estimatedHighestValueFront = 970;
     const int estimatedHighestValueRight = 970;
+
+    int frontTotal;
+    int leftTotal;
+    int rightTotal;
 };
 
 #endif  /*SENSORS_H*/
