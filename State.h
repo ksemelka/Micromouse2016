@@ -17,22 +17,43 @@ const int thresholdFront = 100;
 const int targetSide = 400;
 const int thresholdSide = 100;
 
+bool wallToTheFront() {
+  if (sensors.getFrontSmoothed() > thresholdFront) {
+    return true;
+  }
+  return false;
+}
+
+bool wallToTheRight() {
+  if (sensors.getRightSmoothed() > thresholdSide) {
+    return true;
+  }
+  return false;
+}
+
+bool wallToTheLeft() {
+  if (sensors.getLeftSmoothed() > thresholdSide) {
+    return true;
+  }
+  return false;
+}
+
 byte state() {
   byte currentState = 0;
   sensors.readSensors();
-  if (sensors.getFrontPTReading() > thresholdFront) {
+  if (wallToTheFront()) {
     currentState += FRONT;
   }
-  if (sensors.getRightPTReading() > thresholdSide) {
+  if (wallToTheRight()) {
     currentState += RIGHT;
   }
-  if (sensors.getLeftPTReading() > thresholdSide) {
+  if (wallToTheLeft()) {
     currentState += LEFT;
   }
   return currentState;
 }
 
-void determineState() {
+void printState() {
   switch (state()) {
     case 0:
       Serial1.println("STATE: 0");
@@ -64,7 +85,7 @@ void determineState() {
 }
 
 void navigate() {
-  determineState();
+  printState();
   switch (state()) {
     case 0:
       blink(1);

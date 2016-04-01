@@ -14,13 +14,54 @@ class Sensors {
     }
     void view() {
       readSensors();
-      printPTReadings();
+      printSmoothed();
+    }
+    int calculateFrontSmoothed() {
+      frontTotal -= frontReadings[index];
+      frontReadings[index] = analogRead(frontPT);
+      frontTotal += frontReadings[index];
+      frontIndex++;
+      if (frontIndex >= numReadings) {
+        frontIndex = 0;
+      }
+      frontSmoothed = frontTotal / numReadings;
+      return frontSmoothed;
+    }
+    int calculateLeftSmoothed() {
+      leftTotal -= frontReadings[index];
+      leftReadings[index] = analogRead(frontPT);
+      leftTotal += frontReadings[index];
+      index++;
+      if (index >= numReadings) {
+        leftIndex = 0;
+      }
+      leftSmoothed = leftTotal / numReadings;
+      return leftSmoothed;
+    }
+    int calculateRightSmoothed() {
+      rightTotal -= rightReadings[index];
+      rightReadings[index] = analogRead(rightPT);
+      rightTotal += rightReadings[index];
+      rightIndex++;
+      if (rightIndex >= numReadings) {
+        rightIndex = 0;
+      }
+      rightSmoothed = rightTotal / numReadings;
+      return rightSmoothed;
     }
     void readSensors() {
+      for (int i = 0; i < numReadings; i++) {
+        frontSmoothed = calculateFrontSmoothed();
+        leftSmoothed = calculateLeftSmoothed();
+        rightSmoothed = calculateRightSmoothed();
+      }
       leftPTReading = analogRead(leftPT);
       frontPTReading = analogRead(frontPT);
       rightPTReading = analogRead(rightPT);
     }
+    int getFrontSmoothed() const { return frontSmoothed; }
+    int getLeftSmoothed() const { return leftSmoothed; }
+    int getRightSmoothed() const { return rightSmoothed; }
     unsigned int getLeftPTReading() const { return leftPTReading; }
     unsigned int getFrontPTReading() const { return frontPTReading; }
     unsigned int getRightPTReading() const { return rightPTReading; }
@@ -33,18 +74,13 @@ class Sensors {
       Serial1.print("\tRight sensor: ");
       Serial1.println(rightPTReading);
     }
-    void mapPTReadings() {
-      leftMappedValue = map(leftPTReading, 0, estimatedHighestValueLeft, 0, 255);
-      frontMappedValue = map(frontPTReading, 0, estimatedHighestValueFront, 0, 255);
-      rightMappedValue = map(rightPTReading, 0, estimatedHighestValueRight, 0, 255);
-    }
-    void printMappedValues() const {
-      Serial1.print("Left mapped value: ");
-      Serial1.print(leftMappedValue);
-      Serial1.print("\tFront mapped value: ");
-      Serial1.print(frontMappedValue);
-      Serial1.print("\tRight mapped value: ");
-      Serial1.println(rightMappedValue);
+    void printSmoothed() const {
+      Serial1.print("Left sensor: ");
+      Serial1.print(leftSmoothed);
+      Serial1.print("\tFront sensor: ");
+      Serial1.print(frontSmoothed);
+      Serial1.print("\tRight sensor: ");
+      Serial1.println(rightSmoothed);
     }
   private:
     unsigned int leftPTReading;
@@ -58,6 +94,25 @@ class Sensors {
     const int estimatedHighestValueLeft = 950;
     const int estimatedHighestValueFront = 970;
     const int estimatedHighestValueRight = 970;
+
+    static const byte numReadings = 10;
+
+    int frontTotal;
+    int leftTotal;
+    int rightTotal;
+
+    byte frontIndex;
+    byte leftIndex;
+    byte rightIndex;
+
+    int frontReadings[numReadings];
+    int leftReadings[numReadings];
+    int rightReadings[numReadings];
+
+    int frontSmoothed;
+    int leftSmoothed;
+    int rightSmoothed;
+
 };
 
 #endif  /*SENSORS_H*/
