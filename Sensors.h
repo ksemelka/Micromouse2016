@@ -59,9 +59,22 @@ class Sensors {
     const int estimatedHighestValueFront = 970;
     const int estimatedHighestValueRight = 970;
 
+    static const byte numReadings = 10;
+
     int frontTotal;
     int leftTotal;
     int rightTotal;
+
+    byte index;
+
+    int frontReadings[numReadings];
+    int leftReadings[numReadings];
+    int rightReadings[numReadings];
+
+    int frontSmoothed;
+    int leftSmoothed;
+    int rightSmoothed;
+
 };
 
 #endif  /*SENSORS_H*/
