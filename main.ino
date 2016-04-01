@@ -8,8 +8,6 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
-#define OFFSET 0
-
 volatile int encoderValueLeft = 0;
 volatile int encoderValueRight = 0;
 
