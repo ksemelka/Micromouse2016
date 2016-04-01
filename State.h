@@ -12,10 +12,10 @@ extern Motors motors;
 extern int calculateError();
 
 // Values for how far the mouse should be from walls
-//const int targetFront;
-const int thresholdFront = 300;
-//const int targetSide;
-const int thresholdSide = 400;
+const int targetFront = 300;
+const int thresholdFront = 100;
+const int targetSide = 400;
+const int thresholdSide = 100;
 
 byte state() {
   byte currentState = 0;
@@ -35,7 +35,7 @@ byte state() {
 void determineState() {
   switch (state()) {
     case 0:
-      Serial1.println("Error: 0");
+      Serial1.println("STATE: 0");
       break;
     case FRONT:
       Serial1.println("FRONT");
@@ -64,11 +64,10 @@ void determineState() {
 }
 
 void navigate() {
+  determineState();
   switch (state()) {
     case 0:
-      Serial1.println("Error: 0");
-      motors.halt();
-      //blink(3);
+      blink(1);
       break;
     case FRONT:
       if (random(millis()) % 2) {   // Turn left or right randomly
@@ -79,10 +78,20 @@ void navigate() {
       }
       break;
     case RIGHT:
-      motors.goForwardProportional(calculateError());
+      if (random(millis()) % 2) {   // Turn left or go forward randomly
+        motors.turnLeft();
+      }
+      else {
+        motors.traverseCell();
+      }
       break;
     case LEFT:
-      motors.goForwardProportional(calculateError());
+      if (random(millis()) % 2) {   // Turn right or go forward randomly
+        motors.turnRight();
+      }
+      else {
+        motors.traverseCell();
+      }
       break;
     case FRONT + RIGHT:
       motors.turnLeft();
@@ -91,13 +100,16 @@ void navigate() {
       motors.turnRight();
       break;
     case RIGHT + LEFT:
-      motors.goForwardProportional(calculateError());
+      motors.traverseCell();
       break;
     case FRONT + RIGHT + LEFT:
       motors.turnAround();
       break;
     default:
-      motors.goForwardProportional(calculateError());
+      Serial1.println("Error: Default");
+      motors.halt();
+      blink(1);
+      break;
   }
 }
 

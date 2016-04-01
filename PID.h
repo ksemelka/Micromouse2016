@@ -1,6 +1,7 @@
 #ifndef PID_H
 #define PID_H
 
+/******************************************************************************************************
 class PID {
   public:
     PID(double*, double*, double*,        // * Constructor. Links the PID to the Input, Output, and
@@ -8,7 +9,7 @@ class PID {
 
     bool Compute();                       // * Performs the PID calculation. It should be
                                           //   called every time loop() cycles.
-    
+
   private:
     void SetTunings(double, double, double);  // Used in constructor
 
@@ -26,5 +27,7 @@ class PID {
     const double outMin = 0, outMax = 255;
     unsigned long SampleTime = 100.0;
 };
+*******************************************************************************************************/
+
 
 #endif /*PID_H*/
