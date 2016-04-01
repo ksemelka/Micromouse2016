@@ -35,7 +35,7 @@ byte state() {
 void determineState() {
   switch (state()) {
     case 0:
-      Serial1.println("Error: 0");
+      Serial1.println("STATE: 0");
       break;
     case FRONT:
       Serial1.println("FRONT");
@@ -64,9 +64,9 @@ void determineState() {
 }
 
 void navigate() {
+  determineState();
   switch (state()) {
     case 0:
-      Serial1.println("Error: 0");
       blink(1);
       break;
     case FRONT:
@@ -78,10 +78,20 @@ void navigate() {
       }
       break;
     case RIGHT:
-      motors.traverseCell();
+      if (random(millis()) % 2) {   // Turn left or go forward randomly
+        motors.turnLeft();
+      }
+      else {
+        motors.traverseCell();
+      }
       break;
     case LEFT:
-      motors.traverseCell();
+      if (random(millis()) % 2) {   // Turn right or go forward randomly
+        motors.turnRight();
+      }
+      else {
+        motors.traverseCell();
+      }
       break;
     case FRONT + RIGHT:
       motors.turnLeft();
