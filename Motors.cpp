@@ -4,6 +4,7 @@
 extern int encoderValueLeft;
 extern int encoderValueRight;
 extern int RIGHT_PinALast;
+extern int LEFT_PinALast;
 
 Motors::Motors() {
   pinMode(LEFTMotorEN, OUTPUT);  // Initialize left motor
@@ -85,11 +86,14 @@ void Motors::turnLeft() {
   encoderValueRight = 0;
   rotateCCW();
   while(true) {
+    if (LEFT_PinALast < encoderValueLeft) {
+      LEFT_PinALast++;
+    }
     if (RIGHT_PinALast < encoderValueRight) {
       RIGHT_PinALast++;
-      if (!(RIGHT_PinALast % 10)) {
-        Serial.println(RIGHT_PinALast);
-      }
+    }
+    if (!((LEFT_PinALast + RIGHT_PinALast) % 10)) {
+      Serial.println(LEFT_PinALast + RIGHT_PinALast);
     }
     if (encoderValueRight > 230) {
       brake();
@@ -104,11 +108,14 @@ void Motors::turnRight() {
   encoderValueRight = 0;
   rotateCW();
   while(true) {
+    if (LEFT_PinALast < encoderValueLeft) {
+      LEFT_PinALast++;
+    }
     if (RIGHT_PinALast < encoderValueRight) {
       RIGHT_PinALast++;
-      if (!(RIGHT_PinALast % 10)) {
-        Serial.println(RIGHT_PinALast);
-      }
+    }
+    if (!((LEFT_PinALast + RIGHT_PinALast) % 10)) {
+      Serial.println(LEFT_PinALast + RIGHT_PinALast);
     }
     if (encoderValueLeft + encoderValueRight > 450) {
       brake();

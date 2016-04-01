@@ -17,6 +17,7 @@ int calculateError() {
   return error;
 }
 
+volatile int LEFT_PinALast = 0;
 volatile int RIGHT_PinALast = 0;
 volatile int encoderValueLeft = 0;
 volatile int encoderValueRight = 0;
