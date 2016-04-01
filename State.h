@@ -12,10 +12,10 @@ extern Motors motors;
 extern int calculateError();
 
 // Values for how far the mouse should be from walls
-//const int targetFront;
-const int thresholdFront = 300;
-//const int targetSide;
-const int thresholdSide = 400;
+const int targetFront = 300;
+const int thresholdFront = 100;
+const int targetSide = 400;
+const int thresholdSide = 100;
 
 byte state() {
   byte currentState = 0;
