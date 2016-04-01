@@ -1,4 +1,5 @@
 #include "Motors.h"
+#include "Sensors.h"
 #include <Arduino.h>
 
 extern int calculateError();
@@ -61,11 +62,11 @@ void Motors::goForward() {
 }
 
 void Motors::goForwardProportional(int error) {
-  analogWrite(LEFTMotorEN, 80 - (error/2));         //tuned down from 128
+  analogWrite(LEFTMotorEN, 80 - error);
   digitalWrite(LEFTlogic1, HIGH);
   digitalWrite(LEFTlogic2, LOW);
 
-  analogWrite(RIGHTMotorEN, 80 + (error/2));      //tuned down
+  analogWrite(RIGHTMotorEN, 80 + error);
   digitalWrite(RIGHTlogic1, LOW);
   digitalWrite(RIGHTlogic2, HIGH);
 }
