@@ -2,6 +2,7 @@
 #define STATE_H
 #include <Arduino.h>
 #include "LEDs.h"
+#include "Motors.h"
 
 #define FRONT 1
 #define RIGHT 2

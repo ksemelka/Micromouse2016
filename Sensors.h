@@ -1,5 +1,6 @@
 #ifndef SENSORS_H
 #define SENSORS_H
+#include <Arduino.h>
 
 const byte rightPT = A0;
 const byte frontPT = A1;

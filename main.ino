@@ -14,7 +14,7 @@ volatile int encoderValueRight = 0;
 void checkIfTooClose();
 bool isTooClose();
 
-PID PID(.1, 0);
+PID PID(.1, 0, 0);
 Motors motors;
 Sensors sensors(leftPT, frontPT, rightPT);
 

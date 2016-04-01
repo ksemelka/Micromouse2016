@@ -1,4 +1,5 @@
 #include "PID.h"
+#include "State.h"
 #include <Arduino.h>
 //
 // PID::PID(double* Input, double* Output, double* Setpoint, double Kp, double Ki, double Kd) {
@@ -46,16 +47,16 @@
 //    else { return false; }
 // }
 
-PID::PID(double Kp, double Ki) {
-  PID::SetTunings(Kp, Ki);
-  iTerm = 0;
+PID::PID(double Kp, double Ki, double Kd) {
+  PID::SetTunings(Kp, Ki, Kd);
+  ITerm = 0;
 }
 
 int PID::calculateError() {
   int error = 0;
   sensors.readSensors();
   if (wallToTheRight() && wallToTheLeft()) {
-    error = sensors.getRightSmoothed() - sensors.getLeftSmoothed() - OFFSET;
+    error = sensors.getRightSmoothed() - sensors.getLeftSmoothed();
   }
   else if (wallToTheRight() && !wallToTheLeft()) {
     error = targetSide - sensors.getRightSmoothed();

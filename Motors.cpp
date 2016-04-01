@@ -3,6 +3,8 @@
 #include "PID.h"
 #include <Arduino.h>
 
+extern PID PID;
+extern Sensors sensors;
 extern int calculateError();
 extern int encoderValueLeft;
 extern int encoderValueRight;

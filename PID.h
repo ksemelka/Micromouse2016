@@ -1,5 +1,8 @@
 #ifndef PID_H
 #define PID_H
+#include "Sensors.h"
+
+extern Sensors sensors;
 
 /******************************************************************************************************
 class PID {
@@ -37,6 +40,7 @@ class PID {
     void SetTunings(double, double, double);  // Used in constructor
     double kp;
     double ki;
+    double kd;
     double ITerm;
     unsigned long SampleTime = 100.0;
 };
