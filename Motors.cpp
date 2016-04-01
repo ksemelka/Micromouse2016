@@ -3,8 +3,6 @@
 
 extern int encoderValueLeft;
 extern int encoderValueRight;
-extern int RIGHT_PinALast;
-extern int LEFT_PinALast;
 
 Motors::Motors() {
   pinMode(LEFTMotorEN, OUTPUT);  // Initialize left motor
