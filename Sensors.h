@@ -16,7 +16,7 @@ class Sensors {
       readSensors();
       printSmoothed();
     }
-    int getFrontSmoothed() {
+    int calculateFrontSmoothed() {
       frontTotal -= frontReadings[index];
       frontReadings[index] = analogRead(frontPT);
       frontTotal += frontReadings[index];
@@ -27,7 +27,7 @@ class Sensors {
       frontSmoothed = frontTotal / numReadings;
       return frontSmoothed;
     }
-    int getLeftSmoothed() {
+    int calculateLeftSmoothed() {
       leftTotal -= frontReadings[index];
       leftReadings[index] = analogRead(frontPT);
       leftTotal += frontReadings[index];
@@ -38,7 +38,7 @@ class Sensors {
       leftSmoothed = leftTotal / numReadings;
       return leftSmoothed;
     }
-    int getRightSmoothed() {
+    int calculateRightSmoothed() {
       rightTotal -= rightReadings[index];
       rightReadings[index] = analogRead(rightPT);
       rightTotal += rightReadings[index];
@@ -51,14 +51,17 @@ class Sensors {
     }
     void readSensors() {
       for (int i = 0; i < numReadings; i++) {
-        frontSmoothed = getFrontSmoothed();
-        leftSmoothed = getLeftSmoothed();
-        rightSmoothed = getRightSmoothed();
+        frontSmoothed = calculateFrontSmoothed();
+        leftSmoothed = calculateLeftSmoothed();
+        rightSmoothed = calculateRightSmoothed();
       }
       leftPTReading = analogRead(leftPT);
       frontPTReading = analogRead(frontPT);
       rightPTReading = analogRead(rightPT);
     }
+    int getFrontSmoothed() const { return frontSmoothed; }
+    int getLeftSmoothed() const { return leftSmoothed; }
+    int getRightSmoothed() const { return rightSmoothed; }
     unsigned int getLeftPTReading() const { return leftPTReading; }
     unsigned int getFrontPTReading() const { return frontPTReading; }
     unsigned int getRightPTReading() const { return rightPTReading; }
