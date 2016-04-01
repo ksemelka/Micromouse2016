@@ -10,29 +10,13 @@
 
 #define OFFSET 0
 
-int calculateError() {
-  const double kp = .1;   // Proportional tuning value
-  int error = 0;
-  sensors.readSensors();
-  if (wallToTheRight() && wallToTheLeft()) {
-    error = sensors.getRightSmoothed() - sensors.getLeftSmoothed() - OFFSET;
-  }
-  else if (wallToTheRight() && !wallToTheLeft()) {
-    error = targetSide - sensors.getRightSmoothed();
-  }
-  else if (wallToTheLeft() && !wallToTheRight()) {
-    error = targetSide - sensors.getLeftSmoothed();
-  }
-  error *= kp;
-  return error;
-}
-
 volatile int encoderValueLeft = 0;
 volatile int encoderValueRight = 0;
 
 void checkIfTooClose();
 bool isTooClose();
 
+PID PID(.1, 0);
 Motors motors;
 Sensors sensors(leftPT, frontPT, rightPT);
 
