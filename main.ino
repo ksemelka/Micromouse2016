@@ -15,13 +15,13 @@ int calculateError() {
   int error = 0;
   sensors.readSensors();
   if (wallToTheRight() && wallToTheLeft()) {
-    error = sensors.getRightPTReading() - sensors.getLeftPTReading() - OFFSET;
+    error = sensors.getRightSmoothed() - sensors.getLeftSmoothed() - OFFSET;
   }
   else if (wallToTheRight() && !wallToTheLeft()) {
-    error = targetSide - sensors.getRightPTReading();
+    error = targetSide - sensors.getRightSmoothed();
   }
   else if (wallToTheLeft() && !wallToTheRight()) {
-    error = targetSide - sensors.getLeftPTReading();
+    error = targetSide - sensors.getLeftSmoothed();
   }
   error *= kp;
   return error;

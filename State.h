@@ -18,21 +18,21 @@ const int targetSide = 400;
 const int thresholdSide = 100;
 
 bool wallToTheFront() {
-  if (sensors.getFrontPTReading() > thresholdFront) {
+  if (sensors.getFrontSmoothed() > thresholdFront) {
     return true;
   }
   return false;
 }
 
 bool wallToTheRight() {
-  if (sensors.getRightPTReading() > thresholdSide) {
+  if (sensors.getRightSmoothed() > thresholdSide) {
     return true;
   }
   return false;
 }
 
 bool wallToTheLeft() {
-  if (sensors.getLeftPTReading() > thresholdSide) {
+  if (sensors.getLeftSmoothed() > thresholdSide) {
     return true;
   }
   return false;
