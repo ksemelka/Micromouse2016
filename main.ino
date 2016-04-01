@@ -40,7 +40,7 @@ void loop() {
   checkIfTooClose();
   //motors.goForwardProportional(calculateError());
   navigate();
-  if (!(millis() % 100)) {  // Prevent Serial buffer from being overloaded
+  if (!(millis() % 300)) {  // Prevent Serial buffer from being overloaded
     //sensors.view();
     determineState();
   }
