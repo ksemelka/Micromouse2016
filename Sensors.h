@@ -17,9 +17,9 @@ class Sensors {
       printSmoothed();
     }
     int calculateFrontSmoothed() {
-      frontTotal -= frontReadings[index];
-      frontReadings[index] = analogRead(frontPT);
-      frontTotal += frontReadings[index];
+      frontTotal -= frontReadings[frontIndex];
+      frontReadings[frontIndex] = analogRead(frontPT);
+      frontTotal += frontReadings[frontIndex];
       frontIndex++;
       if (frontIndex >= numReadings) {
         frontIndex = 0;
@@ -28,20 +28,20 @@ class Sensors {
       return frontSmoothed;
     }
     int calculateLeftSmoothed() {
-      leftTotal -= frontReadings[index];
-      leftReadings[index] = analogRead(frontPT);
-      leftTotal += frontReadings[index];
-      index++;
-      if (index >= numReadings) {
+      leftTotal -= frontReadings[leftIndex];
+      leftReadings[leftIndex] = analogRead(frontPT);
+      leftTotal += frontReadings[leftIndex];
+      leftIndex++;
+      if (leftIndex >= numReadings) {
         leftIndex = 0;
       }
       leftSmoothed = leftTotal / numReadings;
       return leftSmoothed;
     }
     int calculateRightSmoothed() {
-      rightTotal -= rightReadings[index];
-      rightReadings[index] = analogRead(rightPT);
-      rightTotal += rightReadings[index];
+      rightTotal -= rightReadings[rightIndex];
+      rightReadings[rightIndex] = analogRead(rightPT);
+      rightTotal += rightReadings[rightIndex];
       rightIndex++;
       if (rightIndex >= numReadings) {
         rightIndex = 0;
