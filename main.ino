@@ -28,10 +28,10 @@ Sensors sensors(leftPT, frontPT, rightPT);
 void setup() {
   initializeOnboardLED();
   randomSeed(analogRead(0));  // Seeds using random analog noise on unconnected pin
-  Serial.begin(9600);
+  Serial1.begin(9600);
   attachInterrupt(encoderLEFT_A, countLeft, FALLING);
   attachInterrupt(encoderRIGHT_A, countRight, FALLING);
-  Serial.print("Starting...\n");
+  Serial1.print("Starting...\n");
   delay(1000);
 }
 
@@ -55,6 +55,6 @@ void countRight() {
 }
 
 void printEncoderValues() {
-  Serial.print("Encoder Value: ");
-  Serial.println(encoderValueLeft);
+  Serial1.print("Encoder Value: ");
+  Serial1.println(encoderValueLeft);
 }

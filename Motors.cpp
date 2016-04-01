@@ -93,7 +93,7 @@ void Motors::turnLeft() {
       RIGHT_PinALast++;
     }
     if (!((LEFT_PinALast + RIGHT_PinALast) % 10)) {
-      Serial.println(LEFT_PinALast + RIGHT_PinALast);
+      Serial1.println(LEFT_PinALast + RIGHT_PinALast);
     }
     if (encoderValueRight > 230) {
       brake();
@@ -115,7 +115,7 @@ void Motors::turnRight() {
       RIGHT_PinALast++;
     }
     if (!((LEFT_PinALast + RIGHT_PinALast) % 10)) {
-      Serial.println(LEFT_PinALast + RIGHT_PinALast);
+      Serial1.println(LEFT_PinALast + RIGHT_PinALast);
     }
     if (encoderValueLeft + encoderValueRight > 450) {
       brake();
@@ -133,7 +133,7 @@ void Motors::turnAround() {
     if (RIGHT_PinALast < encoderValueRight) {
       RIGHT_PinALast++;
       if (!(RIGHT_PinALast % 10)) {
-        Serial.println(RIGHT_PinALast);
+        Serial1.println(RIGHT_PinALast);
       }
     }
     if (encoderValueLeft + encoderValueRight > 1000) {
@@ -145,7 +145,7 @@ void Motors::turnAround() {
 }
 
 void Motors::rotateCW() {
-  Serial.println("Rotating CW");
+  Serial1.println("Rotating CW");
   analogWrite(LEFTMotorEN, 255);
   digitalWrite(LEFTlogic1, LOW);
   digitalWrite(LEFTlogic2, HIGH);
@@ -156,7 +156,7 @@ void Motors::rotateCW() {
 }
 
 void Motors::rotateCCW() {
-  Serial.println("Rotating CCW");
+  Serial1.println("Rotating CCW");
   analogWrite(LEFTMotorEN, 255);
   digitalWrite(LEFTlogic1, HIGH);
   digitalWrite(LEFTlogic2, LOW);
