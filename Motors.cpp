@@ -1,4 +1,5 @@
 #include "Motors.h"
+#include "Sensors.h"
 #include <Arduino.h>
 
 extern int calculateError();
@@ -56,16 +57,6 @@ void Motors::goForward() {
   digitalWrite(LEFTlogic2, LOW);
 
   digitalWrite(RIGHTMotorEN, HIGH);
-  digitalWrite(RIGHTlogic1, LOW);
-  digitalWrite(RIGHTlogic2, HIGH);
-}
-
-void Motors::goForwardProportional(int error) {
-  analogWrite(LEFTMotorEN, 80 - (error/2));         //tuned down from 128
-  digitalWrite(LEFTlogic1, HIGH);
-  digitalWrite(LEFTlogic2, LOW);
-
-  analogWrite(RIGHTMotorEN, 80 + (error/2));      //tuned down
   digitalWrite(RIGHTlogic1, LOW);
   digitalWrite(RIGHTlogic2, HIGH);
 }
@@ -171,11 +162,22 @@ void Motors::rotateCCW() {
   digitalWrite(RIGHTlogic2, LOW);
 }
 
+void Motors::goForwardProportional(int error) {
+  analogWrite(LEFTMotorEN, 120 - error);
+  digitalWrite(LEFTlogic1, HIGH);
+  digitalWrite(LEFTlogic2, LOW);
+
+  analogWrite(RIGHTMotorEN, 120 + error);
+  digitalWrite(RIGHTlogic1, LOW);
+  digitalWrite(RIGHTlogic2, HIGH);
+}
+
 void Motors::traverseCell() {
   encoderValueLeft = 0;
   encoderValueRight = 0;
   while (encoderValueLeft + encoderValueRight < encoderTicksPerCell) {
-    // goForwardProportional(calculateError());
-    goForward();
+    goForwardProportional(calculateError());
+    // goForward();
   }
+  brake();
 }
