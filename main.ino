@@ -39,9 +39,6 @@ void setup() {
 void loop() {
   checkIfTooClose();
   motors.goForwardProportional(calculateError());
-  if (sensors.getFrontPTReading() > 950) {  // Prevent motor driver from burning out
-    motors.brake();
-  }
   if (!(millis() % 100)) {  // Prevent Serial buffer from being overloaded
     sensors.view();
     determineState();
