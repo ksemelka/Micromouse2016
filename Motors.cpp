@@ -136,9 +136,9 @@ void Motors::turnAround() {
     }
     if (RIGHT_PinALast < encoderValueRight) {
       RIGHT_PinALast++;
-      if (!((RIGHT_PinALast + LEFT_PinALast) % 10)) {
-        Serial1.println(RIGHT_PinALast + LEFT_PinALast);
-      }
+    }
+    if (!((RIGHT_PinALast + LEFT_PinALast) % 10)) {
+      Serial1.println(RIGHT_PinALast + LEFT_PinALast);
     }
     if (encoderValueLeft + encoderValueRight > 910) {
       brake();
@@ -175,6 +175,7 @@ void Motors::traverseCell() {
   encoderValueLeft = 0;
   encoderValueRight = 0;
   while (encoderValueLeft + encoderValueRight < encoderTicksPerCell) {
-    goForwardProportional(calculateError());
+    // goForwardProportional(calculateError());
+    goForward();
   }
 }

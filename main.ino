@@ -11,9 +11,11 @@
 #define OFFSET 0
 
 int calculateError() {
+  const double kp = .3;   // Proportional tuning value
   int error = 0;
   sensors.readSensors();
   error = sensors.getRightPTReading() - sensors.getLeftPTReading() - OFFSET;
+  error *= kp
   return error;
 }
 
@@ -37,13 +39,19 @@ void setup() {
 }
 
 void loop() {
-  checkIfTooClose();
-  //motors.goForwardProportional(calculateError());
+//  checkIfTooClose();
+//  //motors.goForwardProportional(calculateError());
+//  navigate();
+//  if (!(millis() % 300)) {  // Prevent Serial buffer from being overloaded
+//    //sensors.view();
+//    determineState();
+//  }
+//  motors.traverseCell();
+  sensors.view();
   navigate();
-  if (!(millis() % 300)) {  // Prevent Serial buffer from being overloaded
-    //sensors.view();
-    determineState();
-  }
+  delay(1500);
+//  motors.turnLeft();
+//  delay(1500);
 }
 
 void countLeft() {
