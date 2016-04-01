@@ -1,5 +1,5 @@
-// #include "PID.h"
-// #include <Arduino.h>
+#include "PID.h"
+#include <Arduino.h>
 //
 // PID::PID(double* Input, double* Output, double* Setpoint, double Kp, double Ki, double Kd) {
 //   myOutput = Output;
@@ -45,10 +45,31 @@
 //    }
 //    else { return false; }
 // }
-//
-// void PID::SetTunings(double Kp, double Ki, double Kd) {
-//   double SampleTimeInSec = ((double)SampleTime) / 1000;
-//   kp = Kp;
-//   ki = Ki * SampleTimeInSec;
-//   kd = Kd / SampleTimeInSec;
-// }
+
+PID::PID(double Kp, double Ki) {
+  PID::SetTunings(Kp, Ki);
+  iTerm = 0;
+}
+
+int PID::calculateError() {
+  int error = 0;
+  sensors.readSensors();
+  if (wallToTheRight() && wallToTheLeft()) {
+    error = sensors.getRightSmoothed() - sensors.getLeftSmoothed() - OFFSET;
+  }
+  else if (wallToTheRight() && !wallToTheLeft()) {
+    error = targetSide - sensors.getRightSmoothed();
+  }
+  else if (wallToTheLeft() && !wallToTheRight()) {
+    error = targetSide - sensors.getLeftSmoothed();
+  }
+  error *= kp;
+  return error;
+}
+
+void PID::SetTunings(double Kp, double Ki, double Kd = 0) {
+  double SampleTimeInSec = ((double)SampleTime) / 1000;
+  kp = Kp;
+  ki = Ki * SampleTimeInSec;
+  kd = Kd / SampleTimeInSec;
+}
