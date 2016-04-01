@@ -67,8 +67,7 @@ void navigate() {
   switch (state()) {
     case 0:
       Serial1.println("Error: 0");
-      motors.halt();
-      //blink(3);
+      blink(1);
       break;
     case FRONT:
       if (random(millis()) % 2) {   // Turn left or right randomly
@@ -79,10 +78,10 @@ void navigate() {
       }
       break;
     case RIGHT:
-      motors.goForwardProportional(calculateError());
+      motors.traverseCell();
       break;
     case LEFT:
-      motors.goForwardProportional(calculateError());
+      motors.traverseCell();
       break;
     case FRONT + RIGHT:
       motors.turnLeft();
@@ -91,13 +90,16 @@ void navigate() {
       motors.turnRight();
       break;
     case RIGHT + LEFT:
-      motors.goForwardProportional(calculateError());
+      motors.traverseCell();
       break;
     case FRONT + RIGHT + LEFT:
       motors.turnAround();
       break;
     default:
-      motors.goForwardProportional(calculateError());
+      Serial1.println("Error: Default");
+      motors.halt();
+      blink(1);
+      break;
   }
 }
 
