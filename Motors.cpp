@@ -60,11 +60,11 @@ void Motors::goForward() {
 }
 
 void Motors::goForwardProportional(int error) {
-  analogWrite(LEFTMotorEN, 128 - error);
+  analogWrite(LEFTMotorEN, 80 - (error/2));         //tuned down from 128
   digitalWrite(LEFTlogic1, HIGH);
   digitalWrite(LEFTlogic2, LOW);
 
-  analogWrite(RIGHTMotorEN, 128 + error);
+  analogWrite(RIGHTMotorEN, 80 + (error/2));      //tuned down
   digitalWrite(RIGHTlogic1, LOW);
   digitalWrite(RIGHTlogic2, HIGH);
 }

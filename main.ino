@@ -38,9 +38,10 @@ void setup() {
 
 void loop() {
   checkIfTooClose();
-  motors.goForwardProportional(calculateError());
+  //motors.goForwardProportional(calculateError());
+  navigate();
   if (!(millis() % 100)) {  // Prevent Serial buffer from being overloaded
-    sensors.view();
+    //sensors.view();
     determineState();
   }
 }
