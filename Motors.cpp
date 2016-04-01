@@ -1,6 +1,7 @@
 #include "Motors.h"
 #include <Arduino.h>
 
+extern int calculateError();
 extern int encoderValueLeft;
 extern int encoderValueRight;
 
@@ -135,9 +136,9 @@ void Motors::turnAround() {
     }
     if (RIGHT_PinALast < encoderValueRight) {
       RIGHT_PinALast++;
-      if (!((RIGHT_PinALast + LEFT_PinALast) % 10)) {
-        Serial1.println(RIGHT_PinALast + LEFT_PinALast);
-      }
+    }
+    if (!((RIGHT_PinALast + LEFT_PinALast) % 10)) {
+      Serial1.println(RIGHT_PinALast + LEFT_PinALast);
     }
     if (encoderValueLeft + encoderValueRight > 910) {
       brake();
@@ -168,4 +169,13 @@ void Motors::rotateCCW() {
   analogWrite(RIGHTMotorEN, 150);
   digitalWrite(RIGHTlogic1, HIGH);
   digitalWrite(RIGHTlogic2, LOW);
+}
+
+void Motors::traverseCell() {
+  encoderValueLeft = 0;
+  encoderValueRight = 0;
+  while (encoderValueLeft + encoderValueRight < encoderTicksPerCell) {
+    // goForwardProportional(calculateError());
+    goForward();
+  }
 }
