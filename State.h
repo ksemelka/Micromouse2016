@@ -1,6 +1,7 @@
 #ifndef STATE_H
 #define STATE_H
 #include <Arduino.h>
+#include "Sensors.h"
 
 #define FRONT 1
 #define RIGHT 2
