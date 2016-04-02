@@ -1,8 +1,5 @@
 #ifndef PID_H
 #define PID_H
-#include "Sensors.h"
-
-extern Sensors sensors;
 
 /******************************************************************************************************
 class PID {

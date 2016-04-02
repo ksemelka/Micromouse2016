@@ -1,11 +1,11 @@
 #include "Motors.h"
 #include "Sensors.h"
+#include "LEDs.h"
 #include "PID.h"
 #include <Arduino.h>
 
 extern PID PID;
 extern Sensors sensors;
-extern int calculateError();
 extern int encoderValueLeft;
 extern int encoderValueRight;
 
@@ -183,4 +183,22 @@ void Motors::traverseCell() {
     // goForward();
   }
   brake();
+}
+
+void Motors::checkIfTooClose() {
+  if (isTooClose()) {
+    while (true) {
+      Serial1.println("Stopped: Too close");
+      blink(1);
+    }
+  }
+ }
+
+bool Motors::isTooClose() {
+  sensors.readSensors();
+  if (sensors.getFrontPTReading() > 964) {  // Prevent motor driver from burning out
+    brake();
+    return true;
+  }
+  return false;
 }

@@ -1,7 +1,10 @@
 #include "PID.h"
 #include "State.h"
+#include "Sensors.h"
 #include <Arduino.h>
-//
+
+extern Sensors sensors;
+
 // PID::PID(double* Input, double* Output, double* Setpoint, double Kp, double Ki, double Kd) {
 //   myOutput = Output;
 //   myInput = Input;
