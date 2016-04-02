@@ -9,8 +9,8 @@
 // Values for how far the mouse should be from walls
 const int targetFront = 400;
 const int thresholdFront = 100;
-const int targetSide = 400;   // FIXME: Target side being too high might be what
-                              //          is causing it to not go straight
+const int targetSide = analogRead(rightPT);   // FIXME: Target side being too high might be what
+                                              //          is causing it to not go straight
 const int thresholdSide = 80;
 
 bool wallToTheFront();
