@@ -29,5 +29,17 @@ class PID {
 };
 *******************************************************************************************************/
 
+class PID {
+  public:
+    PID(double, double, double);
+    int calculateError();
+  private:
+    void SetTunings(double, double, double);  // Used in constructor
+    double kp;
+    double ki;
+    double kd;
+    double ITerm;
+    unsigned long SampleTime = 100.0;
+};
 
 #endif /*PID_H*/

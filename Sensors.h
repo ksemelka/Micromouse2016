@@ -1,5 +1,6 @@
 #ifndef SENSORS_H
 #define SENSORS_H
+#include <Arduino.h>
 
 const byte rightPT = A0;
 const byte frontPT = A1;
@@ -7,58 +8,12 @@ const byte leftPT = A2;
 
 class Sensors {
   public:
-     Sensors(const byte leftPT, const byte frontPT, const byte rightPT) {
-      pinMode(leftPT, INPUT);        // Initialize phototransistors
-      pinMode(frontPT, INPUT);
-      pinMode(rightPT, INPUT);
-    }
-    void view() {
-      readSensors();
-      printSmoothed();
-    }
-    int calculateFrontSmoothed() {
-      frontTotal -= frontReadings[index];
-      frontReadings[index] = analogRead(frontPT);
-      frontTotal += frontReadings[index];
-      frontIndex++;
-      if (frontIndex >= numReadings) {
-        frontIndex = 0;
-      }
-      frontSmoothed = frontTotal / numReadings;
-      return frontSmoothed;
-    }
-    int calculateLeftSmoothed() {
-      leftTotal -= frontReadings[index];
-      leftReadings[index] = analogRead(frontPT);
-      leftTotal += frontReadings[index];
-      index++;
-      if (index >= numReadings) {
-        leftIndex = 0;
-      }
-      leftSmoothed = leftTotal / numReadings;
-      return leftSmoothed;
-    }
-    int calculateRightSmoothed() {
-      rightTotal -= rightReadings[index];
-      rightReadings[index] = analogRead(rightPT);
-      rightTotal += rightReadings[index];
-      rightIndex++;
-      if (rightIndex >= numReadings) {
-        rightIndex = 0;
-      }
-      rightSmoothed = rightTotal / numReadings;
-      return rightSmoothed;
-    }
-    void readSensors() {
-      for (int i = 0; i < numReadings; i++) {
-        frontSmoothed = calculateFrontSmoothed();
-        leftSmoothed = calculateLeftSmoothed();
-        rightSmoothed = calculateRightSmoothed();
-      }
-      leftPTReading = analogRead(leftPT);
-      frontPTReading = analogRead(frontPT);
-      rightPTReading = analogRead(rightPT);
-    }
+     Sensors(const byte leftPT, const byte frontPT, const byte rightPT);
+    void view();
+    int calculateFrontSmoothed();
+    int calculateLeftSmoothed();
+    int calculateRightSmoothed();
+    void readSensors();
     int getFrontSmoothed() const { return frontSmoothed; }
     int getLeftSmoothed() const { return leftSmoothed; }
     int getRightSmoothed() const { return rightSmoothed; }
@@ -66,22 +21,8 @@ class Sensors {
     unsigned int getFrontPTReading() const { return frontPTReading; }
     unsigned int getRightPTReading() const { return rightPTReading; }
 
-    void printPTReadings() const {
-      Serial1.print("Left sensor: ");
-      Serial1.print(leftPTReading);
-      Serial1.print("\tFront sensor: ");
-      Serial1.print(frontPTReading);
-      Serial1.print("\tRight sensor: ");
-      Serial1.println(rightPTReading);
-    }
-    void printSmoothed() const {
-      Serial1.print("Left sensor: ");
-      Serial1.print(leftSmoothed);
-      Serial1.print("\tFront sensor: ");
-      Serial1.print(frontSmoothed);
-      Serial1.print("\tRight sensor: ");
-      Serial1.println(rightSmoothed);
-    }
+    void printPTReadings() const;
+    void printSmoothed() const;
   private:
     unsigned int leftPTReading;
     unsigned int frontPTReading;
