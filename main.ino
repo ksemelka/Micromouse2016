@@ -10,11 +10,13 @@
 
 volatile int encoderValueLeft = 0;
 volatile int encoderValueRight = 0;
+int targetRight;
+int targetLeft;
 
 void checkIfTooClose();
 bool isTooClose();
 
-PID PID(.1, 0, 0);
+PID PID(.05, 0, 0);
 Motors motors;
 Sensors sensors(leftPT, frontPT, rightPT);
 
@@ -25,7 +27,12 @@ void setup() {
   attachInterrupt(encoderLEFT_A, countLeft, FALLING);
   attachInterrupt(encoderRIGHT_A, countRight, FALLING);
   Serial1.print("Starting...\n");
-  delay(1000);
+  while (sensors.getFrontSmoothed() < 700) {  // Wait to enter loop
+    sensors.readSensors();
+  }
+  delay(2000);
+  targetRight = analogRead(rightPT);
+  targetLeft = analogRead(leftPT);
 }
 
 void loop() {
@@ -39,7 +46,7 @@ void loop() {
 //  motors.traverseCell();
   sensors.view();
   navigate();
-  delay(1500);
+  delay(1000);
 //  motors.turnLeft();
 //  delay(1500);
 }
