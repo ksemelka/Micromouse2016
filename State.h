@@ -1,18 +1,16 @@
 #ifndef STATE_H
 #define STATE_H
-#include <Arduino.h>
 #include "Sensors.h"
+#include <Arduino.h>
 
 #define FRONT 1
 #define RIGHT 2
 #define LEFT 4
 
 // Values for how far the mouse should be from walls
-const int targetFront = 400;
-const int thresholdFront = 100;
-const int targetSide = analogRead(rightPT);   // FIXME: Target side being too high might be what
-                                              //          is causing it to not go straight
-const int thresholdSide = 80;
+const int targetFront = 400;      // stopping value
+const int thresholdFront = 100;   // reading value to indicate wall
+const int thresholdSide = 80;     // reading value to indicate if there is a wall
 
 bool wallToTheFront();
 bool wallToTheRight();
