@@ -30,7 +30,7 @@ bool wallToTheLeft() {
 
 byte state() {
   byte currentState = 0;
-  sensors.readSensors();
+//  sensors.readSensors();
   if (wallToTheFront()) {
     currentState += FRONT;
   }
@@ -78,7 +78,7 @@ void navigate() {
   printState();
   switch (state()) {
     case 0:
-      blink(1);
+      motors.traverseCell();
       break;
     case FRONT:
       if (random(millis()) % 2) {   // Turn left or right randomly
@@ -90,7 +90,7 @@ void navigate() {
       break;
     case RIGHT:
       if (random(millis()) % 2) {   // Turn left or go forward randomly
-        motors.turnLeft();
+//        motors.turnLeft();
       }
       else {
         motors.traverseCell();
@@ -98,7 +98,7 @@ void navigate() {
       break;
     case LEFT:
       if (random(millis()) % 2) {   // Turn right or go forward randomly
-        motors.turnRight();
+//        motors.turnRight();
       }
       else {
         motors.traverseCell();

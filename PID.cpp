@@ -59,7 +59,7 @@ PID::PID(double Kp, double Ki, double Kd) {
 
 int PID::calculateError() {
   int error = 0;
-  sensors.readSensors();
+//  sensors.readSensors();
   if (wallToTheRight() && wallToTheLeft()) {
     error = sensors.getRightSmoothed() - sensors.getLeftSmoothed();
   }
@@ -68,6 +68,9 @@ int PID::calculateError() {
   }
   else if (wallToTheLeft() && !wallToTheRight()) {
     error = targetLeft - sensors.getLeftSmoothed();
+  }
+  else if (!wallToTheLeft() && !wallToTheRight()) {
+    error = 0;
   }
   error *= kp;
   return error;

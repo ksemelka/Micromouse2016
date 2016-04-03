@@ -9,7 +9,7 @@ Sensors::Sensors(const byte leftPT, const byte frontPT, const byte rightPT)  {
 }
 
 void Sensors::view() {
-  readSensors();
+//  readSensors();
   printSmoothed();
 }
 
@@ -46,16 +46,16 @@ int Sensors::calculateRightSmoothed() {
       rightSmoothed = rightTotal / numReadings;
       return rightSmoothed;
 }
-void Sensors::readSensors() {
-      for (int i = 0; i < numReadings; i++) {
-        frontSmoothed = calculateFrontSmoothed();
-        leftSmoothed = calculateLeftSmoothed();
-        rightSmoothed = calculateRightSmoothed();
-      }
-      leftPTReading = analogRead(leftPT);
-      frontPTReading = analogRead(frontPT);
-      rightPTReading = analogRead(rightPT);
-}
+//void Sensors::readSensors() {
+//      for (int i = 0; i < numReadings; i++) {
+//        frontSmoothed = calculateFrontSmoothed();
+//        leftSmoothed = calculateLeftSmoothed();
+//        rightSmoothed = calculateRightSmoothed();
+//      }
+//      leftPTReading = analogRead(leftPT);
+//      frontPTReading = analogRead(frontPT);
+//      rightPTReading = analogRead(rightPT);
+//}
 
 void Sensors::printPTReadings() const {
       Serial1.print("Left sensor: ");

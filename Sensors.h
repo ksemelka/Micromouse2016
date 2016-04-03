@@ -23,7 +23,7 @@ class Sensors {
 
     void printPTReadings() const;
     void printSmoothed() const;
-  private:
+//  private:
     unsigned int leftPTReading;
     unsigned int frontPTReading;
     unsigned int rightPTReading;
