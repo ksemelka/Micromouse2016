@@ -4,6 +4,8 @@
 #include <Arduino.h>
 
 extern Sensors sensors;
+extern int targetRight;
+extern int targetLeft;
 
 // PID::PID(double* Input, double* Output, double* Setpoint, double Kp, double Ki, double Kd) {
 //   myOutput = Output;
@@ -62,10 +64,10 @@ int PID::calculateError() {
     error = sensors.getRightSmoothed() - sensors.getLeftSmoothed();
   }
   else if (wallToTheRight() && !wallToTheLeft()) {
-    error = targetSide - sensors.getRightSmoothed();
+    error = sensors.getRightSmoothed() - targetRight;
   }
   else if (wallToTheLeft() && !wallToTheRight()) {
-    error = targetSide - sensors.getLeftSmoothed();
+    error = targetLeft - sensors.getLeftSmoothed();
   }
   error *= kp;
   return error;
