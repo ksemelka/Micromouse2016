@@ -6,7 +6,7 @@
 #define encoderLEFT_B       3  // Left encoder output B
 #define encoderRIGHT_A      4  // Right encoder output channel
 #define encoderRIGHT_B      5  // Right encoder Output B
-#define encoderTicksPerCell 1550  // Number of encoder ticks it takes to traverse cell
+#define encoderTicksPerCell 1500  // Number of encoder ticks it takes to traverse cell
 
 class Motors {
   public:
