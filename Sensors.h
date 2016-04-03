@@ -14,12 +14,12 @@ class Sensors {
     int calculateLeftSmoothed();
     int calculateRightSmoothed();
     void readSensors();
-    int getFrontSmoothed() const { return frontSmoothed; }
-    int getLeftSmoothed() const { return leftSmoothed; }
-    int getRightSmoothed() const { return rightSmoothed; }
-    unsigned int getLeftPTReading() const { return leftPTReading; }
-    unsigned int getFrontPTReading() const { return frontPTReading; }
-    unsigned int getRightPTReading() const { return rightPTReading; }
+    int getFrontSmoothed() const;
+    int getLeftSmoothed() const;
+    int getRightSmoothed() const;
+    unsigned int getLeftPTReading() const;
+    unsigned int getFrontPTReading() const;
+    unsigned int getRightPTReading() const;
 
     void printPTReadings() const;
     void printSmoothed() const;
