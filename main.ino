@@ -45,7 +45,7 @@ void loop() {
 
   sensors.view();
   navigate();
-  delay(100);
+  delay(500);
   printState();
 
 }
