@@ -74,3 +74,10 @@ void Sensors::printSmoothed() const {
       Serial1.print("\tRight sensor: ");
       Serial1.println(rightSmoothed);
 }
+
+int Sensors::getFrontSmoothed() const { return frontSmoothed; }
+int Sensors::getLeftSmoothed() const { return leftSmoothed; }
+int Sensors::getRightSmoothed() const { return rightSmoothed; }
+unsigned int Sensors::getLeftPTReading() const { return leftPTReading; }
+unsigned int Sensors::getFrontPTReading() const { return frontPTReading; }
+unsigned int Sensors::getRightPTReading() const { return rightPTReading; }
