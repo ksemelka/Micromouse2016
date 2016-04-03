@@ -1,5 +1,6 @@
 #ifndef PID_H
 #define PID_H
+#include "PIDencoders.h"
 
 /******************************************************************************************************
 class PID {
@@ -33,6 +34,7 @@ class PID {
   public:
     PID(double, double, double);
     int calculateError();
+    int calculateErrorSensors();
   private:
     void SetTunings(double, double, double);  // Used in constructor
     double kp;

@@ -58,8 +58,11 @@ PID::PID(double Kp, double Ki, double Kd) {
 }
 
 int PID::calculateError() {
+  int totalError = calculateErrorSensors() + calculateProportionalEncoderError();
+}
+
+int PID::calculateErrorSensors() {
   int error = 0;
-//  sensors.readSensors();
   if (wallToTheRight() && wallToTheLeft()) {
     error = sensors.getRightSmoothed() - sensors.getLeftSmoothed();
   }
