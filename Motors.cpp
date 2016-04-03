@@ -80,19 +80,12 @@ void Motors::turnLeft() {
   encoderValueRight = 0;
   rotateCCW();
   while(true) {
-    if (LEFT_PinALast < encoderValueLeft) {
-      LEFT_PinALast++;
-    }
-    if (RIGHT_PinALast < encoderValueRight) {
-      RIGHT_PinALast++;
-    }
-    if (!((LEFT_PinALast + RIGHT_PinALast) % 10)) {   // Print every 10 encoder ticks
-      Serial1.println(LEFT_PinALast + RIGHT_PinALast);
-    }
+//    if (!((encoderValueLeft + encoderValueRight) % 10)) {     // THIS MAKES THE CODE WORK DON'T REMOVE
+//      Serial1.println(encoderValueLeft + encoderValueRight);
+//    }
+    delay(1);
     if (encoderValueRight + encoderValueLeft > 365) {
         brake();
-        LEFT_PinALast = 0;
-        RIGHT_PinALast = 0;
         break;
     }
   }
@@ -103,19 +96,12 @@ void Motors::turnRight() {
   encoderValueRight = 0;
   rotateCW();
   while(true) {
-    if (LEFT_PinALast < encoderValueLeft) {
-      LEFT_PinALast++;
-    }
-    if (RIGHT_PinALast < encoderValueRight) {
-      RIGHT_PinALast++;
-    }
-    if (!((LEFT_PinALast + RIGHT_PinALast) % 10)) {
-      Serial1.println(LEFT_PinALast + RIGHT_PinALast);
-    }
+//    if (!((encoderValueLeft + encoderValueRight) % 10)) {
+//      Serial1.println(encoderValueLeft + encoderValueRight);
+//    }
+    delay(1);
     if (encoderValueLeft + encoderValueRight > 335) {
          brake();
-         LEFT_PinALast = 0;
-         RIGHT_PinALast = 0;
          break;
     }
   }
@@ -126,15 +112,7 @@ void Motors::turnAround() {
   encoderValueRight = 0;
   rotateCW();
   while(true) {
-    if (LEFT_PinALast < encoderValueLeft) {
-      LEFT_PinALast++;
-    }
-    if (RIGHT_PinALast < encoderValueRight) {
-      RIGHT_PinALast++;
-    }
-    if (!((RIGHT_PinALast + LEFT_PinALast) % 10)) {
-      Serial1.println(RIGHT_PinALast + LEFT_PinALast);
-    }
+    delay(1);
     if (encoderValueLeft + encoderValueRight > 910) {
       brake();
       LEFT_PinALast = 0;

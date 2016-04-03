@@ -6,6 +6,8 @@ const byte rightPT = A0;
 const byte frontPT = A1;
 const byte leftPT = A2;
 
+#define SENSOR_SAMPLE_TIME  1000
+
 class Sensors {
   public:
      Sensors(const byte leftPT, const byte frontPT, const byte rightPT);

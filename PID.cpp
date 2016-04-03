@@ -6,6 +6,8 @@
 extern Sensors sensors;
 extern int targetRight;
 extern int targetLeft;
+extern int encoderValueLeft;
+extern int encoderValueRight;
 
 // PID::PID(double* Input, double* Output, double* Setpoint, double Kp, double Ki, double Kd) {
 //   myOutput = Output;
@@ -58,7 +60,15 @@ PID::PID(double Kp, double Ki, double Kd) {
 }
 
 int PID::calculateError() {
-  int totalError = calculateErrorSensors() + calculateProportionalEncoderError();
+  int totalError = calculateErrorSensors();
+//  Serial1.print("Total error: ");
+//  Serial1.println(totalError);
+//  Serial1.print("Left Velocity: ");
+//  Serial1.println(velocityLeft);
+//  Serial1.print("Right Velocity: ");
+//  Serial1.println(velocityRight);
+
+  return totalError;
 }
 
 int PID::calculateErrorSensors() {
@@ -84,4 +94,9 @@ void PID::SetTunings(double Kp, double Ki, double Kd = 0) {
   kp = Kp;
   ki = Ki * SampleTimeInSec;
   kd = Kd / SampleTimeInSec;
+}
+
+double PID::calculateProportionalEncoderError() {
+  encoderErrorBoth = velocityRight - velocityLeft;
+  return encoderErrorBoth * Kx;
 }

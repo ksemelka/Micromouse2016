@@ -18,23 +18,24 @@ int targetLeft;
 void checkIfTooClose();
 bool isTooClose();
 
-PID PID(.05, 0, 0);
+PID PID(.2, 0, 0);
 Motors motors;
 Sensors sensors(leftPT, frontPT, rightPT);
 
 void setup() {
-  Timer1.initialize(SAMPLE_TIME);
+  Timer1.initialize(VELOCITY_SAMPLE_TIME);
   Timer1.start();
   initializeOnboardLED();
   randomSeed(analogRead(0));  // Seeds using random analog noise on unconnected pin
   Serial1.begin(9600);
-  Timer1.attachInterrupt(readSensors);
+  Serial.begin(9600);
   Timer1.attachInterrupt(calculateVelocity);
   attachInterrupt(encoderLEFT_A, countLeft, FALLING);
   attachInterrupt(encoderRIGHT_A, countRight, FALLING);
   Serial1.print("Starting...\n");
-  while (sensors.getFrontSmoothed() < 500) {  // Wait to enter loop
-//  sensors.view();
+  delay(1000);
+  while (sensors.getFrontSmoothed() < 500 || !(millis() % 300)) {  // Wait to enter loop
+    sensors.view();
   }
   delay(2000);
   targetRight = analogRead(rightPT);
@@ -42,10 +43,18 @@ void setup() {
 }
 
 void loop() {
-  sensors.view();
+//  sensors.view();
   navigate();
-  delay(100);
-  printState();
+  delay(1000);
+//  printState();
+//  if (!(millis() % 300)) {
+    sensors.view();
+//    Serial1.println(PID.velocityLeft);
+//    Serial1.print("Velocity Right: ")
+//    Serial1.println(PID.velocityRight);
+//  }
+//  motors.goForward();
+//  motors.goForwardProportional(PID.calculateError());
 }
 
 void countLeft() {
@@ -62,4 +71,17 @@ void readSensors() {
       sensors.leftPTReading = analogRead(leftPT);
       sensors.frontPTReading = analogRead(frontPT);
       sensors.rightPTReading = analogRead(rightPT);
+}
+
+void calculateVelocity() {
+  sensors.leftSmoothed = analogRead(leftPT);
+  sensors.frontSmoothed = analogRead(frontPT);
+  sensors.rightSmoothed = analogRead(rightPT);
+  PID.velocityLeft = (double)encoderLeftTicksPerSample / VELOCITY_SAMPLE_TIME;
+  PID.velocityRight = (double)encoderRightTicksPerSample / VELOCITY_SAMPLE_TIME;
+  PID.calculateProportionalEncoderError();
+  PID.prevVelocityLeft = PID.velocityLeft;  // Keep these values for calculating error
+  PID.prevVelocityRight = PID.velocityRight;
+  encoderLeftTicksPerSample = 0;
+  encoderRightTicksPerSample = 0;
 }
