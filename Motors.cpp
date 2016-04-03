@@ -2,6 +2,7 @@
 #include "Sensors.h"
 #include "LEDs.h"
 #include "PID.h"
+#include "State.h"
 #include <Arduino.h>
 
 extern PID PID;
@@ -85,7 +86,7 @@ void Motors::turnLeft() {
     if (RIGHT_PinALast < encoderValueRight) {
       RIGHT_PinALast++;
     }
-    if (!((LEFT_PinALast + RIGHT_PinALast) % 10)) {
+    if (!((LEFT_PinALast + RIGHT_PinALast) % 10)) {   // Print every 10 encoder ticks
       Serial1.println(LEFT_PinALast + RIGHT_PinALast);
     }
     if (encoderValueRight + encoderValueLeft > 365) {
@@ -144,7 +145,7 @@ void Motors::turnAround() {
 }
 
 void Motors::rotateCW() {
-  Serial1.println("Rotating CW");
+//  Serial1.println("Rotating CW");
   analogWrite(LEFTMotorEN, 150);
   digitalWrite(LEFTlogic1, LOW);
   digitalWrite(LEFTlogic2, HIGH);
@@ -155,7 +156,7 @@ void Motors::rotateCW() {
 }
 
 void Motors::rotateCCW() {
-  Serial1.println("Rotating CCW");
+//  Serial1.println("Rotating CCW");
   analogWrite(LEFTMotorEN, 150);
   digitalWrite(LEFTlogic1, HIGH);
   digitalWrite(LEFTlogic2, LOW);
@@ -181,6 +182,9 @@ void Motors::traverseCell() {
   while (encoderValueLeft + encoderValueRight < encoderTicksPerCell) {
     goForwardProportional(PID.calculateError());
     // goForward();
+    if (sensors.getFrontSmoothed() > targetFront) {
+      break;
+    }
   }
   brake();
 }
