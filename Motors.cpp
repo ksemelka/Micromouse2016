@@ -9,6 +9,7 @@ extern PID PID;
 extern Sensors sensors;
 extern int encoderValueLeft;
 extern int encoderValueRight;
+extern byte nextState;
 
 Motors::Motors() {
   pinMode(LEFTMotorEN, OUTPUT);  // Initialize left motor
@@ -149,6 +150,9 @@ void Motors::traverseCell() {
   encoderValueRight = 0;
   while (encoderValueLeft + encoderValueRight < encoderTicksPerCell) {
     goForwardProportional(PID.calculateError());
+    if (encoderValueLeft + encoderValueRight == encoderTicksPerCell - 500) {
+      nextState = state();
+    }
     if (sensors.frontPTReading > targetFront) {
       break;
     }

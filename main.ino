@@ -9,10 +9,11 @@
 // #include "stm32f4xx.h"
 // #include "delay.h"
 
-volatile int encoderValueLeft = 0;
-volatile int encoderValueRight = 0;
+volatile int encoderValueLeft = encoderTicksPerCell - 500;
+volatile int encoderValueRight = encoderTicksPerCell - 500;
 int targetRight;
 int targetLeft;
+byte nextState = LEFT + RIGHT;
 
 void checkIfTooClose();
 bool isTooClose();
