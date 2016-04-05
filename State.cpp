@@ -43,7 +43,7 @@ byte state() {
 }
 
 void printState() {
-  switch (state()) {
+  switch (nextState) {
     case 0:
       Serial1.println("STATE: 0");
       break;
@@ -75,7 +75,7 @@ void printState() {
 
 void navigate() {
   printState();
-  switch (state()) {
+  switch (nextState) {
     case 0:       // Randomly choose left, right, or straight
     if (random(millis()) % 3 == 2) {
       delay(200);
@@ -159,7 +159,7 @@ void navigate() {
 
 void solveRightHand() {
   printState();
-  switch (state()) {
+  switch (nextState) {
     case 0:
       motors.turnRight();
       delay(100);
