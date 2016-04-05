@@ -6,6 +6,7 @@
 
 extern Motors motors;
 extern Sensors sensors;
+extern byte nextState;
 
 bool wallToTheFront() {
   if (sensors.frontPTReading > thresholdFront) {
