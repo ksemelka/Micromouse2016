@@ -150,8 +150,11 @@ void Motors::traverseCell() {
   encoderValueRight = 0;
   while (encoderValueLeft + encoderValueRight < encoderTicksPerCell) {
     goForwardProportional(PID.calculateError());
-    if (encoderValueLeft + encoderValueRight == encoderTicksPerCell - 500) {
-      nextState = state();
+    if (encoderValueLeft + encoderValueRight > encoderTicksPerCell - 500 &&
+        encoderValueLeft + encoderValueRight < encoderTicksPerCell - 495) { // Call within a range
+                                                                            // in case they increment
+                                                                            // by more than 1 at a time
+        nextState = state();
     }
     if (sensors.frontPTReading > targetFront) {
       break;
