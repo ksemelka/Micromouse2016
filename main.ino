@@ -1,5 +1,4 @@
 #include <TimerOne.h>
-
 #include "Motors.h"
 #include "Sensors.h"
 #include "LEDs.h"
@@ -7,9 +6,8 @@
 // #include "Floodfill.h"
 #include "State.h"
 #include "Maze.h"
-
-//#include <avr/io.h>
-//#include <avr/interrupt.h>
+// #include "stm32f4xx.h"
+// #include "delay.h"
 
 volatile int encoderValueLeft = 0;
 volatile int encoderValueRight = 0;
@@ -19,22 +17,22 @@ int targetLeft;
 void checkIfTooClose();
 bool isTooClose();
 
-PID PID(.2, 0, 0);
+PID PID(.33, 0, 0);
 Motors motors;
 Sensors sensors(leftPT, frontPT, rightPT);
 
 void setup() {
-  Timer1.initialize(1000);
+  Timer1.initialize(500);
   Timer1.start();
   initializeOnboardLED();
   randomSeed(analogRead(0));  // Seeds using random analog noise on unconnected pin
   Serial1.begin(9600);
   Timer1.attachInterrupt(readSensors);
-  attachInterrupt(encoderLEFT_A, countLeft, FALLING);
-  attachInterrupt(encoderRIGHT_A, countRight, FALLING);
+  attachInterrupt(encoderLEFT_A, countLeft, RISING);
+  attachInterrupt(encoderRIGHT_A, countRight, RISING);
   Serial1.print("Starting...\n");
-  while (sensors.getFrontSmoothed() < 500) {  // Wait to enter loop
-//  sensors.view();
+  while (sensors.frontPTReading < 500) {  // Wait to enter loop
+    blink(1);
   }
   delay(2000);
   targetRight = analogRead(rightPT);
@@ -42,28 +40,29 @@ void setup() {
 }
 
 void loop() {
-
-  sensors.view();
   navigate();
-  delay(500);
-  printState();
-
 }
 
 void countLeft() {
-  encoderValueLeft++;
+//  if (digitalRead(encoderLEFT_B) == HIGH) { // If channel A leads B, CW
+//    encoderValueLeft--;
+//  }
+//  else {
+    encoderValueLeft++;
+//  }
 }
 
 void countRight() {
-  encoderValueRight++;
+//  if (digitalRead(encoderRIGHT_B) == HIGH) { // If channel A leads B, CW
+    encoderValueRight++;
+//  }
+//  else {
+//    encoderValueRight--;
+//  }
 }
 
 void readSensors() {
-        sensors.frontSmoothed = sensors.calculateFrontSmoothed();
-        sensors.leftSmoothed = sensors.calculateLeftSmoothed();
-        sensors.rightSmoothed = sensors.calculateRightSmoothed();
-   //   }
-      sensors.leftPTReading = analogRead(leftPT);
-      sensors.frontPTReading = analogRead(frontPT);
-      sensors.rightPTReading = analogRead(rightPT);
+  sensors.leftPTReading = analogRead(leftPT);
+  sensors.frontPTReading = analogRead(frontPT);
+  sensors.rightPTReading = analogRead(rightPT);
 }

@@ -56,11 +56,11 @@ void Motors::halt() {
  }
 
 void Motors::goForward() {
-  digitalWrite(LEFTMotorEN, HIGH);
+  analogWrite(LEFTMotorEN, 180);
   digitalWrite(LEFTlogic1, HIGH);
   digitalWrite(LEFTlogic2, LOW);
 
-  digitalWrite(RIGHTMotorEN, HIGH);
+  analogWrite(RIGHTMotorEN, 150);
   digitalWrite(RIGHTlogic1, LOW);
   digitalWrite(RIGHTlogic2, HIGH);
 }
@@ -80,22 +80,12 @@ void Motors::turnLeft() {
   encoderValueRight = 0;
   rotateCCW();
   while(true) {
-    if (LEFT_PinALast < encoderValueLeft) {
-      LEFT_PinALast++;
-    }
-    if (RIGHT_PinALast < encoderValueRight) {
-      RIGHT_PinALast++;
-    }
-    if (!((LEFT_PinALast + RIGHT_PinALast) % 10)) {   // Print every 10 encoder ticks
-      Serial1.println(LEFT_PinALast + RIGHT_PinALast);
-    }
-    if (encoderValueRight + encoderValueLeft > 365) {
-        brake();
-        LEFT_PinALast = 0;
-        RIGHT_PinALast = 0;
-        break;
+    delay(2);
+    if (encoderValueRight + encoderValueLeft > 380) {
+      break;
     }
   }
+  brake();
 }
 
 void Motors::turnRight() {
@@ -103,22 +93,12 @@ void Motors::turnRight() {
   encoderValueRight = 0;
   rotateCW();
   while(true) {
-    if (LEFT_PinALast < encoderValueLeft) {
-      LEFT_PinALast++;
-    }
-    if (RIGHT_PinALast < encoderValueRight) {
-      RIGHT_PinALast++;
-    }
-    if (!((LEFT_PinALast + RIGHT_PinALast) % 10)) {
-      Serial1.println(LEFT_PinALast + RIGHT_PinALast);
-    }
-    if (encoderValueLeft + encoderValueRight > 335) {
-         brake();
-         LEFT_PinALast = 0;
-         RIGHT_PinALast = 0;
-         break;
+    delay(2);
+    if (encoderValueLeft + encoderValueRight > 351) {
+      break;
     }
   }
+  brake();
 }
 
 void Motors::turnAround() {
@@ -126,52 +106,40 @@ void Motors::turnAround() {
   encoderValueRight = 0;
   rotateCW();
   while(true) {
-    if (LEFT_PinALast < encoderValueLeft) {
-      LEFT_PinALast++;
-    }
-    if (RIGHT_PinALast < encoderValueRight) {
-      RIGHT_PinALast++;
-    }
-    if (!((RIGHT_PinALast + LEFT_PinALast) % 10)) {
-      Serial1.println(RIGHT_PinALast + LEFT_PinALast);
-    }
-    if (encoderValueLeft + encoderValueRight > 910) {
-      brake();
-      LEFT_PinALast = 0;
-      RIGHT_PinALast = 0;
+    delay(1);
+    if (encoderValueLeft + encoderValueRight > 904) {
       break;
     }
   }
+  brake();
 }
 
 void Motors::rotateCW() {
-//  Serial1.println("Rotating CW");
-  analogWrite(LEFTMotorEN, 150);
+  analogWrite(LEFTMotorEN, 130);
   digitalWrite(LEFTlogic1, LOW);
   digitalWrite(LEFTlogic2, HIGH);
 
-  analogWrite(RIGHTMotorEN, 150);
+  analogWrite(RIGHTMotorEN, 130);
   digitalWrite(RIGHTlogic1, LOW);
   digitalWrite(RIGHTlogic2, HIGH);
 }
 
 void Motors::rotateCCW() {
-//  Serial1.println("Rotating CCW");
-  analogWrite(LEFTMotorEN, 150);
+  analogWrite(LEFTMotorEN, 130);
   digitalWrite(LEFTlogic1, HIGH);
   digitalWrite(LEFTlogic2, LOW);
 
-  analogWrite(RIGHTMotorEN, 150);
+  analogWrite(RIGHTMotorEN, 130);
   digitalWrite(RIGHTlogic1, HIGH);
   digitalWrite(RIGHTlogic2, LOW);
 }
 
 void Motors::goForwardProportional(int error) {
-  analogWrite(LEFTMotorEN, 160 - error);
+  analogWrite(LEFTMotorEN, 180 - error);
   digitalWrite(LEFTlogic1, HIGH);
   digitalWrite(LEFTlogic2, LOW);
 
-  analogWrite(RIGHTMotorEN, 160 + error);
+  analogWrite(RIGHTMotorEN, 150 + error);
   digitalWrite(RIGHTlogic1, LOW);
   digitalWrite(RIGHTlogic2, HIGH);
 }
@@ -181,28 +149,27 @@ void Motors::traverseCell() {
   encoderValueRight = 0;
   while (encoderValueLeft + encoderValueRight < encoderTicksPerCell) {
     goForwardProportional(PID.calculateError());
-    // goForward();
-    if (sensors.getFrontSmoothed() > targetFront) {
+    if (sensors.frontPTReading > targetFront) {
       break;
     }
   }
   brake();
 }
 
-void Motors::checkIfTooClose() {
-  if (isTooClose()) {
-    while (true) {
-      Serial1.println("Stopped: Too close");
-      blink(1);
-    }
-  }
- }
-
-bool Motors::isTooClose() {
-  sensors.readSensors();
-  if (sensors.getFrontPTReading() > 964) {  // Prevent motor driver from burning out
-    brake();
-    return true;
-  }
-  return false;
-}
+// void Motors::checkIfTooClose() {
+//   if (isTooClose()) {
+//     while (true) {
+//       Serial1.println("Stopped: Too close");
+//       blink(1);
+//     }
+//   }
+//  }
+//
+// bool Motors::isTooClose() {
+//   sensors.readSensors();
+//   if (sensors.getFrontPTReading() > 964) {  // Prevent motor driver from burning out
+//     brake();
+//     return true;
+//   }
+//   return false;
+// }
