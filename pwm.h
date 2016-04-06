@@ -5,5 +5,7 @@
 
 void setLeftPwm(int);
 void setRightPwm(int);
+void calculateMotorPwm();
+void resetSpeedProfile();
 
 #endif /*PWM_H*/
