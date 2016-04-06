@@ -80,19 +80,9 @@ void Motors::turnLeft() {
   encoderValueRight = 0;
   rotateCCW();
   while(true) {
-<<<<<<< HEAD
-//    if (!((encoderValueLeft + encoderValueRight) % 10)) {     // THIS MAKES THE CODE WORK DON'T REMOVE
-//      Serial1.println(encoderValueLeft + encoderValueRight);
-//    }
-    delay(1);
-    if (encoderValueRight + encoderValueLeft > 365) {
-        brake();
-        break;
-=======
     delay(2);
     if (encoderValueRight + encoderValueLeft > 380) {
       break;
->>>>>>> refs/remotes/origin/master
     }
   }
   brake();
@@ -103,19 +93,9 @@ void Motors::turnRight() {
   encoderValueRight = 0;
   rotateCW();
   while(true) {
-<<<<<<< HEAD
-//    if (!((encoderValueLeft + encoderValueRight) % 10)) {
-//      Serial1.println(encoderValueLeft + encoderValueRight);
-//    }
-    delay(1);
-    if (encoderValueLeft + encoderValueRight > 335) {
-         brake();
-         break;
-=======
     delay(2);
     if (encoderValueLeft + encoderValueRight > 351) {
       break;
->>>>>>> refs/remotes/origin/master
     }
   }
   brake();
@@ -127,14 +107,7 @@ void Motors::turnAround() {
   rotateCW();
   while(true) {
     delay(1);
-<<<<<<< HEAD
-    if (encoderValueLeft + encoderValueRight > 910) {
-      brake();
-      LEFT_PinALast = 0;
-      RIGHT_PinALast = 0;
-=======
     if (encoderValueLeft + encoderValueRight > 904) {
->>>>>>> refs/remotes/origin/master
       break;
     }
   }
@@ -165,12 +138,7 @@ void Motors::goForwardProportional(int error) {
   analogWrite(LEFTMotorEN, 180 - error);
   digitalWrite(LEFTlogic1, HIGH);
   digitalWrite(LEFTlogic2, LOW);
-
-<<<<<<< HEAD
-  analogWrite(RIGHTMotorEN, 180 + error);
-=======
   analogWrite(RIGHTMotorEN, 150 + error);
->>>>>>> refs/remotes/origin/master
   digitalWrite(RIGHTlogic1, LOW);
   digitalWrite(RIGHTlogic2, HIGH);
 }
