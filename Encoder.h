@@ -9,6 +9,8 @@ int distanceLeft;
 int leftEncoderOld;
 int rightEncoderOld;
 int encoderCount;
+int leftEncoder;
+int rightEncoder;
 
 void getEncoderStatus();
 int getLeftEncCount();
