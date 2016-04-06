@@ -1,16 +1,20 @@
 #ifndef ENCODER_H
 #define ENCODER_H
 
-int leftEncoderCount;
-int leftEncoderChange;
-int rightEncoderCount;
-int rightEncoderChange;
-int distanceLeft;
-int leftEncoderOld;
-int rightEncoderOld;
-int encoderCount;
 int leftEncoder;
 int rightEncoder;
+
+int encoderCount;
+int leftEncoderCount;
+int rightEncoderCount;
+
+int encoderChange;
+int leftEncoderChange;
+int rightEncoderChange;
+
+int leftEncoderOld;
+int rightEncoderOld;
+int distanceLeft;
 
 void getEncoderStatus();
 int getLeftEncCount();

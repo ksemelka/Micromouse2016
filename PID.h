@@ -1,6 +1,5 @@
 #ifndef PID_H
 #define PID_H
-#include "PIDencoders.h"
 #define VELOCITY_SAMPLE_TIME 100000  // Micros
 
 /******************************************************************************************************
