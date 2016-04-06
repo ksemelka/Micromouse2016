@@ -6,10 +6,16 @@
 // #include "Floodfill.h"
 #include "State.h"
 #include "Maze.h"
+<<<<<<< HEAD
 #include "PIDencoders.h"
 
 volatile int encoderLeftTicksPerSample = 0;
 volatile int encoderRightTicksPerSample = 0;
+=======
+// #include "stm32f4xx.h"
+// #include "delay.h"
+
+>>>>>>> refs/remotes/origin/master
 volatile int encoderValueLeft = 0;
 volatile int encoderValueRight = 0;
 int targetRight;
@@ -18,16 +24,21 @@ int targetLeft;
 void checkIfTooClose();
 bool isTooClose();
 
-PID PID(.2, 0, 0);
+PID PID(.33, 0, 0);
 Motors motors;
 Sensors sensors(leftPT, frontPT, rightPT);
 
 void setup() {
+<<<<<<< HEAD
   Timer1.initialize(VELOCITY_SAMPLE_TIME);
+=======
+  Timer1.initialize(500);
+>>>>>>> refs/remotes/origin/master
   Timer1.start();
   initializeOnboardLED();
   randomSeed(analogRead(0));  // Seeds using random analog noise on unconnected pin
   Serial1.begin(9600);
+<<<<<<< HEAD
   Serial.begin(9600);
   Timer1.attachInterrupt(calculateVelocity);
   attachInterrupt(encoderLEFT_A, countLeft, FALLING);
@@ -36,6 +47,14 @@ void setup() {
   delay(1000);
   while (sensors.getFrontSmoothed() < 500 || !(millis() % 300)) {  // Wait to enter loop
     sensors.view();
+=======
+  Timer1.attachInterrupt(readSensors);
+  attachInterrupt(encoderLEFT_A, countLeft, RISING);
+  attachInterrupt(encoderRIGHT_A, countRight, RISING);
+  Serial1.print("Starting...\n");
+  while (sensors.frontPTReading < 500) {  // Wait to enter loop
+    blink(1);
+>>>>>>> refs/remotes/origin/master
   }
   delay(2000);
   targetRight = analogRead(rightPT);
@@ -43,6 +62,7 @@ void setup() {
 }
 
 void loop() {
+<<<<<<< HEAD
 //  sensors.view();
   navigate();
   delay(1000);
@@ -71,6 +91,33 @@ void readSensors() {
       sensors.leftPTReading = analogRead(leftPT);
       sensors.frontPTReading = analogRead(frontPT);
       sensors.rightPTReading = analogRead(rightPT);
+=======
+  navigate();
+}
+
+void countLeft() {
+//  if (digitalRead(encoderLEFT_B) == HIGH) { // If channel A leads B, CW
+//    encoderValueLeft--;
+//  }
+//  else {
+    encoderValueLeft++;
+//  }
+}
+
+void countRight() {
+//  if (digitalRead(encoderRIGHT_B) == HIGH) { // If channel A leads B, CW
+    encoderValueRight++;
+//  }
+//  else {
+//    encoderValueRight--;
+//  }
+}
+
+void readSensors() {
+  sensors.leftPTReading = analogRead(leftPT);
+  sensors.frontPTReading = analogRead(frontPT);
+  sensors.rightPTReading = analogRead(rightPT);
+>>>>>>> refs/remotes/origin/master
 }
 
 void calculateVelocity() {

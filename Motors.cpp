@@ -56,11 +56,11 @@ void Motors::halt() {
  }
 
 void Motors::goForward() {
-  digitalWrite(LEFTMotorEN, HIGH);
+  analogWrite(LEFTMotorEN, 180);
   digitalWrite(LEFTlogic1, HIGH);
   digitalWrite(LEFTlogic2, LOW);
 
-  digitalWrite(RIGHTMotorEN, HIGH);
+  analogWrite(RIGHTMotorEN, 150);
   digitalWrite(RIGHTlogic1, LOW);
   digitalWrite(RIGHTlogic2, HIGH);
 }
@@ -80,6 +80,7 @@ void Motors::turnLeft() {
   encoderValueRight = 0;
   rotateCCW();
   while(true) {
+<<<<<<< HEAD
 //    if (!((encoderValueLeft + encoderValueRight) % 10)) {     // THIS MAKES THE CODE WORK DON'T REMOVE
 //      Serial1.println(encoderValueLeft + encoderValueRight);
 //    }
@@ -87,8 +88,14 @@ void Motors::turnLeft() {
     if (encoderValueRight + encoderValueLeft > 365) {
         brake();
         break;
+=======
+    delay(2);
+    if (encoderValueRight + encoderValueLeft > 380) {
+      break;
+>>>>>>> refs/remotes/origin/master
     }
   }
+  brake();
 }
 
 void Motors::turnRight() {
@@ -96,6 +103,7 @@ void Motors::turnRight() {
   encoderValueRight = 0;
   rotateCW();
   while(true) {
+<<<<<<< HEAD
 //    if (!((encoderValueLeft + encoderValueRight) % 10)) {
 //      Serial1.println(encoderValueLeft + encoderValueRight);
 //    }
@@ -103,8 +111,14 @@ void Motors::turnRight() {
     if (encoderValueLeft + encoderValueRight > 335) {
          brake();
          break;
+=======
+    delay(2);
+    if (encoderValueLeft + encoderValueRight > 351) {
+      break;
+>>>>>>> refs/remotes/origin/master
     }
   }
+  brake();
 }
 
 void Motors::turnAround() {
@@ -113,33 +127,36 @@ void Motors::turnAround() {
   rotateCW();
   while(true) {
     delay(1);
+<<<<<<< HEAD
     if (encoderValueLeft + encoderValueRight > 910) {
       brake();
       LEFT_PinALast = 0;
       RIGHT_PinALast = 0;
+=======
+    if (encoderValueLeft + encoderValueRight > 904) {
+>>>>>>> refs/remotes/origin/master
       break;
     }
   }
+  brake();
 }
 
 void Motors::rotateCW() {
-//  Serial1.println("Rotating CW");
-  analogWrite(LEFTMotorEN, 150);
+  analogWrite(LEFTMotorEN, 130);
   digitalWrite(LEFTlogic1, LOW);
   digitalWrite(LEFTlogic2, HIGH);
 
-  analogWrite(RIGHTMotorEN, 150);
+  analogWrite(RIGHTMotorEN, 130);
   digitalWrite(RIGHTlogic1, LOW);
   digitalWrite(RIGHTlogic2, HIGH);
 }
 
 void Motors::rotateCCW() {
-//  Serial1.println("Rotating CCW");
-  analogWrite(LEFTMotorEN, 150);
+  analogWrite(LEFTMotorEN, 130);
   digitalWrite(LEFTlogic1, HIGH);
   digitalWrite(LEFTlogic2, LOW);
 
-  analogWrite(RIGHTMotorEN, 150);
+  analogWrite(RIGHTMotorEN, 130);
   digitalWrite(RIGHTlogic1, HIGH);
   digitalWrite(RIGHTlogic2, LOW);
 }
@@ -149,7 +166,11 @@ void Motors::goForwardProportional(int error) {
   digitalWrite(LEFTlogic1, HIGH);
   digitalWrite(LEFTlogic2, LOW);
 
+<<<<<<< HEAD
   analogWrite(RIGHTMotorEN, 180 + error);
+=======
+  analogWrite(RIGHTMotorEN, 150 + error);
+>>>>>>> refs/remotes/origin/master
   digitalWrite(RIGHTlogic1, LOW);
   digitalWrite(RIGHTlogic2, HIGH);
 }
@@ -159,28 +180,27 @@ void Motors::traverseCell() {
   encoderValueRight = 0;
   while (encoderValueLeft + encoderValueRight < encoderTicksPerCell) {
     goForwardProportional(PID.calculateError());
-    // goForward();
-    if (sensors.getFrontSmoothed() > targetFront) {
+    if (sensors.frontPTReading > targetFront) {
       break;
     }
   }
   brake();
 }
 
-void Motors::checkIfTooClose() {
-  if (isTooClose()) {
-    while (true) {
-      Serial1.println("Stopped: Too close");
-      blink(1);
-    }
-  }
- }
-
-bool Motors::isTooClose() {
-  sensors.readSensors();
-  if (sensors.getFrontPTReading() > 964) {  // Prevent motor driver from burning out
-    brake();
-    return true;
-  }
-  return false;
-}
+// void Motors::checkIfTooClose() {
+//   if (isTooClose()) {
+//     while (true) {
+//       Serial1.println("Stopped: Too close");
+//       blink(1);
+//     }
+//   }
+//  }
+//
+// bool Motors::isTooClose() {
+//   sensors.readSensors();
+//   if (sensors.getFrontPTReading() > 964) {  // Prevent motor driver from burning out
+//     brake();
+//     return true;
+//   }
+//   return false;
+// }

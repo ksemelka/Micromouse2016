@@ -8,9 +8,9 @@
 #define LEFT 4
 
 // Values for how far the mouse should be from walls
-const int targetFront = 460;      // stopping value
-const int thresholdFront = 120;   // reading value to indicate wall
-const int thresholdSide = 120;     // reading value to indicate if there is a wall
+const int targetFront = 475;      // stopping value
+const int thresholdFront = 100;   // reading value to indicate wall
+const int thresholdSide = 70;     // reading value to indicate if there is a wall
 
 bool wallToTheFront();
 bool wallToTheRight();
@@ -18,6 +18,7 @@ bool wallToTheLeft();
 byte state();
 void printState();
 void navigate();
+void solveRightHand();
 
 /*
   *********************************************************
