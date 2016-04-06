@@ -76,12 +76,6 @@ void printState() {
 void navigate() {
   printState();
   switch (state()) {
-<<<<<<< HEAD
-    case 0:
-      motors.traverseCell();
-
-      break;
-=======
     case 0:       // Randomly choose left, right, or straight
     if (random(millis()) % 3 == 2) {
       delay(200);
@@ -95,7 +89,6 @@ void navigate() {
     }
     motors.traverseCell();
     break;
->>>>>>> refs/remotes/origin/master
     case FRONT:
       if (random(millis()) % 2) {   // Turn left or right randomly
         delay(200);
@@ -112,14 +105,10 @@ void navigate() {
       break;
     case RIGHT:
       if (random(millis()) % 2) {   // Turn left or go forward randomly
-<<<<<<< HEAD
-        motors.turnLeft();
-=======
        delay(200);
        motors.turnLeft();
        delay(200);
        motors.traverseCell();
->>>>>>> refs/remotes/origin/master
       }
       else {
         motors.traverseCell();
@@ -127,14 +116,10 @@ void navigate() {
       break;
     case LEFT:
       if (random(millis()) % 2) {   // Turn right or go forward randomly
-<<<<<<< HEAD
-        motors.turnRight();
-=======
        delay(200);
        motors.turnRight();
        delay(200);
        motors.traverseCell();
->>>>>>> refs/remotes/origin/master
       }
       else {
         motors.traverseCell();
