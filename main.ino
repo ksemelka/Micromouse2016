@@ -68,9 +68,6 @@ void readSensors() {
 }
 
 void calculateVelocity() {
-  sensors.leftSmoothed = analogRead(leftPT);
-  sensors.frontSmoothed = analogRead(frontPT);
-  sensors.rightSmoothed = analogRead(rightPT);
   PID.velocityLeft = (double)encoderLeftTicksPerSample / VELOCITY_SAMPLE_TIME;
   PID.velocityRight = (double)encoderRightTicksPerSample / VELOCITY_SAMPLE_TIME;
   PID.calculateProportionalEncoderError();
