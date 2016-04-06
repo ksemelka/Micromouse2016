@@ -6,30 +6,33 @@
 // #include "Floodfill.h"
 #include "State.h"
 #include "Maze.h"
-volatile int encoderLeftTicksPerSample = 0;
-volatile int encoderRightTicksPerSample = 0;
+#include "Encoder.h"
+
+int encoderLeftTicksPerSample = 0;
+int encoderRightTicksPerSample = 0;
 volatile int encoderValueLeft = 0;
 volatile int encoderValueRight = 0;
+
 int targetRight;
 int targetLeft;
-
-void checkIfTooClose();
-bool isTooClose();
 
 PID PID(.33, 0, 0);
 Motors motors;
 Sensors sensors(leftPT, frontPT, rightPT);
 
+IntervalTimer sensorTimer;
+IntervalTimer speedProfile;
+
 void setup() {
-  Timer1.initialize(VELOCITY_SAMPLE_TIME);
-  Timer1.initialize(500);
-  Timer1.start();
+  sensorTimer.begin(readSensors, 1000);
+  speedProfile.begin(speedProfile, 1000);
+  attachInterrupt(encoderLEFT_A, countLeftEncoder, RISING);
+  attachInterrupt(encoderRIGHT_A, countRightEncoder, RISING);
+
   initializeOnboardLED();
   randomSeed(analogRead(0));  // Seeds using random analog noise on unconnected pin
   Serial1.begin(9600);
-  Timer1.attachInterrupt(readSensors);
-  attachInterrupt(encoderLEFT_A, countLeft, RISING);
-  attachInterrupt(encoderRIGHT_A, countRight, RISING);
+
   Serial1.print("Starting...\n");
   while (sensors.frontPTReading < 500) {  // Wait to enter loop
     blink(1);
@@ -43,7 +46,7 @@ void loop() {
   navigate();
 }
 
-void countLeft() {
+void countLeftEncoder() {
 //  if (digitalRead(encoderLEFT_B) == HIGH) { // If channel A leads B, CW
 //    encoderValueLeft--;
 //  }
@@ -52,7 +55,7 @@ void countLeft() {
 //  }
 }
 
-void countRight() {
+void countRightEncoder() {
 //  if (digitalRead(encoderRIGHT_B) == HIGH) { // If channel A leads B, CW
     encoderValueRight++;
 //  }
@@ -65,6 +68,12 @@ void readSensors() {
   sensors.leftPTReading = analogRead(leftPT);
   sensors.frontPTReading = analogRead(frontPT);
   sensors.rightPTReading = analogRead(rightPT);
+}
+
+void speedProfile() {
+  getEncoderStatus();
+  updateCurrentSpeed();
+  calculateMotorPWM();
 }
 
 void calculateVelocity() {
