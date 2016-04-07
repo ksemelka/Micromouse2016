@@ -22,9 +22,21 @@ extern int rightBaseSpeed;
 extern int encoderFeedbackX;
 extern int encoderFeedbackW;
 
+int speed_to_counts(int);
+
+int moveSpeed = speed_to_counts(500*2);
+int turnSpeed = speed_to_counts(500*2);
+int returnSpeed = speed_to_counts(500*2);
+int stopSpeed = speed_to_counts(100*2);
+int maxSpeed = speed_to_counts(2000*2);
+
+
+int counts_to_speed(int);
 void setLeftPwm(int);
 void setRightPwm(int);
+void updateCurrentSpeed();
 void calculateMotorPwm();
+int needToDecelerate(int, int, int);
 void resetSpeedProfile();
 
 #endif /*PWM_H*/
