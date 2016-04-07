@@ -26,7 +26,7 @@ class Motors {
     // void checkIfTooClose();
     // bool isTooClose();
 
-  private:
+  // private:
     const byte LEFTMotorEN = 6;
     const byte LEFTlogic1 = 22;
     const byte LEFTlogic2 = 23;
