@@ -1,6 +1,24 @@
 #include "pwm.h"
 #include "PID.h"
 #include "Encoder.h"
+int accX;
+int accW;
+int decX;
+int decW;
+double curSpeedX;
+double curSpeedW;
+int targetSpeedX;
+int targetSpeedW;
+int posPwmX;
+int posPwmW;
+double posErrorX;
+double posErrorW;
+double oldPosErrorX;
+double oldPosErrorW;
+int leftBaseSpeed;
+int rightBaseSpeed;
+int encoderFeedbackX;
+int encoderFeedbackW;
 
 void setLeftPwm(int speed) {
   if(speed > 999)//parameter check

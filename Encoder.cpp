@@ -3,6 +3,21 @@
 extern volatile int encoderValueLeft;
 extern volatile int encoderValueRight;
 
+int leftEncoder;
+int rightEncoder;
+
+int encoderCount;
+int leftEncoderCount;
+int rightEncoderCount;
+
+int encoderChange;
+int leftEncoderChange;
+int rightEncoderChange;
+
+int leftEncoderOld;
+int rightEncoderOld;
+int distanceLeft;
+
 void resetRightEncCount() {
   encoderValueLeft = 0;
 }

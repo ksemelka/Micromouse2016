@@ -3,16 +3,24 @@
 
 #define turnMotorOff     setLeftPwm(0);setRightPwm(0)
 
-int curSpeedX;
-int curSpeedW;
-int targetSpeedX;
-int targetSpeedW;
-int posErrorX;
-int posErrorW;
-int oldPosErrorX;
-int oldPosErrorW;
-int leftBaseSpeed;
-int rightBaseSpeed;
+extern int accX;
+extern int accW;
+extern int decX;
+extern int decW;
+extern double curSpeedX;
+extern double curSpeedW;
+extern int targetSpeedX;
+extern int targetSpeedW;
+extern int posPwmX;
+extern int posPwmW;
+extern double posErrorX;
+extern double posErrorW;
+extern double oldPosErrorX;
+extern double oldPosErrorW;
+extern int leftBaseSpeed;
+extern int rightBaseSpeed;
+extern int encoderFeedbackX;
+extern int encoderFeedbackW;
 
 void setLeftPwm(int);
 void setRightPwm(int);
