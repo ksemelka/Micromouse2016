@@ -7,6 +7,7 @@
 #include "State.h"
 #include "Maze.h"
 #include "Encoder.h"
+#include "pwm.h"
 
 int encoderLeftTicksPerSample = 0;
 int encoderRightTicksPerSample = 0;
@@ -21,11 +22,11 @@ Motors motors;
 Sensors sensors(leftPT, frontPT, rightPT);
 
 IntervalTimer sensorTimer;
-IntervalTimer speedProfile;
+IntervalTimer speedProfileTimer;
 
 void setup() {
   sensorTimer.begin(readSensors, 1000);
-  speedProfile.begin(speedProfile, 1000);
+  speedProfileTimer.begin(speedProfile, 1000);
   attachInterrupt(encoderLEFT_A, countLeftEncoder, RISING);
   attachInterrupt(encoderRIGHT_A, countRightEncoder, RISING);
 
@@ -46,7 +47,7 @@ void loop() {
   navigate();
 }
 
-void countLeftEncoder() {
+void countLeftEncoder() {   // ++ if going forwards
  if (digitalRead(encoderLEFT_B) == HIGH) { // If channel A leads B, CW
    encoderValueLeft--;
  }
@@ -55,12 +56,12 @@ void countLeftEncoder() {
  }
 }
 
-void countRightEncoder() {
+void countRightEncoder() {  // ++ if going forwards
  if (digitalRead(encoderRIGHT_B) == HIGH) { // If channel A leads B, CW
     encoderValueRight++;
  }
  else {
-   encoderValueRight--;
+    encoderValueRight--;
  }
 }
 
@@ -73,7 +74,7 @@ void readSensors() {
 void speedProfile() {
   getEncoderStatus();
   updateCurrentSpeed();
-  calculateMotorPWM();
+  calculateMotorPwm();
 }
 
 void calculateVelocity() {
