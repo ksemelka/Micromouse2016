@@ -47,21 +47,21 @@ void loop() {
 }
 
 void countLeftEncoder() {
-//  if (digitalRead(encoderLEFT_B) == HIGH) { // If channel A leads B, CW
-//    encoderValueLeft--;
-//  }
-//  else {
+ if (digitalRead(encoderLEFT_B) == HIGH) { // If channel A leads B, CW
+   encoderValueLeft--;
+ }
+ else {
     encoderValueLeft++;
-//  }
+ }
 }
 
 void countRightEncoder() {
-//  if (digitalRead(encoderRIGHT_B) == HIGH) { // If channel A leads B, CW
+ if (digitalRead(encoderRIGHT_B) == HIGH) { // If channel A leads B, CW
     encoderValueRight++;
-//  }
-//  else {
-//    encoderValueRight--;
-//  }
+ }
+ else {
+   encoderValueRight--;
+ }
 }
 
 void readSensors() {
