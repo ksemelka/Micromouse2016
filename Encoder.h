@@ -17,8 +17,6 @@ int rightEncoderOld;
 int distanceLeft;
 
 void getEncoderStatus();
-int getLeftEncCount();
-int getRightEncCount();
 void resetRightEncCount();
 void resetLeftEncCount();
 
