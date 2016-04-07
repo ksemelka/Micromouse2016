@@ -3,6 +3,7 @@
 #include "LEDs.h"
 #include "PID.h"
 #include "State.h"
+#include "Encoder.h"
 #include <Arduino.h>
 
 extern PID PID;
@@ -153,6 +154,7 @@ void Motors::traverseCell() {
     }
   }
   brake();
+  // oldEncoderCount = encoderCount;
 }
 
 // void Motors::checkIfTooClose() {
