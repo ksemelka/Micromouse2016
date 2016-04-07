@@ -1,5 +1,6 @@
 #include "pwm.h"
 #include "PID.h"
+#include "Encoder.h"
 
 void setLeftPwm(int speed) {
   if(speed > 999)//parameter check
@@ -38,23 +39,23 @@ void setRightPwm(int speed) {
 
 void calculateMotorPwm(void) // encoder PD controller
 {
-	int gyroFeedback;
+	// int gyroFeedback;
 	int rotationalFeedback;
-	int sensorFeedback;
+	// int sensorFeedback;
 
     /* simple PD loop to generate base speed for both motors */
 	encoderFeedbackX = rightEncoderChange + leftEncoderChange;
 	encoderFeedbackW = rightEncoderChange - leftEncoderChange;
 
-	gyroFeedback = aSpeed/gyroFeedbackRatio; //gyroFeedbackRatio mentioned in curve turn lecture
+	// gyroFeedback = aSpeed/gyroFeedbackRatio; //gyroFeedbackRatio mentioned in curve turn lecture
 	sensorFeedback = sensorError/a_scale;//have sensor error properly scale to fit the system
 
-	if(onlyUseGyroFeedback)
-		rotationalFeedback = guroFeedback;
-	else if(onlyUseEncoderFeedback)
+	// if(onlyUseGyroFeedback)
+	// 	rotationalFeedback = guroFeedback;
+	// else if(onlyUseEncoderFeedback)
 		rotationalFeedback = encoderFeedbackW;
-	else
-		rotationalFeedback = encoderFeedbackW + gyroFeedback;
+	// else
+	// 	rotationalFeedback = encoderFeedbackW + gyroFeedback;
 	    //if you use IR sensor as well, the line above will be rotationalFeedback = encoderFeedbackW + gyroFeedback + sensorFeedback;
 	    //make sure to check the sign of sensor error.
 
