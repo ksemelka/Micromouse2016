@@ -76,49 +76,62 @@ void printState() {
 
 
 void executeStack(){    //after hitting U-Turn,
-  while (navHistory.top() < 8){   //While not random variable do same movements except turn right for Left and turn left for Right
+  byte topCommand = navHistory.top();
+  while (topCommand < 8){   //While not random variable do same movements except turn right for Left and turn left for Right
 
-    if (navHistory.top())== 1){   //For Forward go forward
-    motors.traverseCell();
-    navHistory.pop();
+    if (topCommand == 1){   //For Forward go forward
+      motors.traverseCell();
+      navHistory.pop();
+    }
+
+    if (topCommand == 2){     //For Right go left
+      motors.turnLeft();
+      navHistory.pop();
+    }
+
+    if (topCommand == 4){    //For Left go right
+      motors.turnRight();
+      navHistory.pop();
+    }
+    topCommand = navHistory.top();
   }
 
-  if (navHistory.top())== 2){     //For Right go left
-  motors.turnLeft();
-  navHistory.pop();
-}
+  if (topCommand == 8){     //if you randomly chose to go forward, now randomly choose between left and right
 
-if (navHistory.top())== 4);{    //For Left go right
-motors.turnRight();
-navHistory.pop();
-}
   }
 
-if (navHistory.top() == 8){     //if you randomly chose to go forward, now randomly choose between left and right
 
-}
+  if (topCommand == 16){     //if you randomly chose to go forward, now randomly choose between left and right
 
-
-if (navHistory.top() == 16){     //if you randomly chose to go forward, now randomly choose between left and right
-
-}
+  }
 
 
-if (navHistory.top() == 32{     //if you randomly chose to go forward, now randomly choose between left and right
+  if (topCommand == 32{     //if you randomly chose to go forward, now randomly choose between left and right
 
-}
+  }
 
-if (navHistory.top() == 64){
-
+  if (topCommand == 64){
+    if (random(millis() % 2)) {
+      navHistory.push(32);
+      motors.traverseCell();
+    }
+    else {
+      navHistory.push(32);
+      delay(200);
+      motors.turnLeft();
+      delay(200);
+      motors.traverseCell();
+    }
+  }
 }
 
 //Forward       1
 //Right         2
 //Left          4
-//RandomA       8         (Left Right Option)
-//RandomB       16        (Front Left Option)
-//RandomC       32        (Front Left Option)
-//RandomD       64        (3 options)
+//RandomLR       8         (Left Right Option)
+//RandomFL       16        (Front Left Option)
+//RandomFR       32        (Front Right Option)
+//RandomFLR       64        (3 options)
 
 void navigate() {
   printState();
@@ -128,31 +141,28 @@ void navigate() {
     if (random(millis()) % 3 == 2) {  //Random D and it chose Right
       navHistory.push(2)                //CHECK   Turn Right
       navHistory.push(64)               //CHECK   RandomD
+      navHistory.push(1);
 
       delay(200);
       motors.turnRight();
       delay(200);
+      motors.traverseCell();
     }
     else if (random(millis()) % 3 == 1) {     //Random and it chose Left
-      navHistory.push(4)                //CHECK   Turn left
-      navHistory.push(64)               //CHECK   Random D
+      navHistory.push(4);                //CHECK   Turn left
+      navHistory.push(64);               //CHECK   Random D
+      navHistory.push(1);
       delay(200);
       motors.turnLeft();
       delay(200);
+      motors.traverseCell();
     }
-
     else {                                  //Random and it "chose" Forward
       navHistory.push(1)                //forward
       navHistory.push(64)               //RandomD
 
       motors.traverseCell()
     }
-
-    navHistory.push(1)                //CHECK   add Forward
-//    navHistory.push(16)               //CHECK
-
-    motors.traverseCell();
-
     break;
 
     case FRONT:                   //Random A: WALL IS ONLY IN FRONT
