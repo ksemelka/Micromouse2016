@@ -75,22 +75,24 @@ void printState() {
 
 
 
-void executeStack(){    //after hitting U-Turn, go through stack, from top, doing same movements except turn right for Left and turn left for Right
-  while (navHistory.top() !=
+void executeStack(){    //after hitting U-Turn,
+  while (navHistory.top() < 8){   //While not random variable do same movements except turn right for Left and turn left for Right
 
+    if (navHistory.top())== 1){   //For Forward go forward
+    motors.traverseCell();
+    navHistory.pop();
+  }
 
-  if (navHistory.top())== 1){
-  motors.traverseCell();
-  navHistory.pop();
-}
-  if (navHistory.top())== 2){
+  if (navHistory.top())== 2){     //For Right go left
   motors.turnLeft();
   navHistory.pop();
 }
-  if (navHistory.top())== 4);{
-  motors.turnRight();
-  navHistory.pop();
+
+if (navHistory.top())== 4);{    //For Left go right
+motors.turnRight();
+navHistory.pop();
 }
+  }
 
 if (navHistory.top() == 8){     //if you randomly chose to go forward, now randomly choose between left and right
 
@@ -106,6 +108,9 @@ if (navHistory.top() == 32{     //if you randomly chose to go forward, now rando
 
 }
 
+if (navHistory.top() == 64){
+
+}
 
 //Forward       1
 //Right         2
@@ -120,31 +125,40 @@ void navigate() {
 
   switch (state()) {
     case 0:                            // RANDOM D: Randomly choose left, right, or straight
-    if (random(millis()) % 3 == 2) {
-      navHistory.push(2)                //CHECK   add Right Turn in a Random D situation
-      navHistory.push(16)               //CHECK
+    if (random(millis()) % 3 == 2) {  //Random D and it chose Right
+      navHistory.push(2)                //CHECK   Turn Right
+      navHistory.push(64)               //CHECK   RandomD
+
       delay(200);
       motors.turnRight();
       delay(200);
     }
-    else if (random(millis()) % 3 == 1) {
-      navHistory.push(4)                //CHECK   add Left Turn followed by Random indicator to stack
-      navHistory.push(16)               //CHECK
+    else if (random(millis()) % 3 == 1) {     //Random and it chose Left
+      navHistory.push(4)                //CHECK   Turn left
+      navHistory.push(64)               //CHECK   Random D
       delay(200);
       motors.turnLeft();
       delay(200);
     }
 
-    navHistory.push(1)                //CHECK   add Forward followed by Random indicator to stack
-    navHistory.push(16)               //CHECK
+    else {                                  //Random and it "chose" Forward
+      navHistory.push(1)                //forward
+      navHistory.push(64)               //RandomD
+
+      motors.traverseCell()
+    }
+
+    navHistory.push(1)                //CHECK   add Forward
+//    navHistory.push(16)               //CHECK
+
     motors.traverseCell();
 
     break;
 
-    case FRONT:                   //WALL IS ONLY IN FRONT
-      if (random(millis()) % 2) {          //RANDOM: Turn left or right randomly
+    case FRONT:                   //Random A: WALL IS ONLY IN FRONT
+      if (random(millis()) % 2) {          //RANDOM: Turn Left
       navHistory.push(4)                //CHECK   add Left Turn followed by Random indicator to stack
-      navHistory.push(16)               //CHECK
+      navHistory.push(8)               //CHECK
 
         delay(200);
         motors.turnLeft();
@@ -154,9 +168,10 @@ void navigate() {
 
         motors.traverseCell();
       }
-      else {
-      navHistory.push(2)                //CHECK   add Right followed by Random indicator to stack
-      navHistory.push(16)               //CHECK
+
+      else {                        //RANDOM: Turn Right
+      navHistory.push(2)                //CHECK   add Right followed by
+      navHistory.push(8)               //CHECK    Random A
 
         delay(200);
         motors.turnRight();
@@ -169,29 +184,33 @@ void navigate() {
       break;
 
 
-    case RIGHT:
-      if (random(millis()) % 2) {   // Turn left or go forward randomly
-      navHistory.push(4)                //CHECK Add Left to stack
+    case RIGHT:                     //Random B: Turn left or go forward randomly
+      if (random(millis()) % 2) {   // Randomly chose left
+      navHistory.push(4)                //Add Left to stack
+      navHistory.push(16)               //Add Random B to stack
 
        delay(200);
        motors.turnLeft();
 
-        navHistory.push(1)                //CHECK Add Forward to stack
+        navHistory.push(1)                //Add Forward to stack
 
        delay(200);
        motors.traverseCell();
       }
 
 
-      else {
-        navHistory.push(1)                //CHECK Add Forward to stack
+      else {                               //Randomly chose forward
+        navHistory.push(1)
+        navHistory.push(16)                //CHECK Add Forward to stack
         motors.traverseCell();
       }
       break;
 
-    case LEFT:
-      if (random(millis()) % 2) {   // Turn right or go forward randomly
+
+    case LEFT:                      //Random C: Choose forward or right
+      if (random(millis()) % 2) {   // chose Right
       navHistory.push(2)                //CHECK Add Right to stack
+      navHistory.push(32)
 
        delay(200);
        motors.turnRight();
@@ -200,8 +219,9 @@ void navigate() {
        delay(200);
        motors.traverseCell();
       }
-      else {
-        navHistory.push(1)               //CHECK
+      else {                     //Chose Forward
+        navHistory.push(1)               //Add forward to stack
+        navHistory.push(32)             //Add random C to stack
         motors.traverseCell();
       }
       break;

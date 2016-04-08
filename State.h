@@ -9,6 +9,8 @@
 #define RIGHT 2
 #define LEFT 4
 
+
+
 // Values for how far the mouse should be from walls
 const int targetFront = 475;      // stopping value
 const int thresholdFront = 100;   // reading value to indicate wall
