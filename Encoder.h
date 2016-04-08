@@ -4,17 +4,17 @@
 extern int leftEncoder;
 extern int rightEncoder;
 
-extern int encoderCount;
+extern double encoderCount;
 extern int leftEncoderCount;
 extern int rightEncoderCount;
 
-extern int encoderChange;
+extern double encoderChange;
 extern int leftEncoderChange;
 extern int rightEncoderChange;
 
 extern int leftEncoderOld;
 extern int rightEncoderOld;
-extern int distanceLeft;
+extern double distanceLeft;
 
 extern int oldEncoderCount;
 

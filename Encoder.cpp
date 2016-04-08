@@ -6,17 +6,17 @@ extern volatile int encoderValueRight;
 int leftEncoder;
 int rightEncoder;
 
-int encoderCount;
+double encoderCount;
 int leftEncoderCount;
 int rightEncoderCount;
 
-int encoderChange;
+double encoderChange;
 int leftEncoderChange;
 int rightEncoderChange;
 
 int leftEncoderOld;
 int rightEncoderOld;
-int distanceLeft;
+double distanceLeft;
 
 int oldEncoderCount;
 
@@ -33,14 +33,14 @@ void getEncoderStatus() {
 
 	leftEncoderChange = leftEncoder - leftEncoderOld;
 	rightEncoderChange = rightEncoder - rightEncoderOld;
-	encoderChange = (leftEncoderChange + rightEncoderChange)/2;
+	encoderChange = (double)(leftEncoderChange + rightEncoderChange) / 2;
 
 	leftEncoderOld = leftEncoder;
 	rightEncoderOld = rightEncoder;
 
 	leftEncoderCount += leftEncoderChange;
 	rightEncoderCount += rightEncoderChange;
-	encoderCount =  (leftEncoderCount+rightEncoderCount)/2;
+	encoderCount =  (double)(leftEncoderCount + rightEncoderCount) / 2;
 
 	distanceLeft -= encoderChange;// update distanceLeft
 }
