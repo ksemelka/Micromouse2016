@@ -2,6 +2,8 @@
 #define STATE_H
 #include "Sensors.h"
 #include <Arduino.h>
+#include <stack>
+#include <vector>
 
 #define FRONT 1
 #define RIGHT 2
@@ -20,6 +22,10 @@ void printState();
 void navigate();
 void solveRightHand();
 
+void executeStack();
+
+
+std::stack <byte> navHistory;            //CHECK
 /*
   *********************************************************
   0 == undefined
