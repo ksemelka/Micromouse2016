@@ -16,7 +16,7 @@ extern int leftEncoderOld;
 extern int rightEncoderOld;
 extern int distanceLeft;
 
-// extern int oldEncoderCount;
+extern int oldEncoderCount;
 
 void getEncoderStatus();
 void resetRightEncCount();

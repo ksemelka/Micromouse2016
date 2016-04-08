@@ -18,6 +18,8 @@ int leftEncoderOld;
 int rightEncoderOld;
 int distanceLeft;
 
+int oldEncoderCount;
+
 void resetRightEncCount() {
   encoderValueLeft = 0;
 }
