@@ -21,21 +21,21 @@ extern int leftBaseSpeed;
 extern int rightBaseSpeed;
 extern int encoderFeedbackX;
 extern int encoderFeedbackW;
+extern int oneCellDistance;
+
+extern int moveSpeed;
+extern int turnSpeed;
+extern int returnSpeed;
+extern int stopSpeed;
+extern int maxSpeed;
 
 int speed_to_counts(int);
-
-int moveSpeed = speed_to_counts(500*2);
-int turnSpeed = speed_to_counts(500*2);
-int returnSpeed = speed_to_counts(500*2);
-int stopSpeed = speed_to_counts(100*2);
-int maxSpeed = speed_to_counts(2000*2);
-
-
 int counts_to_speed(int);
 void setLeftPwm(int);
 void setRightPwm(int);
 void updateCurrentSpeed();
 void calculateMotorPwm();
+void moveOneCell();
 int needToDecelerate(int, int, int);
 void resetSpeedProfile();
 

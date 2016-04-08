@@ -10,6 +10,8 @@
   *Implement Old Encoder count in Motors.cpp
   *Implement PosPwmX and PosPwmW
   *speedToCounts()
+  *Implement pidInputX and pidInputW
+  *Fix needToDecelerate return statement
 */
 
 extern Motors motors;
@@ -34,6 +36,12 @@ int leftBaseSpeed;
 int rightBaseSpeed;
 int encoderFeedbackX;
 int encoderFeedbackW;
+int oneCellDistance = 1475; // in counts
+int moveSpeed = speed_to_counts(500*2);
+int turnSpeed = speed_to_counts(500*2);
+int returnSpeed = speed_to_counts(500*2);
+int stopSpeed = speed_to_counts(100*2);
+int maxSpeed = speed_to_counts(2000*2);
 
 int speed_to_counts(int speed) {  // counts per mm  TODO
   return speed / 1000;
@@ -145,6 +153,39 @@ void calculateMotorPwm(void) // encoder PD controller
 
 	setLeftPwm(leftBaseSpeed);
 	setRightPwm(rightBaseSpeed);
+}
+
+void moveOneCell
+{
+	enable_sensor(),
+	enable_gyro();
+	enable_PID();
+
+	targetSpeedW = 0;
+	targetSpeedX = moveSpeed;
+
+	do
+	{
+		/*you can call int needToDecelerate(int32_t dist, int16_t curSpd, int16_t endSpd)
+		here with current speed and distanceLeft to decide if you should start to decelerate or not.*/
+		/*sample*/
+		if(needToDecelerate(distanceLeft, curSpeedX, moveSpeed) < decX)
+			targetSpeedX = maxSpeed;
+		else
+			targetSpeedX = moveSpeed;
+
+		//there is something else you can add here. Such as detecting falling edge of post to correct longitudinal position of mouse when running in a straight path
+	}
+	while( ( (encoderCount-oldEncoderCount) < oneCellDistance && LFSensor < LFvalue2 && RFSensor < RFvalue2)//use encoder to finish 180mm movement if no front walls
+	|| (LFSensor < LFvalues1 && LFSensor > LFvalue2)//if has front wall, make the mouse finish this 180mm with sensor threshold only
+	|| (RFSensor < RFvalue1 && RFSensor > RFvalve2)
+	);
+	//LFvalues1 and RFvalues1 are the front wall sensor threshold when the center of mouse between the boundary of the cells.
+	//LFvalues2 and RFvalues2 are the front wall sensor threshold when the center of the mouse staying half cell farther than LFvalues1 and 2
+	//and LF/RFvalues2 are usually the threshold to determine if there is a front wall or not. You should probably move this 10mm closer to front wall when collecting
+	//these thresholds just in case the readings are too weak.
+
+	oldEncoderCount = encoderCount;	//update here for next movement to minimized the counts loss between cells.
 }
 
 int needToDecelerate(int dist, int curSpd, int endSpd)//speed are in encoder counts/ms, dist is in encoder counts
