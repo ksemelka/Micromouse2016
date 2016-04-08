@@ -157,6 +157,7 @@ void Motors::traverseCell() {
         nextState = state();
     }
     if (sensors.frontPTReading > targetFront) {
+      nextState = state();
       break;
     }
   }
