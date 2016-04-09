@@ -26,7 +26,9 @@ IntervalTimer speedProfileTimer;
 
 void setup() {
   sensorTimer.begin(readSensors, 1000);
+  sensorTimer.priority(172);
   speedProfileTimer.begin(speedProfile, 1000);
+  speedProfileTimer.priority(172);
   attachInterrupt(encoderLEFT_A, countLeftEncoder, RISING);
   attachInterrupt(encoderRIGHT_A, countRightEncoder, RISING);
 
