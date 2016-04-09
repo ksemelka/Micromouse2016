@@ -34,9 +34,6 @@ class Motors {
     const byte RIGHTMotorEN = 7;
     const byte RIGHTlogic1 = 9;
     const byte RIGHTlogic2 = 10;
-
-    int LEFT_PinALast = 0;
-    int RIGHT_PinALast = 0;
 };
 
 #endif  /*MOTORS_H*/
