@@ -18,14 +18,14 @@ extern Motors motors;
 extern volatile int encoderValueLeft;
 extern volatile int encoderValueRight;
 
-int accX;
-int accW;
-int decX;
-int decW;
+double accX = 100;
+double accW = 1;
+double decX = 100;
+double decW = 1;
 double curSpeedX;
 double curSpeedW;
-int targetSpeedX;
-int targetSpeedW;
+double targetSpeedX;
+double targetSpeedW;
 int posPwmX;
 int posPwmW;
 double posErrorX;
@@ -155,7 +155,7 @@ void calculateMotorPwm(void) // encoder PD controller
 	setRightPwm(rightBaseSpeed);
 }
 
-void moveOneCell
+void moveOneCell()
 {
 	enable_sensor(),
 	enable_gyro();
