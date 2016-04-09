@@ -3,7 +3,7 @@
 #include "Sensors.h"
 #include <Arduino.h>
 #include <stack>
-#include <vector>
+//#include <vector>
 
 #define FRONT 1
 #define RIGHT 2
@@ -22,12 +22,14 @@ bool wallToTheLeft();
 byte state();
 void printState();
 void navigate();
+void navigateStack();
 void solveRightHand();
 
 void executeStack();
 
 
-std::stack <byte> navHistory;            //CHECK
+           //CHECK
+extern std::stack <byte> navHistory;
 /*
   *********************************************************
   0 == undefined

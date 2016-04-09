@@ -4,6 +4,7 @@
 #include "PID.h"
 #include "State.h"
 #include <Arduino.h>
+#include <stack>
 
 extern PID PID;
 extern Sensors sensors;
@@ -145,6 +146,48 @@ void Motors::goForwardProportional(int error) {
 }
 
 void Motors::traverseCell() {
+  encoderValueLeft = 0;
+  encoderValueRight = 0;
+  while (encoderValueLeft + encoderValueRight < encoderTicksPerCell) {
+    goForwardProportional(PID.calculateError());
+    if (sensors.frontPTReading > targetFront) {
+      break;
+    }
+  }
+  brake();
+}
+
+//STACK MOVEMENT FUNCTIONS
+void Motors::turnLeftStack() {
+  navHistory.push(4);                //CHECK Add Left to stack
+  encoderValueLeft = 0;
+  encoderValueRight = 0;
+  rotateCCW();
+  while(true) {
+    delay(2);
+    if (encoderValueRight + encoderValueLeft > 380) {
+      break;
+    }
+  }
+  brake();
+}
+
+void Motors::turnRightStack() {
+  navHistory.push(2);                //CHECK Add Right to stack
+  encoderValueLeft = 0;
+  encoderValueRight = 0;
+  rotateCW();
+  while(true) {
+    delay(2);
+    if (encoderValueLeft + encoderValueRight > 351) {
+      break;
+    }
+  }
+  brake();
+}
+
+void Motors::traverseCellStack() {
+  navHistory.push(1);                //CHECK Add Forward to stack
   encoderValueLeft = 0;
   encoderValueRight = 0;
   while (encoderValueLeft + encoderValueRight < encoderTicksPerCell) {

@@ -9,6 +9,19 @@
 // #include "stm32f4xx.h"
 // #include "delay.h"
 
+namespace std {
+  void __throw_bad_alloc()
+  {
+    Serial.println("Unable to allocate memory");
+  }
+
+  void __throw_length_error( char const*e )
+  {
+    Serial.print("Length Error :");
+    Serial.println(e);
+  }
+}
+
 volatile int encoderValueLeft = 0;
 volatile int encoderValueRight = 0;
 int targetRight;
@@ -20,6 +33,10 @@ bool isTooClose();
 PID PID(.33, 0, 0);
 Motors motors;
 Sensors sensors(leftPT, frontPT, rightPT);
+
+void readSensors();
+void countLeft();
+void countRight();
 
 void setup() {
   Timer1.initialize(500);
@@ -40,7 +57,8 @@ void setup() {
 }
 
 void loop() {
-  navigate();
+  navigateStack();
+  //sensors.printReadings();
 }
 
 void countLeft() {

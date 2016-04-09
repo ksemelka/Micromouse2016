@@ -26,6 +26,14 @@ class Motors {
     // void checkIfTooClose();
     // bool isTooClose();
 
+
+
+    void turnLeftStack();
+    void turnRightStack();
+    void traverseCellStack();
+
+
+
   private:
     const byte LEFTMotorEN = 6;
     const byte LEFTlogic1 = 22;
