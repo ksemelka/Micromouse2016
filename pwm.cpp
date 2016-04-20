@@ -58,15 +58,13 @@ void setLeftPwm(int speed) {
 
     if(speed >= 0)//forward
     {
-      digitalWrite(motors.LEFTlogic1, HIGH);
-      digitalWrite(motors.LEFTlogic2, LOW);
-      analogWrite(motors.LEFTMotorEN, speed);
+      analogWrite(motors.LEFTlogic1, speed);
+      analogWrite(motors.LEFTlogic2, 0);
     }
     else//backward
     {
-      digitalWrite(motors.LEFTlogic1, LOW);
-      digitalWrite(motors.LEFTlogic2, HIGH);
-      analogWrite(motors.LEFTMotorEN, -speed);
+      analogWrite(motors.LEFTlogic1, 0);
+      analogWrite(motors.LEFTlogic2, -speed);
     }
 }
 void setRightPwm(int speed) {
@@ -77,15 +75,13 @@ void setRightPwm(int speed) {
 
   if(speed >= 0)//forward
   {
-    digitalWrite(motors.RIGHTlogic1, LOW);
-    digitalWrite(motors.RIGHTlogic2, HIGH);
-    analogWrite(motors.RIGHTMotorEN, speed);
+    analogWrite(motors.RIGHTlogic1, 0);
+    analogWrite(motors.RIGHTlogic2, speed);
   }
   else//backward
   {
-    digitalWrite(motors.RIGHTlogic1, HIGH);
-    digitalWrite(motors.RIGHTlogic2, LOW);
-    analogWrite(motors.RIGHTMotorEN, -speed);
+    analogWrite(motors.RIGHTlogic1, -speed);
+    analogWrite(motors.RIGHTlogic2, 0);
   }
 }
 
