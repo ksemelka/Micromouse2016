@@ -27,13 +27,13 @@ class Motors {
     // bool isTooClose();
 
   // private:
-    const byte LEFTMotorEN = 6;
-    const byte LEFTlogic1 = 22;
-    const byte LEFTlogic2 = 23;
+    const byte RIGHTMotorEN = 6;
+    const byte RIGHTlogic1 = 22;
+    const byte RIGHTlogic2 = 23;
 
-    const byte RIGHTMotorEN = 7;
-    const byte RIGHTlogic1 = 9;
-    const byte RIGHTlogic2 = 10;
+    const byte LEFTMotorEN = 7;
+    const byte LEFTlogic1 = 9;
+    const byte LEFTlogic2 = 10;
 };
 
 #endif  /*MOTORS_H*/
