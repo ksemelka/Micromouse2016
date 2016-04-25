@@ -51,35 +51,37 @@ int counts_to_speed(int counts) { // counts per ms
 }
 
 void setLeftPwm(int speed) {
-  if(speed > 255)//parameter check
-		speed = 255;
-	if(speed < -255)
-		speed = -255;
+  // if(speed > 255)//parameter check
+	// 	speed = 255;
+	// if(speed < -255)
+	// 	speed = -255;
 
     if(speed >= 0)//forward
     {
-      analogWrite(motors.LEFTlogic1, speed);
-      analogWrite(motors.LEFTlogic2, 0);
+      analogWrite(motors.LEFTlogic1, 0);
+      analogWrite(motors.LEFTlogic2, speed);
     }
     else//backward
     {
-      analogWrite(motors.LEFTlogic1, 0);
-      analogWrite(motors.LEFTlogic2, -speed);
+      analogWrite(motors.LEFTlogic1, -speed);
+      analogWrite(motors.LEFTlogic2, 0);
     }
 }
 void setRightPwm(int speed) {
-  if(speed > 255)
-		speed = 255;
-	if(speed < -255)
-		speed = -255;
+  // if(speed > 255)
+	// 	speed = 255;
+	// if(speed < -255)
+	// 	speed = -255;
 
   if(speed >= 0)//forward
   {
+    speed += 35 // OFFSET BECAUSE OF SHITTY MOTORS
     analogWrite(motors.RIGHTlogic1, 0);
     analogWrite(motors.RIGHTlogic2, speed);
   }
   else//backward
   {
+    speed -= 28
     analogWrite(motors.RIGHTlogic1, -speed);
     analogWrite(motors.RIGHTlogic2, 0);
   }
@@ -89,13 +91,13 @@ void updateCurrentSpeed()
 {
 	if(curSpeedX < targetSpeedX)
 	{
-		// curSpeedX += (float)(speed_to_counts(accX*2)/100); TODO
+		 curSpeedX += (double)speed_to_counts(accX*2) / 5;
 		if(curSpeedX > targetSpeedX)
 			curSpeedX = targetSpeedX;
 	}
 	else if(curSpeedX > targetSpeedX)
 	{
-		// curSpeedX -= (float)speed_to_counts(decX*2)/100; TODO
+		 curSpeedX -= (double)speed_to_counts(decX*2) / 5;
 		if(curSpeedX < targetSpeedX)
 			curSpeedX = targetSpeedX;
 	}
