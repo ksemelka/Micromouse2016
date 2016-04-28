@@ -6,12 +6,30 @@ void initializeBuzzer() {
   pinMode(BUZZER, OUTPUT);
 }
 
-void varyFrequency() {
-  int reading;
-  const uint8_t scale = 1; // 1 for high frequencies, scale up to 15 for lowest freqs
+// play tone on a piezo BUZZER: tone shorter values produce higher frequencies
+//  which is opposite beep() but avoids some math delay - similar to code by Erin Robotgrrl
 
-  reading = scale * analogRead(POT);
-  playTone(reading, 1000);
+void playTone(uint16_t tone1, uint16_t duration) {
+  if(tone1 < 50 || tone1 > 15000) return;  // these do not play on a piezo
+  for (long i = 0; i < duration * 1000L; i += tone1 * 2) {
+     digitalWrite(BUZZER, HIGH);
+     delayMicroseconds(tone1);
+     digitalWrite(BUZZER, LOW);
+     delayMicroseconds(tone1);
+  }
+}
+
+// another sound producing function similar to http://web.media.mit.edu/~leah/LilyPad/07_sound_code.html
+void beep (int16_t frequencyInHertz, long timeInMilliseconds) {
+    long x;
+    long delayAmount = (long)(1000000/frequencyInHertz);
+    long loopTime = (long)((timeInMilliseconds*1000)/(delayAmount*2));
+    for (x=0;x<loopTime;x++) {
+       digitalWrite(BUZZER,HIGH);
+       delayMicroseconds(delayAmount);
+       digitalWrite(BUZZER,LOW);
+       delayMicroseconds(delayAmount);
+    }
 }
 
 void chirp() {  // Bird chirp
@@ -39,7 +57,6 @@ void meow2() {  // cat meow (emphasis on "ow")
 }
 
 void mew() {  // cat mew
-  uint16_t i;
   playTone(5100,55);       // "m"   (short)
   playTone(394,130);       // "eee" (long)
   playTone(384,35);        // "eee" (up a tiny bit on end)
@@ -62,32 +79,5 @@ void arf() {    // dog arf
   playTone(4545,80);         // intermediate
   playTone(12200,70);        // "ff"   (shorter, hard to do)
 }
-
-// play tone on a piezo BUZZER: tone shorter values produce higher frequencies
-//  which is opposite beep() but avoids some math delay - similar to code by Erin Robotgrrl
-
-void playTone(uint16_t tone1, uint16_t duration) {
-  if(tone1 < 50 || tone1 > 15000) return;  // these do not play on a piezo
-  for (long i = 0; i < duration * 1000L; i += tone1 * 2) {
-     digitalWrite(BUZZER, HIGH);
-     delayMicroseconds(tone1);
-     digitalWrite(BUZZER, LOW);
-     delayMicroseconds(tone1);
-  }
-}
-
-// another sound producing function similar to http://web.media.mit.edu/~leah/LilyPad/07_sound_code.html
-void beep (int16_t frequencyInHertz, long timeInMilliseconds) {
-    long x;
-    long delayAmount = (long)(1000000/frequencyInHertz);
-    long loopTime = (long)((timeInMilliseconds*1000)/(delayAmount*2));
-    for (x=0;x<loopTime;x++) {
-       digitalWrite(BUZZER,HIGH);
-       delayMicroseconds(delayAmount);
-       digitalWrite(BUZZER,LOW);
-       delayMicroseconds(delayAmount);
-    }
-}
-
 
 #endif /*BUZZER_H*/

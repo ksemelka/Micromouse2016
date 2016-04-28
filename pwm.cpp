@@ -5,6 +5,7 @@
 
 extern volatile int encoderValueLeft;
 extern volatile int encoderValueRight;
+extern elapsedMillis wait;
 
 double accX = 300;
 double accW = 1;
