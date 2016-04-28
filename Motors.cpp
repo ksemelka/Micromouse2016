@@ -16,13 +16,11 @@ Motors::Motors() {
   pinMode(LEFTlogic1, OUTPUT);
   pinMode(LEFTlogic2, OUTPUT);
 
-  digitalWrite(LEFTMotorEN, LOW);
-
   pinMode(RIGHTMotorEN, OUTPUT);  // Initialize right motor
   pinMode(RIGHTlogic1, OUTPUT);
   pinMode(RIGHTlogic2, OUTPUT);
 
-  digitalWrite(RIGHTMotorEN, LOW);
+  turnMotorENOn;
 
   pinMode(encoderLEFT_A, INPUT);  // Initialize left encoder
   pinMode(encoderLEFT_B, INPUT);

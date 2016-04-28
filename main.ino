@@ -21,6 +21,7 @@ Sensors sensors(leftPT, frontPT, rightPT);
 
 IntervalTimer sensorTimer;
 IntervalTimer speedProfileTimer;
+elapsedMillis wait;
 
 void setup() {
   sensorTimer.begin(readSensors, 5000);
@@ -36,19 +37,19 @@ void setup() {
   initializeOnboardLED();
   initializeBuzzer();
   randomSeed(analogRead(0));  // Seeds using random analog noise on unconnected pin
-  Serial1.begin(9600);
-
+  Serial.begin(9600);
   Serial1.print("Starting...\n");
   while (sensors.frontPTReading < 500) {  // Wait to enter loop
     blink(1);
   }
+//  chirp();
   delay(2000);
   targetRight = analogRead(rightPT);
   targetLeft = analogRead(leftPT);
+  wait = 0;
 }
-
 void loop() {
-  navigate();
+
 }
 
 void outputData(double data) {
@@ -62,7 +63,7 @@ void outputData(double left, double right) {
 
 void countLeftEncoderA() {   // ++ if going forwards
   if (digitalRead(encoderLEFT_A)) {
-    if (digitalRead(encoderLEFT_A)) { // If channel A leads B, CW
+    if (digitalRead(encoderLEFT_B)) { // If channel A leads B, CW
       encoderValueLeft--;
     }
     else {
@@ -70,7 +71,7 @@ void countLeftEncoderA() {   // ++ if going forwards
     }
   }
   else {
-    if (digitalRead(encoderLEFT_A)) {
+    if (digitalRead(encoderLEFT_B)) {
       encoderValueLeft++;
     }
     else {
@@ -99,7 +100,7 @@ void countRightEncoderA() {  // ++ if going forwards
 }
 
 void countLeftEncoderB() {
-  if (digitalRead(encoderLEFT_A)) {
+  if (digitalRead(encoderLEFT_B)) {
     if (digitalRead(encoderLEFT_A)) {
       encoderValueLeft++;
     }

@@ -7,10 +7,10 @@ extern volatile int encoderValueLeft;
 extern volatile int encoderValueRight;
 extern elapsedMillis wait;
 
-double accX = 300;
-double accW = 1;
+double accX = 165;
+double accW = 1.5;
 double decX = 300;
-double decW = 1;
+double decW = 1.5;
 double curSpeedX;
 double curSpeedW;
 double targetSpeedX;
@@ -23,8 +23,8 @@ double oldPosErrorX;
 double oldPosErrorW;
 int leftBaseSpeed;
 int rightBaseSpeed;
-int encoderFeedbackX;
-int encoderFeedbackW;
+double encoderFeedbackX;
+double encoderFeedbackW;
 double kpX = .4;
 double kpW = 1;
 double kdX = .1;
@@ -282,11 +282,11 @@ void turnRightAndLeft() {
 
 void turnLeftEncoderTicks() {
   resetSpeedProfile();
-  distanceLeftW = TURNDISTANCE;
+  distanceLeftW = TURNDISTANCELEFT;
   targetSpeedX = 0;
-  targetSpeedW = 100;
+  targetSpeedW = 50;
   Serial.println("Entering While 1");
-  while (distanceLeftW > TURNDISTANCE - 950) {
+  while (distanceLeftW > TURNDISTANCELEFT - 1180) {
     if (wait > 10) {
       Serial.println(distanceLeftW);
       wait -= 10;
@@ -294,7 +294,6 @@ void turnLeftEncoderTicks() {
   } // Stuck in loop until halfway
   targetSpeedW = 1;
   while (distanceLeftW > 0) {
-//    map(targetSpeedW, 0, TURNDISTANCE / 2, -120, 0);
     if (wait > 10) {
       Serial.println(distanceLeftW);
       wait -= 10;
@@ -302,7 +301,6 @@ void turnLeftEncoderTicks() {
   } // Finish last half of turn
   targetSpeedW = -1;
   while (distanceLeftW < 0) {
-//    map(targetSpeedW, 0, TURNDISTANCE / 2, -120, 0);
     if (wait > 10) {
       Serial.println(distanceLeftW);
       wait -= 10;
@@ -314,11 +312,11 @@ void turnLeftEncoderTicks() {
 void turnRightEncoderTicks() {
   resetSpeedProfile();
   turningRight = true;
-  distanceLeftW = TURNDISTANCE;
+  distanceLeftW = TURNDISTANCERIGHT;
   targetSpeedX = 0;
-  targetSpeedW = -100;
+  targetSpeedW = -50;
   Serial.println("Entering While 1");
-  while (distanceLeftW > TURNDISTANCE - 950) {
+  while (distanceLeftW > TURNDISTANCERIGHT - 1200) {
     if (wait > 10) {
       Serial.println(distanceLeftW);
       wait -= 10;
@@ -331,7 +329,12 @@ void turnRightEncoderTicks() {
       wait -= 10;
     }
   }
-  targetSpeedW = 0;
+  targetSpeedW = 1;
+  while (distanceLeftW < 0) {
+    if (wait > 10) {
+      Serial.println(distanceLeftW);
+    }
+  }
   turningRight = false;
 }
 

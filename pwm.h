@@ -4,11 +4,10 @@
 #include <Arduino.h>
 
 #define turnMotorOff     setLeftPwm(0);setRightPwm(0)
-#define turnMotorENOff      digitalWrite(LEFTMotorEN, LOW);digitalWrite(RIGHTMotorEN, LOW)
-#define turnMotorENOn       digitalWrite(LEFTMotorEN, HIGH); digitalWrite(RIGHTMotorEN, HIGH)
 #define MAXSPEEDX         72
 #define GOODTARGETSPEEDX  65
-#define TURNDISTANCE      2293
+#define TURNDISTANCERIGHT 2298
+#define TURNDISTANCELEFT  2248
 
 extern double accX;
 extern double accW;
@@ -26,8 +25,8 @@ extern double oldPosErrorX;
 extern double oldPosErrorW;
 extern int leftBaseSpeed;
 extern int rightBaseSpeed;
-extern int encoderFeedbackX;
-extern int encoderFeedbackW;
+extern double encoderFeedbackX;
+extern double encoderFeedbackW;
 extern int oneCellDistance;
 
 extern double kdX;

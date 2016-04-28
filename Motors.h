@@ -2,6 +2,9 @@
 #define MOTORS_H
 #include <Arduino.h>
 
+#define turnMotorENOff      digitalWrite(LEFTMotorEN, LOW);digitalWrite(RIGHTMotorEN, LOW)
+#define turnMotorENOn       digitalWrite(LEFTMotorEN, HIGH); digitalWrite(RIGHTMotorEN, HIGH)
+
 #define encoderLEFT_A       2  // Left encoder output channel
 #define encoderLEFT_B       3  // Left encoder output B
 #define encoderRIGHT_A      5  // Right encoder output channel
