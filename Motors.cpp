@@ -3,6 +3,7 @@
 #include "LEDs.h"
 #include "PID.h"
 #include "State.h"
+#include "Encoder.h"
 #include <Arduino.h>
 
 extern PID PID;
@@ -138,7 +139,6 @@ void Motors::goForwardProportional(int error) {
   analogWrite(LEFTMotorEN, 180 - error);
   digitalWrite(LEFTlogic1, HIGH);
   digitalWrite(LEFTlogic2, LOW);
-
   analogWrite(RIGHTMotorEN, 150 + error);
   digitalWrite(RIGHTlogic1, LOW);
   digitalWrite(RIGHTlogic2, HIGH);
@@ -154,6 +154,7 @@ void Motors::traverseCell() {
     }
   }
   brake();
+  // oldEncoderCount = encoderCount;
 }
 
 // void Motors::checkIfTooClose() {
