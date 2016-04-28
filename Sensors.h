@@ -6,7 +6,6 @@ const byte rightPT = A0;
 const byte frontPT = A1;
 const byte leftPT = A2;
 
-#define SENSOR_SAMPLE_TIME  1000
 
 class Sensors {
   public:
@@ -15,9 +14,9 @@ class Sensors {
     void turnSensorsOn();
     void turnSensorsOff();
 
-    unsigned int leftPTReading;
-    unsigned int frontPTReading;
-    unsigned int rightPTReading;
+    int leftPTReading;
+    int frontPTReading;
+    int rightPTReading;
 };
 
 #endif  /*SENSORS_H*/
