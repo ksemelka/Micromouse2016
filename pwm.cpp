@@ -1,26 +1,14 @@
 #include "pwm.h"
-#include "PID.h"
 #include "Encoder.h"
-#include "Motors.h"
 #include <cmath>
 #include <Arduino.h>
 
-/*Need to make:
-  *UpdateCurrentSpeed()
-  *Implement Old Encoder count in Motors.cpp
-  *Implement PosPwmX and PosPwmW
-  *speedToCounts()
-  *Implement pidInputX and pidInputW
-  *Fix needToDecelerate return statement
-*/
-
-extern Motors motors;
 extern volatile int encoderValueLeft;
 extern volatile int encoderValueRight;
 
-double accX = 100;
+double accX = 300;
 double accW = 1;
-double decX = 100;
+double decX = 300;
 double decW = 1;
 double curSpeedX;
 double curSpeedW;
@@ -36,54 +24,56 @@ int leftBaseSpeed;
 int rightBaseSpeed;
 int encoderFeedbackX;
 int encoderFeedbackW;
-int oneCellDistance = 1475; // in counts
+double kpX = .4;
+double kpW = 1;
+double kdX = .1;
+double kdW = 2;
+int oneCellDistance = 3200; // in counts
 int moveSpeed = speed_to_counts(500*2);
 int turnSpeed = speed_to_counts(500*2);
 int returnSpeed = speed_to_counts(500*2);
 int stopSpeed = speed_to_counts(100*2);
-int maxSpeed = speed_to_counts(2000*2);
+int maxSpeed = speed_to_counts(1400*2);
 
-int speed_to_counts(int speed) {  // counts per mm  TODO
-  return speed / 1000;
+double speed_to_counts(double speed) {  // mm/s to counts/ms
+  return speed / 2000.0 * 4.496;
 }
-int counts_to_speed(int counts) { // counts per ms
-  return counts * 1000;
+double counts_to_speed(double counts) { // counts/20ms to mm/20s
+  return counts * 2000.0 / 4.496;
 }
 
 void setLeftPwm(int speed) {
-  // if(speed > 255)//parameter check
-	// 	speed = 255;
-	// if(speed < -255)
-	// 	speed = -255;
+  if(speed > 255)//parameter check
+    speed = 255;
+  if(speed < -255)
+    speed = -255;
 
     if(speed >= 0)//forward
     {
-      analogWrite(motors.LEFTlogic1, 0);
-      analogWrite(motors.LEFTlogic2, speed);
+      analogWrite(LEFTlogic1, 0);
+      analogWrite(LEFTlogic2, speed);
     }
     else//backward
     {
-      analogWrite(motors.LEFTlogic1, -speed);
-      analogWrite(motors.LEFTlogic2, 0);
+      analogWrite(LEFTlogic1, -speed);
+      analogWrite(LEFTlogic2, 0);
     }
 }
 void setRightPwm(int speed) {
-  // if(speed > 255)
-	// 	speed = 255;
-	// if(speed < -255)
-	// 	speed = -255;
+  if(speed > 255)
+    speed = 255;
+  if(speed < -255)
+    speed = -255;
 
   if(speed >= 0)//forward
   {
-    speed += 35 // OFFSET BECAUSE OF SHITTY MOTORS
-    analogWrite(motors.RIGHTlogic1, 0);
-    analogWrite(motors.RIGHTlogic2, speed);
+    analogWrite(RIGHTlogic1, 0);
+    analogWrite(RIGHTlogic2, speed);
   }
   else//backward
   {
-    speed -= 28
-    analogWrite(motors.RIGHTlogic1, -speed);
-    analogWrite(motors.RIGHTlogic2, 0);
+    analogWrite(RIGHTlogic1, -speed);
+    analogWrite(RIGHTlogic2, 0);
   }
 }
 
@@ -91,13 +81,13 @@ void updateCurrentSpeed()
 {
 	if(curSpeedX < targetSpeedX)
 	{
-		 curSpeedX += (double)speed_to_counts(accX*2) / 5;
+		 curSpeedX += (double)speed_to_counts(accX*2);
 		if(curSpeedX > targetSpeedX)
 			curSpeedX = targetSpeedX;
 	}
 	else if(curSpeedX > targetSpeedX)
 	{
-		 curSpeedX -= (double)speed_to_counts(decX*2) / 5;
+		 curSpeedX -= (double)speed_to_counts(decX*2);
 		if(curSpeedX < targetSpeedX)
 			curSpeedX = targetSpeedX;
 	}
@@ -140,8 +130,8 @@ void calculateMotorPwm(void) // encoder PD controller
 	posErrorX += curSpeedX - encoderFeedbackX;
 	posErrorW += curSpeedW - rotationalFeedback;
 
-	// posPwmX = kpX * posErrorX + kdX * (posErrorX - oldPosErrorX);
-	// posPwmW = kpW * posErrorW + kdW * (posErrorW - oldPosErrorW);
+	 posPwmX = kpX * posErrorX - kdX * (posErrorX - oldPosErrorX);
+	 posPwmW = kpW * posErrorW + kdW * (posErrorW - oldPosErrorW);
 
 	oldPosErrorX = posErrorX;
 	oldPosErrorW = posErrorW;
@@ -153,12 +143,7 @@ void calculateMotorPwm(void) // encoder PD controller
 	setRightPwm(rightBaseSpeed);
 }
 
-void moveOneCell()
-{
-	enable_sensor(),
-	enable_gyro();
-	enable_PID();
-
+void moveOneCell() {
 	targetSpeedW = 0;
 	targetSpeedX = moveSpeed;
 
@@ -167,17 +152,14 @@ void moveOneCell()
 		/*you can call int needToDecelerate(int32_t dist, int16_t curSpd, int16_t endSpd)
 		here with current speed and distanceLeft to decide if you should start to decelerate or not.*/
 		/*sample*/
-		if(needToDecelerate(distanceLeft, curSpeedX, moveSpeed) < decX)
+		if(needToDecelerate(distanceLeftX, curSpeedX, moveSpeed) < decX)
 			targetSpeedX = maxSpeed;
 		else
 			targetSpeedX = moveSpeed;
 
 		//there is something else you can add here. Such as detecting falling edge of post to correct longitudinal position of mouse when running in a straight path
 	}
-	while( ( (encoderCount-oldEncoderCount) < oneCellDistance && LFSensor < LFvalue2 && RFSensor < RFvalue2)//use encoder to finish 180mm movement if no front walls
-	|| (LFSensor < LFvalues1 && LFSensor > LFvalue2)//if has front wall, make the mouse finish this 180mm with sensor threshold only
-	|| (RFSensor < RFvalue1 && RFSensor > RFvalve2)
-	);
+	while( (encoderCount-oldEncoderCount) < oneCellDistance);
 	//LFvalues1 and RFvalues1 are the front wall sensor threshold when the center of mouse between the boundary of the cells.
 	//LFvalues2 and RFvalues2 are the front wall sensor threshold when the center of the mouse staying half cell farther than LFvalues1 and 2
 	//and LF/RFvalues2 are usually the threshold to determine if there is a front wall or not. You should probably move this 10mm closer to front wall when collecting
@@ -193,7 +175,7 @@ int needToDecelerate(int dist, int curSpd, int endSpd)//speed are in encoder cou
 	if (dist<0) dist = 1;//-dist;
 	if (dist == 0) dist = 1;  //prevent divide by 0
 
-	return (abs(counts_to_speed((curSpd*curSpd - endSpd*endSpd)*100*(double)/dist/4/2))); //dist_counts_to_mm(dist)/2);
+	return (abs(counts_to_speed((curSpd*curSpd - endSpd*endSpd)*100*(double)dist/4/2))); //dist_counts_to_mm(dist)/2);
 	//calculate deceleration rate needed with input distance, input current speed and input targetspeed to determind if the deceleration is needed
 	//use equation 2*a*S = Vt^2 - V0^2  ==>  a = (Vt^2-V0^2)/2/S
 	//because the speed is the sum of left and right wheels(which means it's doubled), that's why there is a "/4" in equation since the square of 2 is 4
@@ -212,8 +194,8 @@ void resetSpeedProfile(void)
 	setLeftPwm(0);
 	setRightPwm(0);
 
-	pidInputX = 0;
-	pidInputW = 0;
+//	pidInputX = 0;
+//	pidInputW = 0;
 	curSpeedX = 0;
 	curSpeedW = 0;
 	targetSpeedX = 0;
@@ -232,7 +214,202 @@ void resetSpeedProfile(void)
 	oldEncoderCount = 0;
 	leftBaseSpeed = 0;
 	rightBaseSpeed = 0;
+ distanceLeftX = 0;
+ distanceLeftW = 0;
 
 	encoderValueLeft = 0;//reset left encoder count
 	encoderValueRight = 0;//reset right encoder count
+}
+
+
+/********************************************************************
+ *
+ *    ooo        ooooo   .oooooo.   oooooo     oooo oooooooooooo
+ *    `88.       .888'  d8P'  `Y8b   `888.     .8'  `888'     `8
+ *     888b     d'888  888      888   `888.   .8'    888
+ *     8 Y88. .P  888  888      888    `888. .8'     888oooo8
+ *     8  `888'   888  888      888     `888.8'      888    "
+ *     8    Y     888  `88b    d88'      `888'       888       o
+ *    o8o        o888o  `Y8bood8P'        `8'       o888ooooood8
+ *    ooo        ooooo oooooooooooo ooooo      ooo ooooooooooooo
+ *    `88.       .888' `888'     `8 `888b.     `8' 8'   888   `8
+ *     888b     d'888   888          8 `88b.    8       888
+ *     8 Y88. .P  888   888oooo8     8   `88b.  8       888
+ *     8  `888'   888   888    "     8     `88b.8       888
+ *     8    Y     888   888       o  8       `888       888
+ *    o8o        o888o o888ooooood8 o8o        `8      o888o
+ *
+ ********************************************************************
+ */
+
+void turnRightAndLeft() {
+  wait = 0;
+  targetSpeedX = 0;
+  targetSpeedW = 68;
+  Serial.println("Entering While 1");
+  while(1) {
+    if (wait > 240) {
+      wait -= 240;
+      break;
+    }
+  }
+  targetSpeedW = 0;
+  Serial.println("Entering While 2");
+  while (1) {
+    if (wait > 1500) {
+      wait -= 1500;
+      break;
+    }
+  }
+  targetSpeedW = -50;
+  Serial.println("Entering While 3");
+  while (1) {
+    if (wait > 240) {
+      wait -= 240;
+      break;
+    }
+  }
+  targetSpeedW = 0;
+  Serial.println("Entering While 4");
+  while (1) {
+    if (wait > 1500) {
+      wait -= 1500;
+      break;
+    }
+  }
+}
+
+void turnLeftEncoderTicks() {
+  resetSpeedProfile();
+  distanceLeftW = TURNDISTANCE;
+  targetSpeedX = 0;
+  targetSpeedW = 100;
+  Serial.println("Entering While 1");
+  while (distanceLeftW > TURNDISTANCE - 950) {
+    if (wait > 10) {
+      Serial.println(distanceLeftW);
+      wait -= 10;
+    }
+  } // Stuck in loop until halfway
+  targetSpeedW = 1;
+  while (distanceLeftW > 0) {
+//    map(targetSpeedW, 0, TURNDISTANCE / 2, -120, 0);
+    if (wait > 10) {
+      Serial.println(distanceLeftW);
+      wait -= 10;
+    }
+  } // Finish last half of turn
+  targetSpeedW = -1;
+  while (distanceLeftW < 0) {
+//    map(targetSpeedW, 0, TURNDISTANCE / 2, -120, 0);
+    if (wait > 10) {
+      Serial.println(distanceLeftW);
+      wait -= 10;
+    }
+  } // Finish last half of turn
+  targetSpeedW = 0;
+}
+
+void turnRightEncoderTicks() {
+  resetSpeedProfile();
+  turningRight = true;
+  distanceLeftW = TURNDISTANCE;
+  targetSpeedX = 0;
+  targetSpeedW = -100;
+  Serial.println("Entering While 1");
+  while (distanceLeftW > TURNDISTANCE - 950) {
+    if (wait > 10) {
+      Serial.println(distanceLeftW);
+      wait -= 10;
+    }
+  } // Stuck in loop until about halfway
+  targetSpeedW = -1;
+  while (distanceLeftW > 0) {   // Correct overshoot
+    if (wait > 10) {
+      Serial.println(distanceLeftW);
+      wait -= 10;
+    }
+  }
+  targetSpeedW = 0;
+  turningRight = false;
+}
+
+void goForwardAndBackward() {
+  wait = 0;
+  targetSpeedW = 0;
+  targetSpeedX = 65;
+//  Serial.println("Entering While 1");
+  while(curSpeedX < 65) {
+    if (wait > 1000) {
+      wait -= 1000;
+      break;
+    }
+  }
+//  targetSpeedX = 0;
+////  Serial.println("Entering While 2");
+//  while (curSpeedX > 0) {
+//    if (wait > 1000) {
+//      wait -= 1000;
+//      break;
+//    }
+//  }
+  targetSpeedX = -65;
+//  Serial.println("Entering While 3");
+  while (curSpeedX > -65) {
+    if (wait > 1000) {
+      wait -= 1000;
+      break;
+    }
+  }
+//  targetSpeedX = 0;
+//  Serial.println("Entering While 4");
+//  while (curSpeedX < 0) {
+//    if (wait > 1000) {
+//      wait -= 1000;
+//      break;
+//    }
+//  }
+}
+
+void goForwardDist(int dist) {
+  wait = 0;
+  distanceLeftX = dist;
+  targetSpeedW = 0;
+  while(distanceLeftX > 0) {
+    targetSpeedX = map(distanceLeftX, -50, dist,
+                        8, GOODTARGETSPEEDX);
+    if (wait > 20) {
+      Serial.println(distanceLeftX);
+      wait -= 20;
+    }
+  }
+  targetSpeedX = -1;
+  while (distanceLeftX < 0) {
+    if (wait > 20) {
+      Serial.println(distanceLeftX);
+      wait -= 20;
+    }
+  }
+}
+
+void goBackwardDist(int dist) {
+  wait = 0;
+  distanceLeftX = -dist;
+  targetSpeedW = 0;
+  while (distanceLeftX < 0) {
+    targetSpeedX = map(distanceLeftX, -dist, 0,
+                        -GOODTARGETSPEEDX, -10);
+    if (wait > 20) {
+      Serial.println(distanceLeftX);
+      Serial.println(targetSpeedX);
+      wait -= 20;
+    }
+  }
+  targetSpeedX = 1;
+  while (distanceLeftX > 0) {
+    if (wait > 20) {
+      Serial.println(distanceLeftX);
+      wait -= 20;
+    }
+  }
 }
