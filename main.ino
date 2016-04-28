@@ -28,7 +28,7 @@ void setup() {
   speedProfileTimer.begin(speedProfile, 5000);
   speedProfileTimer.priority(172);
 
-  attachInterrupt(encoderLEFT_A countLeftEncoderA, CHANGE);
+  attachInterrupt(encoderLEFT_A, countLeftEncoderA, CHANGE);
   attachInterrupt(encoderRIGHT_A, countRightEncoderA, CHANGE);
   attachInterrupt(encoderLEFT_B, countLeftEncoderB, CHANGE);
   attachInterrupt(encoderRIGHT_B, countRightEncoderB, CHANGE);
