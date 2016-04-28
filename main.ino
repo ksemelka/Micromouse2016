@@ -25,7 +25,6 @@ IntervalTimer sensorTimer;
 IntervalTimer speedProfileTimer;
 
 void setup() {
-<<<<<<< HEAD
   sensorTimer.begin(readSensors, 1000);
   sensorTimer.priority(172);
   speedProfileTimer.begin(speedProfile, 1000);
@@ -34,12 +33,7 @@ void setup() {
   attachInterrupt(encoderRIGHT_A, countRightEncoder, RISING);
 
   initializeOnboardLED();
-=======
   initializeBuzzer();
-  initializeOnboardLED();
-  Timer1.initialize(500);
-  Timer1.start();
->>>>>>> refs/remotes/origin/master
   randomSeed(analogRead(0));  // Seeds using random analog noise on unconnected pin
   Serial1.begin(9600);
 
