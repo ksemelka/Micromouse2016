@@ -1,12 +1,10 @@
 #include "Motors.h"
 #include "Sensors.h"
 #include "LEDs.h"
-#include "PID.h"
 #include "State.h"
 #include "Encoder.h"
 #include <Arduino.h>
 
-extern PID PID;
 extern Sensors sensors;
 extern int encoderValueLeft;
 extern int encoderValueRight;
@@ -146,7 +144,7 @@ void Motors::traverseCell() {
   encoderValueLeft = 0;
   encoderValueRight = 0;
   while (encoderValueLeft + encoderValueRight < encoderTicksPerCell) {
-    goForwardProportional(PID.calculateError());
+//    goForwardProportional(PID.calculateError());
     if (sensors.frontPTReading > targetFront) {
       break;
     }

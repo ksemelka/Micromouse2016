@@ -1,7 +1,6 @@
 #include "Motors.h"
 #include "Sensors.h"
 #include "LEDs.h"
-#include "PID.h"
 // #include "Floodfill.h"
 #include "State.h"
 #include "Maze.h"
@@ -12,10 +11,6 @@
 volatile int encoderValueLeft = 0;
 volatile int encoderValueRight = 0;
 
-int targetRight;
-int targetLeft;
-
-PID PID(.33, 0, 0);
 Motors motors;
 Sensors sensors(leftPT, frontPT, rightPT);
 
@@ -24,16 +19,8 @@ IntervalTimer speedProfileTimer;
 elapsedMillis wait;
 
 void setup() {
-  sensorTimer.begin(readSensors, 5000);
-  sensorTimer.priority(172);
-  speedProfileTimer.begin(speedProfile, 5000);
-  speedProfileTimer.priority(172);
-
-  attachInterrupt(encoderLEFT_A, countLeftEncoderA, CHANGE);
-  attachInterrupt(encoderRIGHT_A, countRightEncoderA, CHANGE);
-  attachInterrupt(encoderLEFT_B, countLeftEncoderB, CHANGE);
-  attachInterrupt(encoderRIGHT_B, countRightEncoderB, CHANGE);
-
+  attachInterrupts();
+  initializeTimers();
   initializeOnboardLED();
   initializeBuzzer();
   randomSeed(analogRead(0));  // Seeds using random analog noise on unconnected pin
@@ -44,12 +31,11 @@ void setup() {
   }
 //  chirp();
   delay(2000);
-  targetRight = analogRead(rightPT);
-  targetLeft = analogRead(leftPT);
+  calibrateTargetValues();
   wait = 0;
 }
 void loop() {
-
+  newNavigate();
 }
 
 void outputData(double data) {
@@ -147,4 +133,30 @@ void readSensors() {
   sensors.leftPTReading = analogRead(leftPT);
   sensors.frontPTReading = analogRead(frontPT);
   sensors.rightPTReading = analogRead(rightPT);
+  calculateSensorError();
+}
+
+void calibrateTargetValues() {
+  resetSpeedProfile();
+  targetRight = sensors.rightPTReading;
+  targetLeft = sensors.leftPTReading;
+  thresholdSide = (targetRight + targetLeft) / 10;
+  turnRightEncoderTicks();
+  targetFront = sensors.frontPTReading;
+  thresholdFront = targetFront / 10;
+  turnLeftEncoderTicks();
+}
+
+void initializeTimers() {
+  sensorTimer.begin(readSensors, 5000);
+  sensorTimer.priority(172);
+  speedProfileTimer.begin(speedProfile, 5000);
+  speedProfileTimer.priority(172);
+}
+
+void attachInterrupts() {
+  attachInterrupt(encoderLEFT_A, countLeftEncoderA, CHANGE);
+  attachInterrupt(encoderRIGHT_A, countRightEncoderA, CHANGE);
+  attachInterrupt(encoderLEFT_B, countLeftEncoderB, CHANGE);
+  attachInterrupt(encoderRIGHT_B, countRightEncoderB, CHANGE);
 }

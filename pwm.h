@@ -1,6 +1,7 @@
 #ifndef PWM_H
 #define PWM_H
 #include "Motors.h"
+#include "Sensors.h"
 #include <Arduino.h>
 
 #define turnMotorOff     setLeftPwm(0);setRightPwm(0)

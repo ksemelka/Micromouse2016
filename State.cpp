@@ -2,6 +2,7 @@
 #include "Motors.h"
 #include "Sensors.h"
 #include "LEDs.h"
+#include "pwm.h"
 #include <Arduino.h>
 
 extern Motors motors;
