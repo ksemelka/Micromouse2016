@@ -1,7 +1,14 @@
 #ifndef PWM_H
 #define PWM_H
+#include "Motors.h"
+#include <Arduino.h>
 
 #define turnMotorOff     setLeftPwm(0);setRightPwm(0)
+#define turnMotorENOff      digitalWrite(LEFTMotorEN, LOW);digitalWrite(RIGHTMotorEN, LOW)
+#define turnMotorENOn       digitalWrite(LEFTMotorEN, HIGH); digitalWrite(RIGHTMotorEN, HIGH)
+#define MAXSPEEDX         72
+#define GOODTARGETSPEEDX  65
+#define TURNDISTANCE      2293
 
 extern double accX;
 extern double accW;
@@ -23,14 +30,17 @@ extern int encoderFeedbackX;
 extern int encoderFeedbackW;
 extern int oneCellDistance;
 
+extern double kdX;
+extern double kdW;
+
 extern int moveSpeed;
 extern int turnSpeed;
 extern int returnSpeed;
 extern int stopSpeed;
 extern int maxSpeed;
 
-int speed_to_counts(int);
-int counts_to_speed(int);
+double speed_to_counts(double);
+double counts_to_speed(double);
 void setLeftPwm(int);
 void setRightPwm(int);
 void updateCurrentSpeed();
@@ -38,5 +48,14 @@ void calculateMotorPwm();
 void moveOneCell();
 int needToDecelerate(int, int, int);
 void resetSpeedProfile();
+
+// Movement:
+void turnRightAndLeft();
+void turnLeftEncoderTicks();
+void turnRightEncoderTicks();
+void goForwardAndBackward();
+void goForwardDist(int dist);
+void goBackwardDist(int dist);
+
 
 #endif /*PWM_H*/
