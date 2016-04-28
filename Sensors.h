@@ -6,6 +6,8 @@ const byte rightPT = A0;
 const byte frontPT = A1;
 const byte leftPT = A2;
 
+extern double sensorError;
+void calculateSensorError();
 
 class Sensors {
   public:

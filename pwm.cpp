@@ -117,23 +117,16 @@ void calculateMotorPwm(void) // encoder PD controller
 	encoderFeedbackX = rightEncoderChange + leftEncoderChange;
 	encoderFeedbackW = rightEncoderChange - leftEncoderChange;   // Positive if mouse rotates CW
 
-	// gyroFeedback = aSpeed/gyroFeedbackRatio; //gyroFeedbackRatio mentioned in curve turn lecture
-	// sensorFeedback = sensorError/a_scale;//have sensor error properly scale to fit the system TODO
+	sensorFeedback = sensorError/a_scale;//have sensor error properly scale to fit the system TODO
 
-	// if(onlyUseGyroFeedback)
-	// 	rotationalFeedback = guroFeedback;
-	// else if(onlyUseEncoderFeedback)
-		rotationalFeedback = encoderFeedbackW;
-	// else
-	// 	rotationalFeedback = encoderFeedbackW + gyroFeedback;
-	    //if you use IR sensor as well, the line above will be rotationalFeedback = encoderFeedbackW + gyroFeedback + sensorFeedback;
-	    //make sure to check the sign of sensor error.
+	rotationalFeedback = encoderFeedbackW + sensorFeedback * 0;
+// Serial.println(rotationalFeedback);
 
 	posErrorX += curSpeedX - encoderFeedbackX;
 	posErrorW += curSpeedW - rotationalFeedback;
 
-	 posPwmX = kpX * posErrorX - kdX * (posErrorX - oldPosErrorX);
-	 posPwmW = kpW * posErrorW + kdW * (posErrorW - oldPosErrorW);
+	posPwmX = kpX * posErrorX - kdX * (posErrorX - oldPosErrorX);
+	posPwmW = kpW * posErrorW + kdW * (posErrorW - oldPosErrorW);
 
 	oldPosErrorX = posErrorX;
 	oldPosErrorW = posErrorW;
@@ -161,7 +154,7 @@ void moveOneCell() {
 
 		//there is something else you can add here. Such as detecting falling edge of post to correct longitudinal position of mouse when running in a straight path
 	}
-	while( (encoderCount-oldEncoderCount) < oneCellDistance);
+	while( (encoderCount-oldEncoderCount) < ONECELLDISTANCE);
 	//LFvalues1 and RFvalues1 are the front wall sensor threshold when the center of mouse between the boundary of the cells.
 	//LFvalues2 and RFvalues2 are the front wall sensor threshold when the center of the mouse staying half cell farther than LFvalues1 and 2
 	//and LF/RFvalues2 are usually the threshold to determine if there is a front wall or not. You should probably move this 10mm closer to front wall when collecting

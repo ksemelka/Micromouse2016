@@ -3,6 +3,24 @@
 #include "State.h"
 #include <Arduino.h>
 
+double sensorError;
+extern Sensors sensors;
+
+void calculateSensorError() {
+  if (wallToTheRight() && wallToTheLeft()) {
+    sensorError = sensors.rightPTReading - sensors.leftPTReading;
+  }
+  else if (wallToTheRight() && !wallToTheLeft()) {
+    sensorError = sensors.rightPTReading - targetRight;
+  }
+  else if (wallToTheLeft() && !wallToTheRight()) {
+    sensorError = targetLeft - sensors.leftPTReading;
+  }
+  else if (!wallToTheLeft() && !wallToTheRight()) {
+    sensorError = 0;
+  }
+}
+
 Sensors::Sensors(const byte leftPT, const byte frontPT, const byte rightPT)  {
   pinMode(leftPT, INPUT);        // Initialize phototransistors
   pinMode(frontPT, INPUT);
