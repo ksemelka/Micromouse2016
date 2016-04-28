@@ -36,3 +36,4 @@ To solve the maze, we use a modified version of a "floodfill" algorithm. The sta
 + 2 Motor drivers
 + 1 Voltage Regulator
 + 1 Pololu Encoder
++ 1 Pololu Motor
