@@ -16,7 +16,9 @@ int rightEncoderChange;
 
 int leftEncoderOld;
 int rightEncoderOld;
-double distanceLeft;
+double distanceLeftX;
+double distanceLeftW;
+bool turningRight = false;
 
 int oldEncoderCount;
 
@@ -33,14 +35,20 @@ void getEncoderStatus() {
 
 	leftEncoderChange = leftEncoder - leftEncoderOld;
 	rightEncoderChange = rightEncoder - rightEncoderOld;
-	encoderChange = (double)(leftEncoderChange + rightEncoderChange) / 2;
+	encoderChange = (double)(leftEncoderChange + rightEncoderChange)/2;
 
 	leftEncoderOld = leftEncoder;
 	rightEncoderOld = rightEncoder;
 
 	leftEncoderCount += leftEncoderChange;
 	rightEncoderCount += rightEncoderChange;
-	encoderCount =  (double)(leftEncoderCount + rightEncoderCount) / 2;
+	encoderCount =  (double)(leftEncoderCount+rightEncoderCount)/2;
 
-	distanceLeft -= encoderChange;// update distanceLeft
+	distanceLeftX -= encoderChange;// update distanceLeft
+  if (turningRight) {
+    distanceLeftW -= leftEncoderChange - rightEncoderChange;
+  }
+  else {
+    distanceLeftW -= rightEncoderChange - leftEncoderChange;
+  }
 }
