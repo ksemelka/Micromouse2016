@@ -4,8 +4,8 @@
 
 #define encoderLEFT_A       2  // Left encoder output channel
 #define encoderLEFT_B       3  // Left encoder output B
-#define encoderRIGHT_A      4  // Right encoder output channel
-#define encoderRIGHT_B      5  // Right encoder Output B
+#define encoderRIGHT_A      5  // Right encoder output channel
+#define encoderRIGHT_B      4  // Right encoder Output B
 #define encoderTicksPerCell 1475  // Number of encoder ticks it takes to traverse cell
 
 #define RIGHTMotorEN    6
