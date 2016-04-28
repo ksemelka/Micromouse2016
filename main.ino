@@ -22,9 +22,10 @@ Motors motors;
 Sensors sensors(leftPT, frontPT, rightPT);
 
 void setup() {
+  initializeBuzzer();
+  initializeOnboardLED();
   Timer1.initialize(500);
   Timer1.start();
-  initializeOnboardLED();
   randomSeed(analogRead(0));  // Seeds using random analog noise on unconnected pin
   Serial1.begin(9600);
   Timer1.attachInterrupt(readSensors);
