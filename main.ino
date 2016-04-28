@@ -1,4 +1,3 @@
-#include <TimerOne.h>
 #include "Motors.h"
 #include "Sensors.h"
 #include "LEDs.h"
@@ -8,9 +7,8 @@
 #include "Maze.h"
 #include "Encoder.h"
 #include "pwm.h"
+#include "Buzzer.h"
 
-int encoderLeftTicksPerSample = 0;
-int encoderRightTicksPerSample = 0;
 volatile int encoderValueLeft = 0;
 volatile int encoderValueRight = 0;
 
@@ -25,12 +23,15 @@ IntervalTimer sensorTimer;
 IntervalTimer speedProfileTimer;
 
 void setup() {
-  sensorTimer.begin(readSensors, 1000);
+  sensorTimer.begin(readSensors, 5000);
   sensorTimer.priority(172);
-  speedProfileTimer.begin(speedProfile, 1000);
+  speedProfileTimer.begin(speedProfile, 5000);
   speedProfileTimer.priority(172);
-  attachInterrupt(encoderLEFT_A, countLeftEncoder, RISING);
-  attachInterrupt(encoderRIGHT_A, countRightEncoder, RISING);
+
+  attachInterrupt(encoderLEFT_A countLeftEncoderA, CHANGE);
+  attachInterrupt(encoderRIGHT_A, countRightEncoderA, CHANGE);
+  attachInterrupt(encoderLEFT_B, countLeftEncoderB, CHANGE);
+  attachInterrupt(encoderRIGHT_B, countRightEncoderB, CHANGE);
 
   initializeOnboardLED();
   initializeBuzzer();
@@ -50,28 +51,89 @@ void loop() {
   navigate();
 }
 
-void countLeftEncoder() {   // ++ if going forwards
- if (digitalRead(encoderLEFT_B) == HIGH) { // If channel A leads B, CW
-   encoderValueLeft--;
- }
- else {
-    encoderValueLeft++;
- }
+void outputData(double data) {
+  Serial.println(data);
+}
+void outputData(double left, double right) {
+  Serial.print(left);
+  Serial.print("/");
+  Serial.println(right);
 }
 
-void countRightEncoder() {  // ++ if going forwards
- if (digitalRead(encoderRIGHT_B) == HIGH) { // If channel A leads B, CW
-    encoderValueRight++;
- }
- else {
-    encoderValueRight--;
- }
+void countLeftEncoderA() {   // ++ if going forwards
+  if (digitalRead(encoderLEFT_A)) {
+    if (digitalRead(encoderLEFT_A)) { // If channel A leads B, CW
+      encoderValueLeft--;
+    }
+    else {
+      encoderValueLeft++;
+    }
+  }
+  else {
+    if (digitalRead(encoderLEFT_A)) {
+      encoderValueLeft++;
+    }
+    else {
+      encoderValueLeft--;
+    }
+  }
 }
 
-void readSensors() {
-  sensors.leftPTReading = analogRead(leftPT);
-  sensors.frontPTReading = analogRead(frontPT);
-  sensors.rightPTReading = analogRead(rightPT);
+void countRightEncoderA() {  // ++ if going forwards
+  if (digitalRead(encoderRIGHT_A)) {
+    if (digitalRead(encoderRIGHT_B)) { // If channel A leads B, CW
+      encoderValueRight--;
+    }
+    else {
+      encoderValueRight++;
+    }
+  }
+  else {
+    if (digitalRead(encoderRIGHT_B)) { // If channel A leads B, CW
+      encoderValueRight++;
+    }
+    else {
+      encoderValueRight--;
+    }
+  }
+}
+
+void countLeftEncoderB() {
+  if (digitalRead(encoderLEFT_A)) {
+    if (digitalRead(encoderLEFT_A)) {
+      encoderValueLeft++;
+    }
+    else {
+      encoderValueLeft--;
+    }
+  }
+  else {
+    if (digitalRead(encoderLEFT_A)) {
+      encoderValueLeft--;
+    }
+    else {
+      encoderValueLeft++;
+    }
+  }
+}
+
+void countRightEncoderB() {
+  if (digitalRead(encoderRIGHT_B)) {
+    if (digitalRead(encoderRIGHT_A)) {
+      encoderValueRight++;
+    }
+    else {
+      encoderValueRight--;
+    }
+  }
+  else {
+    if (digitalRead(encoderRIGHT_A)) {
+      encoderValueRight--;
+    }
+    else {
+      encoderValueRight++;
+    }
+  }
 }
 
 void speedProfile() {
@@ -80,12 +142,8 @@ void speedProfile() {
   calculateMotorPwm();
 }
 
-void calculateVelocity() {
-  PID.velocityLeft = (double)encoderLeftTicksPerSample / VELOCITY_SAMPLE_TIME;
-  PID.velocityRight = (double)encoderRightTicksPerSample / VELOCITY_SAMPLE_TIME;
-  PID.calculateProportionalEncoderError();
-  PID.prevVelocityLeft = PID.velocityLeft;  // Keep these values for calculating error
-  PID.prevVelocityRight = PID.velocityRight;
-  encoderLeftTicksPerSample = 0;
-  encoderRightTicksPerSample = 0;
+void readSensors() {
+  sensors.leftPTReading = analogRead(leftPT);
+  sensors.frontPTReading = analogRead(frontPT);
+  sensors.rightPTReading = analogRead(rightPT);
 }
