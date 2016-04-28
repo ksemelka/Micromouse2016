@@ -14,7 +14,9 @@ extern int rightEncoderChange;
 
 extern int leftEncoderOld;
 extern int rightEncoderOld;
-extern double distanceLeft;
+extern double distanceLeftX;
+extern double distanceLeftW;
+extern bool turningRight;
 
 extern int oldEncoderCount;
 
