@@ -31,6 +31,7 @@ double kpX = .4;
 double kpW = 1;
 double kdX = .1;
 double kdW = 2;
+bool startingCell = true;
 int moveSpeed = speed_to_counts(500*2);
 int turnSpeed = speed_to_counts(500*2);
 int returnSpeed = speed_to_counts(500*2);
@@ -372,6 +373,10 @@ void goForwardAndBackward() {
 void goForwardDist(int dist) {
   wait = 0;
   distanceLeftX = dist;
+  if (startingCell) {
+    distanceLeftX += 200;
+    startingCell = false;
+  }
   targetSpeedW = 0;
   while(distanceLeftX > 0) {
     targetSpeedX = map(distanceLeftX, -50, dist,

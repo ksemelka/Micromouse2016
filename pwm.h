@@ -34,6 +34,8 @@ extern double sensorFeedback;
 extern double kdX;
 extern double kdW;
 
+extern bool startingCell;
+
 extern int moveSpeed;
 extern int turnSpeed;
 extern int returnSpeed;
