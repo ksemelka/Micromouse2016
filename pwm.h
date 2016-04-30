@@ -1,14 +1,15 @@
 #ifndef PWM_H
 #define PWM_H
 #include "Motors.h"
+#include "Sensors.h"
 #include <Arduino.h>
 
 #define turnMotorOff     setLeftPwm(0);setRightPwm(0)
-#define turnMotorENOff      digitalWrite(LEFTMotorEN, LOW);digitalWrite(RIGHTMotorEN, LOW)
-#define turnMotorENOn       digitalWrite(LEFTMotorEN, HIGH); digitalWrite(RIGHTMotorEN, HIGH)
 #define MAXSPEEDX         72
 #define GOODTARGETSPEEDX  65
-#define TURNDISTANCE      2293
+#define TURNDISTANCERIGHT 2298
+#define TURNDISTANCELEFT  2248
+#define ONECELLDISTANCE   3198 // in counts
 
 extern double accX;
 extern double accW;
@@ -26,9 +27,10 @@ extern double oldPosErrorX;
 extern double oldPosErrorW;
 extern int leftBaseSpeed;
 extern int rightBaseSpeed;
-extern int encoderFeedbackX;
-extern int encoderFeedbackW;
-extern int oneCellDistance;
+extern double encoderFeedbackX;
+extern double encoderFeedbackW;
+extern double sensorFeedback;
+extern bool useSensors;
 
 extern double kdX;
 extern double kdW;

@@ -2,10 +2,16 @@
 #include "Motors.h"
 #include "Sensors.h"
 #include "LEDs.h"
+#include "pwm.h"
 #include <Arduino.h>
 
 extern Motors motors;
 extern Sensors sensors;
+int targetFront;
+int targetRight;
+int targetLeft;
+int thresholdFront;
+int thresholdSide;
 
 bool wallToTheFront() {
   if (sensors.frontPTReading > thresholdFront) {
@@ -195,6 +201,129 @@ void solveRightHand() {
       motors.turnAround();
       delay(300);
       motors.traverseCell();
+      break;
+    default:
+      Serial1.println("Error: Default");
+      motors.halt();
+      blink(1);
+      break;
+  }
+}
+
+void newNavigate() {
+  printState();
+  switch (state()) {
+    case 0:       // Randomly choose left, right, or straight
+    if (random(millis()) % 3 == 2) {
+      turnRightEncoderTicks();
+    }
+    else if (random(millis()) % 3 == 1) {
+      turnLeftEncoderTicks();
+    }
+    delay(200);
+    goForwardDist(ONECELLDISTANCE);
+    break;
+    case FRONT:
+      if (random(millis()) % 2) {   // Turn left or right randomly
+        turnLeftEncoderTicks();
+        delay(200);
+        goForwardDist(ONECELLDISTANCE);
+      }
+      else {
+        turnRightEncoderTicks();
+        delay(200);
+        goForwardDist(ONECELLDISTANCE);
+      }
+      break;
+    case RIGHT:
+      if (random(millis()) % 2) {   // Turn left or go forward randomly
+       turnLeftEncoderTicks();
+       delay(200);
+       goForwardDist(ONECELLDISTANCE);
+      }
+      else {
+        goForwardDist(ONECELLDISTANCE);
+      }
+      break;
+    case LEFT:
+      if (random(millis()) % 2) {   // Turn right or go forward randomly
+       turnRightEncoderTicks();
+       delay(200);
+       goForwardDist(ONECELLDISTANCE);
+      }
+      else {
+        goForwardDist(ONECELLDISTANCE);
+      }
+      break;
+    case FRONT + RIGHT:
+      turnLeftEncoderTicks();
+      delay(200);
+      goForwardDist(ONECELLDISTANCE);
+      break;
+    case FRONT + LEFT:
+      turnRightEncoderTicks();
+      delay(200);
+      goForwardDist(ONECELLDISTANCE);
+      break;
+    case RIGHT + LEFT:
+      goForwardDist(ONECELLDISTANCE);
+      break;
+    case FRONT + RIGHT + LEFT:
+      delay(100);
+      turnRightEncoderTicks();
+      delay(200);
+      turnRightEncoderTicks();
+      delay(200);
+      goForwardDist(ONECELLDISTANCE);
+      break;
+    default:
+      Serial1.println("Error: Default");
+      motors.halt();
+      blink(1);
+      break;
+  }
+}
+
+void newSolveRightHand() {
+  printState();
+  switch (state()) {
+    case 0:
+      turnRightEncoderTicks();
+      delay(100);
+      goForwardDist(ONECELLDISTANCE);
+      break;
+    case FRONT:
+      turnRightEncoderTicks();
+      delay(200);
+      goForwardDist(ONECELLDISTANCE);
+      break;
+    case RIGHT:
+      goForwardDist(ONECELLDISTANCE);
+      break;
+    case LEFT:
+      turnRightEncoderTicks();
+      delay(200);
+      goForwardDist(ONECELLDISTANCE);
+      break;
+    case FRONT + RIGHT:
+      turnLeftEncoderTicks();
+      delay(200);
+      goForwardDist(ONECELLDISTANCE);
+      break;
+    case FRONT + LEFT:
+      turnRightEncoderTicks();
+      delay(200);
+      goForwardDist(ONECELLDISTANCE);
+      break;
+    case RIGHT + LEFT:
+      goForwardDist(ONECELLDISTANCE);
+      break;
+    case FRONT + RIGHT + LEFT:
+      turnRightEncoderTicks();
+      delay(200);
+      turnRightEncoderTicks();
+      delay(200);
+      goForwardDist(ONECELLDISTANCE);
       break;
     default:
       Serial1.println("Error: Default");

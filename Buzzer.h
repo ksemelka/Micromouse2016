@@ -37,6 +37,12 @@ void chirp() {  // Bird chirp
      playTone(i,9);
 }
 
+void bootTone() {
+  playTone(2000, 100);
+  delay(50);
+  playTone(2000, 100);
+}
+
 void meow() {  // cat meow (emphasis ow "me")
   uint16_t i;
   playTone(5100,50);        // "m" (short)

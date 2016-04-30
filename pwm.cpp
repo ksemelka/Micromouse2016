@@ -1,35 +1,41 @@
 #include "pwm.h"
 #include "Encoder.h"
+#include "State.h"
+#include "Sensors.h"
 #include <cmath>
 #include <Arduino.h>
 
+extern Sensors sensors;
 extern volatile int encoderValueLeft;
 extern volatile int encoderValueRight;
 extern elapsedMillis wait;
 
-double accX = 300;
-double accW = 1;
+double accX = 165;
+double accW = 1.5;
 double decX = 300;
-double decW = 1;
-double curSpeedX;
-double curSpeedW;
-double targetSpeedX;
-double targetSpeedW;
-int posPwmX;
-int posPwmW;
-double posErrorX;
-double posErrorW;
-double oldPosErrorX;
-double oldPosErrorW;
-int leftBaseSpeed;
-int rightBaseSpeed;
-int encoderFeedbackX;
-int encoderFeedbackW;
+double decW = 1.5;
+double curSpeedX = 0;
+double curSpeedW = 0;
+double targetSpeedX = 0;
+double targetSpeedW = 0;
+int posPwmX = 0;
+int posPwmW = 0;
+double posErrorX = 0;
+double posErrorW = 0;
+double oldPosErrorX = 0;
+double oldPosErrorW = 0;
+int leftBaseSpeed = 0;
+int rightBaseSpeed = 0;
+double encoderFeedbackX = 0;
+double encoderFeedbackW = 0;
+double sensorFeedback = 0;
+double a_scale = 300;
+bool useSensors = false;
 double kpX = .4;
 double kpW = 1;
 double kdX = .1;
 double kdW = 2;
-int oneCellDistance = 3200; // in counts
+volatile bool startingCell = false;
 int moveSpeed = speed_to_counts(500*2);
 int turnSpeed = speed_to_counts(500*2);
 int returnSpeed = speed_to_counts(500*2);
@@ -80,146 +86,144 @@ void setRightPwm(int speed) {
 
 void updateCurrentSpeed()
 {
-	if(curSpeedX < targetSpeedX)
-	{
-		 curSpeedX += (double)speed_to_counts(accX*2);
-		if(curSpeedX > targetSpeedX)
-			curSpeedX = targetSpeedX;
-	}
-	else if(curSpeedX > targetSpeedX)
-	{
-		 curSpeedX -= (double)speed_to_counts(decX*2);
-		if(curSpeedX < targetSpeedX)
-			curSpeedX = targetSpeedX;
-	}
-	if(curSpeedW < targetSpeedW)
-	{
-		curSpeedW += accW;
-		if(curSpeedW > targetSpeedW)
-			curSpeedW = targetSpeedW;
-	}
-	else if(curSpeedW > targetSpeedW)
-	{
-		curSpeedW -= decW;
-		if(curSpeedW < targetSpeedW)
-			curSpeedW = targetSpeedW;
-	}
+  if(curSpeedX < targetSpeedX)
+  {
+     curSpeedX += (double)speed_to_counts(accX*2);
+    if(curSpeedX > targetSpeedX)
+      curSpeedX = targetSpeedX;
+  }
+  else if(curSpeedX > targetSpeedX)
+  {
+     curSpeedX -= (double)speed_to_counts(decX*2);
+    if(curSpeedX < targetSpeedX)
+      curSpeedX = targetSpeedX;
+  }
+  if(curSpeedW < targetSpeedW)
+  {
+    curSpeedW += accW;
+    if(curSpeedW > targetSpeedW)
+      curSpeedW = targetSpeedW;
+  }
+  else if(curSpeedW > targetSpeedW)
+  {
+    curSpeedW -= decW;
+    if(curSpeedW < targetSpeedW)
+      curSpeedW = targetSpeedW;
+  }
 }
 
 void calculateMotorPwm(void) // encoder PD controller
 {
-	// int gyroFeedback;
-	int rotationalFeedback;
-	// int sensorFeedback;
+  int rotationalFeedback;
 
     /* simple PD loop to generate base speed for both motors */
-	encoderFeedbackX = rightEncoderChange + leftEncoderChange;
-	encoderFeedbackW = rightEncoderChange - leftEncoderChange;   // Positive if mouse rotates CW
+  encoderFeedbackX = rightEncoderChange + leftEncoderChange;
+  encoderFeedbackW = rightEncoderChange - leftEncoderChange;   // Positive if mouse rotates CW
+  if (useSensors) {
+    sensorFeedback = sensorError/a_scale;//have sensor error properly scale to fit the system TODO
+  }
+  else {
+    sensorFeedback = 0;
+  }
+  if (useSensors) {
+    rotationalFeedback = encoderFeedbackW - sensorFeedback;
+  }
+  else {
+    rotationalFeedback = encoderFeedbackW;
+  }
 
-	// gyroFeedback = aSpeed/gyroFeedbackRatio; //gyroFeedbackRatio mentioned in curve turn lecture
-	// sensorFeedback = sensorError/a_scale;//have sensor error properly scale to fit the system TODO
+  posErrorX += curSpeedX - encoderFeedbackX;
+  posErrorW += curSpeedW - rotationalFeedback;
 
-	// if(onlyUseGyroFeedback)
-	// 	rotationalFeedback = guroFeedback;
-	// else if(onlyUseEncoderFeedback)
-		rotationalFeedback = encoderFeedbackW;
-	// else
-	// 	rotationalFeedback = encoderFeedbackW + gyroFeedback;
-	    //if you use IR sensor as well, the line above will be rotationalFeedback = encoderFeedbackW + gyroFeedback + sensorFeedback;
-	    //make sure to check the sign of sensor error.
+  posPwmX = kpX * posErrorX - kdX * (posErrorX - oldPosErrorX);
+  posPwmW = kpW * posErrorW + kdW * (posErrorW - oldPosErrorW);
 
-	posErrorX += curSpeedX - encoderFeedbackX;
-	posErrorW += curSpeedW - rotationalFeedback;
+  oldPosErrorX = posErrorX;
+  oldPosErrorW = posErrorW;
 
-	 posPwmX = kpX * posErrorX - kdX * (posErrorX - oldPosErrorX);
-	 posPwmW = kpW * posErrorW + kdW * (posErrorW - oldPosErrorW);
+  leftBaseSpeed = posPwmX - posPwmW;
+  rightBaseSpeed = posPwmX + posPwmW;
 
-	oldPosErrorX = posErrorX;
-	oldPosErrorW = posErrorW;
-
-	leftBaseSpeed = posPwmX - posPwmW;
-	rightBaseSpeed = posPwmX + posPwmW;
-
-	setLeftPwm(leftBaseSpeed);
-	setRightPwm(rightBaseSpeed);
+  setLeftPwm(leftBaseSpeed);
+  setRightPwm(rightBaseSpeed);
 }
 
 void moveOneCell() {
-	targetSpeedW = 0;
-	targetSpeedX = moveSpeed;
+  targetSpeedW = 0;
+  targetSpeedX = moveSpeed;
 
-	do
-	{
-		/*you can call int needToDecelerate(int32_t dist, int16_t curSpd, int16_t endSpd)
-		here with current speed and distanceLeft to decide if you should start to decelerate or not.*/
-		/*sample*/
-		if(needToDecelerate(distanceLeftX, curSpeedX, moveSpeed) < decX)
-			targetSpeedX = maxSpeed;
-		else
-			targetSpeedX = moveSpeed;
+  do
+  {
+    /*you can call int needToDecelerate(int32_t dist, int16_t curSpd, int16_t endSpd)
+    here with current speed and distanceLeft to decide if you should start to decelerate or not.*/
+    /*sample*/
+    if(needToDecelerate(distanceLeftX, curSpeedX, moveSpeed) < decX)
+      targetSpeedX = maxSpeed;
+    else
+      targetSpeedX = moveSpeed;
 
-		//there is something else you can add here. Such as detecting falling edge of post to correct longitudinal position of mouse when running in a straight path
-	}
-	while( (encoderCount-oldEncoderCount) < oneCellDistance);
-	//LFvalues1 and RFvalues1 are the front wall sensor threshold when the center of mouse between the boundary of the cells.
-	//LFvalues2 and RFvalues2 are the front wall sensor threshold when the center of the mouse staying half cell farther than LFvalues1 and 2
-	//and LF/RFvalues2 are usually the threshold to determine if there is a front wall or not. You should probably move this 10mm closer to front wall when collecting
-	//these thresholds just in case the readings are too weak.
+    //there is something else you can add here. Such as detecting falling edge of post to correct longitudinal position of mouse when running in a straight path
+  }
+  while( (encoderCount-oldEncoderCount) < ONECELLDISTANCE);
+  //LFvalues1 and RFvalues1 are the front wall sensor threshold when the center of mouse between the boundary of the cells.
+  //LFvalues2 and RFvalues2 are the front wall sensor threshold when the center of the mouse staying half cell farther than LFvalues1 and 2
+  //and LF/RFvalues2 are usually the threshold to determine if there is a front wall or not. You should probably move this 10mm closer to front wall when collecting
+  //these thresholds just in case the readings are too weak.
 
-	oldEncoderCount = encoderCount;	//update here for next movement to minimized the counts loss between cells.
+  oldEncoderCount = encoderCount; //update here for next movement to minimized the counts loss between cells.
 }
 
 int needToDecelerate(int dist, int curSpd, int endSpd)//speed are in encoder counts/ms, dist is in encoder counts
 {
-	if (curSpd<0) curSpd = -curSpd;
-	if (endSpd<0) endSpd = -endSpd;
-	if (dist<0) dist = 1;//-dist;
-	if (dist == 0) dist = 1;  //prevent divide by 0
+  if (curSpd<0) curSpd = -curSpd;
+  if (endSpd<0) endSpd = -endSpd;
+  if (dist<0) dist = 1;//-dist;
+  if (dist == 0) dist = 1;  //prevent divide by 0
 
-	return (abs(counts_to_speed((curSpd*curSpd - endSpd*endSpd)*100*(double)dist/4/2))); //dist_counts_to_mm(dist)/2);
-	//calculate deceleration rate needed with input distance, input current speed and input targetspeed to determind if the deceleration is needed
-	//use equation 2*a*S = Vt^2 - V0^2  ==>  a = (Vt^2-V0^2)/2/S
-	//because the speed is the sum of left and right wheels(which means it's doubled), that's why there is a "/4" in equation since the square of 2 is 4
+  return (abs(counts_to_speed((curSpd*curSpd - endSpd*endSpd)*100*(double)dist/4/2))); //dist_counts_to_mm(dist)/2);
+  //calculate deceleration rate needed with input distance, input current speed and input targetspeed to determind if the deceleration is needed
+  //use equation 2*a*S = Vt^2 - V0^2  ==>  a = (Vt^2-V0^2)/2/S
+  //because the speed is the sum of left and right wheels(which means it's doubled), that's why there is a "/4" in equation since the square of 2 is 4
 }
 
 void resetSpeedProfile(void)
 {
-	//resetEverything;
+  //resetEverything;
 
-	// //disable sensor data collecting functions running in 1ms interrupt
- // 	useSensor = false;
- // 	useGyro = false;
-	// //no PID calculating, no motor lock
-	// usePID = false;
+  // //disable sensor data collecting functions running in 1ms interrupt
+  useSensors = false;
+ //   useGyro = false;
+  // //no PID calculating, no motor lock
+  // usePID = false;
 
-	setLeftPwm(0);
-	setRightPwm(0);
+  setLeftPwm(0);
+  setRightPwm(0);
 
-//	pidInputX = 0;
-//	pidInputW = 0;
-	curSpeedX = 0;
-	curSpeedW = 0;
-	targetSpeedX = 0;
-	targetSpeedW = 0;
-	posErrorX = 0;
-	posErrorW = 0;
-	oldPosErrorX = 0;
-	oldPosErrorW = 0;
+//  pidInputX = 0;
+//  pidInputW = 0;
+  curSpeedX = 0;
+  curSpeedW = 0;
+  targetSpeedX = 0;
+  targetSpeedW = 0;
+  posErrorX = 0;
+  posErrorW = 0;
+  oldPosErrorX = 0;
+  oldPosErrorW = 0;
   leftEncoderOld = 0;
-	rightEncoderOld = 0;
-	leftEncoder = 0;
-	rightEncoder = 0;
-	leftEncoderCount = 0;
-	rightEncoderCount = 0;
-	encoderCount = 0;
-	oldEncoderCount = 0;
-	leftBaseSpeed = 0;
-	rightBaseSpeed = 0;
+  rightEncoderOld = 0;
+  leftEncoder = 0;
+  rightEncoder = 0;
+  leftEncoderCount = 0;
+  rightEncoderCount = 0;
+  encoderCount = 0;
+  oldEncoderCount = 0;
+  leftBaseSpeed = 0;
+  rightBaseSpeed = 0;
  distanceLeftX = 0;
  distanceLeftW = 0;
 
-	encoderValueLeft = 0;//reset left encoder count
-	encoderValueRight = 0;//reset right encoder count
+  encoderValueLeft = 0;//reset left encoder count
+  encoderValueRight = 0;//reset right encoder count
 }
 
 
@@ -244,6 +248,7 @@ void resetSpeedProfile(void)
  */
 
 void turnRightAndLeft() {
+  useSensors = false;
   wait = 0;
   targetSpeedX = 0;
   targetSpeedW = 68;
@@ -282,11 +287,11 @@ void turnRightAndLeft() {
 
 void turnLeftEncoderTicks() {
   resetSpeedProfile();
-  distanceLeftW = TURNDISTANCE;
+  distanceLeftW = TURNDISTANCELEFT;
   targetSpeedX = 0;
-  targetSpeedW = 100;
+  targetSpeedW = 50;
   Serial.println("Entering While 1");
-  while (distanceLeftW > TURNDISTANCE - 950) {
+  while (distanceLeftW > TURNDISTANCELEFT - 1180) {
     if (wait > 10) {
       Serial.println(distanceLeftW);
       wait -= 10;
@@ -294,7 +299,6 @@ void turnLeftEncoderTicks() {
   } // Stuck in loop until halfway
   targetSpeedW = 1;
   while (distanceLeftW > 0) {
-//    map(targetSpeedW, 0, TURNDISTANCE / 2, -120, 0);
     if (wait > 10) {
       Serial.println(distanceLeftW);
       wait -= 10;
@@ -302,7 +306,6 @@ void turnLeftEncoderTicks() {
   } // Finish last half of turn
   targetSpeedW = -1;
   while (distanceLeftW < 0) {
-//    map(targetSpeedW, 0, TURNDISTANCE / 2, -120, 0);
     if (wait > 10) {
       Serial.println(distanceLeftW);
       wait -= 10;
@@ -313,25 +316,33 @@ void turnLeftEncoderTicks() {
 
 void turnRightEncoderTicks() {
   resetSpeedProfile();
+  useSensors = false;
   turningRight = true;
-  distanceLeftW = TURNDISTANCE;
+  distanceLeftW = TURNDISTANCERIGHT;
   targetSpeedX = 0;
-  targetSpeedW = -100;
+  targetSpeedW = -50;
   Serial.println("Entering While 1");
-  while (distanceLeftW > TURNDISTANCE - 950) {
+  while (distanceLeftW > TURNDISTANCERIGHT - 1200) {
     if (wait > 10) {
       Serial.println(distanceLeftW);
+      Serial.println(useSensors);
       wait -= 10;
     }
   } // Stuck in loop until about halfway
   targetSpeedW = -1;
+  Serial.println("Entering While 2");
   while (distanceLeftW > 0) {   // Correct overshoot
     if (wait > 10) {
       Serial.println(distanceLeftW);
       wait -= 10;
     }
   }
-  targetSpeedW = 0;
+  targetSpeedW = 1;
+  while (distanceLeftW < 0) {
+    if (wait > 10) {
+      Serial.println(distanceLeftW);
+    }
+  }
   turningRight = false;
 }
 
@@ -373,27 +384,45 @@ void goForwardAndBackward() {
 }
 
 void goForwardDist(int dist) {
+  useSensors = true;
   wait = 0;
   distanceLeftX = dist;
+  if (startingCell) {
+    distanceLeftX += 200;
+    startingCell = false;
+  }
   targetSpeedW = 0;
-  while(distanceLeftX > 0) {
-    targetSpeedX = map(distanceLeftX, -50, dist,
-                        8, GOODTARGETSPEEDX);
+  while(distanceLeftX > 500) {
+    targetSpeedX = GOODTARGETSPEEDX;
     if (wait > 20) {
       Serial.println(distanceLeftX);
       wait -= 20;
     }
   }
-  targetSpeedX = -1;
+  while(distanceLeftX > 0) {
+    targetSpeedX = map(distanceLeftX, 150 , 500,
+                        0 , GOODTARGETSPEEDX);
+    if (sensors.frontPTReading > targetFront) {
+      distanceLeftX = 0;
+      break;
+    }
+    if (wait > 20) {
+      Serial.println(distanceLeftX);
+      wait -= 20;
+    }
+  }
+  targetSpeedX = -2;
   while (distanceLeftX < 0) {
     if (wait > 20) {
       Serial.println(distanceLeftX);
       wait -= 20;
     }
   }
+  useSensors = false;
 }
 
 void goBackwardDist(int dist) {
+  useSensors = true;
   wait = 0;
   distanceLeftX = -dist;
   targetSpeedW = 0;
@@ -413,4 +442,5 @@ void goBackwardDist(int dist) {
       wait -= 20;
     }
   }
+  useSensors = false;
 }

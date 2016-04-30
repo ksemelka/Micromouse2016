@@ -12,43 +12,43 @@
 volatile int encoderValueLeft = 0;
 volatile int encoderValueRight = 0;
 
-int targetRight;
-int targetLeft;
-
-PID PID(.33, 0, 0);
 Motors motors;
 Sensors sensors(leftPT, frontPT, rightPT);
 
 IntervalTimer sensorTimer;
 IntervalTimer speedProfileTimer;
+elapsedMillis wait;
 
 void setup() {
-  sensorTimer.begin(readSensors, 5000);
-  sensorTimer.priority(172);
-  speedProfileTimer.begin(speedProfile, 5000);
-  speedProfileTimer.priority(172);
-
-  attachInterrupt(encoderLEFT_A, countLeftEncoderA, CHANGE);
-  attachInterrupt(encoderRIGHT_A, countRightEncoderA, CHANGE);
-  attachInterrupt(encoderLEFT_B, countLeftEncoderB, CHANGE);
-  attachInterrupt(encoderRIGHT_B, countRightEncoderB, CHANGE);
-
+  attachInterrupts();
+  initializeTimers();
   initializeOnboardLED();
   initializeBuzzer();
+  bootTone();
   randomSeed(analogRead(0));  // Seeds using random analog noise on unconnected pin
-  Serial1.begin(9600);
-
+  Serial.begin(9600);
   Serial1.print("Starting...\n");
+  turnMotorENOff;
   while (sensors.frontPTReading < 500) {  // Wait to enter loop
     blink(1);
   }
+//  chirp();
   delay(2000);
-  targetRight = analogRead(rightPT);
-  targetLeft = analogRead(leftPT);
+  turnMotorENOn;
+   calibrateTargetValues();
+  wait = 0;
 }
-
 void loop() {
-  navigate();
+//  turnMotorENOff;
+//  if (wait > 500) {
+//    outputData(targetFront, thresholdFront);
+//    outputData(targetLeft, targetRight);
+//    outputData(thresholdSide);
+//    Serial.print("\n");
+//    wait -= 500;
+//  }
+  newSolveRightHand();
+  delay(200);
 }
 
 void outputData(double data) {
@@ -62,7 +62,7 @@ void outputData(double left, double right) {
 
 void countLeftEncoderA() {   // ++ if going forwards
   if (digitalRead(encoderLEFT_A)) {
-    if (digitalRead(encoderLEFT_A)) { // If channel A leads B, CW
+    if (digitalRead(encoderLEFT_B)) { // If channel A leads B, CW
       encoderValueLeft--;
     }
     else {
@@ -70,7 +70,7 @@ void countLeftEncoderA() {   // ++ if going forwards
     }
   }
   else {
-    if (digitalRead(encoderLEFT_A)) {
+    if (digitalRead(encoderLEFT_B)) {
       encoderValueLeft++;
     }
     else {
@@ -99,7 +99,7 @@ void countRightEncoderA() {  // ++ if going forwards
 }
 
 void countLeftEncoderB() {
-  if (digitalRead(encoderLEFT_A)) {
+  if (digitalRead(encoderLEFT_B)) {
     if (digitalRead(encoderLEFT_A)) {
       encoderValueLeft++;
     }
@@ -146,4 +146,30 @@ void readSensors() {
   sensors.leftPTReading = analogRead(leftPT);
   sensors.frontPTReading = analogRead(frontPT);
   sensors.rightPTReading = analogRead(rightPT);
+  calculateSensorError();
+}
+
+void calibrateTargetValues() {
+  resetSpeedProfile();
+  targetRight = sensors.rightPTReading;
+  targetLeft = sensors.leftPTReading;
+  thresholdSide = (targetRight + targetLeft) / 7;
+  turnRightEncoderTicks();
+  targetFront = sensors.frontPTReading;
+  thresholdFront = targetFront / 10;
+  turnLeftEncoderTicks();
+}
+
+void initializeTimers() {
+  sensorTimer.begin(readSensors, 5000);
+  sensorTimer.priority(172);
+  speedProfileTimer.begin(speedProfile, 5000);
+  speedProfileTimer.priority(172);
+}
+
+void attachInterrupts() {
+  attachInterrupt(encoderLEFT_A, countLeftEncoderA, CHANGE);
+  attachInterrupt(encoderRIGHT_A, countRightEncoderA, CHANGE);
+  attachInterrupt(encoderLEFT_B, countLeftEncoderB, CHANGE);
+  attachInterrupt(encoderRIGHT_B, countRightEncoderB, CHANGE);
 }
