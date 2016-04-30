@@ -35,7 +35,7 @@ void setup() {
 //  chirp();
   delay(2000);
   turnMotorENOn;
-   calibrateTargetValues();
+  calibrateTargetValues();
   wait = 0;
 }
 void loop() {
@@ -153,7 +153,7 @@ void calibrateTargetValues() {
   resetSpeedProfile();
   targetRight = sensors.rightPTReading;
   targetLeft = sensors.leftPTReading;
-  thresholdSide = (targetRight + targetLeft) / 7;
+  thresholdSide = (targetRight + targetLeft) / 7.5;
   turnRightEncoderTicks();
   targetFront = sensors.frontPTReading;
   thresholdFront = targetFront / 10;
