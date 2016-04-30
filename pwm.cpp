@@ -5,6 +5,7 @@
 #include <cmath>
 #include <Arduino.h>
 
+
 extern Sensors sensors;
 extern volatile int encoderValueLeft;
 extern volatile int encoderValueRight;
@@ -387,7 +388,7 @@ void goForwardDist(int dist) {
   useSensors = true;
   wait = 0;
   distanceLeftX = dist;
-  if (startingCell) {
+  if (startingCell) {                   //if we start from back, calibrate initial distance accordingly
     distanceLeftX += 200;
     startingCell = false;
   }
@@ -404,6 +405,7 @@ void goForwardDist(int dist) {
                         0 , GOODTARGETSPEEDX);
     if (sensors.frontPTReading > targetFront) {
       distanceLeftX = 0;
+      frontWallTone();
       break;
     }
     if (wait > 20) {
