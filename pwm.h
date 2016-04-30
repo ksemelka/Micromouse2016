@@ -9,7 +9,7 @@
 #define GOODTARGETSPEEDX  65
 #define TURNDISTANCERIGHT 2298
 #define TURNDISTANCELEFT  2248
-#define ONECELLDISTANCE   3200 // in counts
+#define ONECELLDISTANCE   3198 // in counts
 
 extern double accX;
 extern double accW;
@@ -30,11 +30,10 @@ extern int rightBaseSpeed;
 extern double encoderFeedbackX;
 extern double encoderFeedbackW;
 extern double sensorFeedback;
+extern bool useSensors;
 
 extern double kdX;
 extern double kdW;
-
-extern bool startingCell;
 
 extern int moveSpeed;
 extern int turnSpeed;

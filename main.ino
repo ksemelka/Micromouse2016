@@ -1,6 +1,7 @@
 #include "Motors.h"
 #include "Sensors.h"
 #include "LEDs.h"
+#include "PID.h"
 // #include "Floodfill.h"
 #include "State.h"
 #include "Maze.h"
@@ -23,19 +24,31 @@ void setup() {
   initializeTimers();
   initializeOnboardLED();
   initializeBuzzer();
+  bootTone();
   randomSeed(analogRead(0));  // Seeds using random analog noise on unconnected pin
   Serial.begin(9600);
   Serial1.print("Starting...\n");
+  turnMotorENOff;
   while (sensors.frontPTReading < 500) {  // Wait to enter loop
     blink(1);
   }
 //  chirp();
   delay(2000);
-  calibrateTargetValues();
+  turnMotorENOn;
+   calibrateTargetValues();
   wait = 0;
 }
 void loop() {
-  newNavigate();
+//  turnMotorENOff;
+//  if (wait > 500) {
+//    outputData(targetFront, thresholdFront);
+//    outputData(targetLeft, targetRight);
+//    outputData(thresholdSide);
+//    Serial.print("\n");
+//    wait -= 500;
+//  }
+  newSolveRightHand();
+  delay(200);
 }
 
 void outputData(double data) {
@@ -140,7 +153,7 @@ void calibrateTargetValues() {
   resetSpeedProfile();
   targetRight = sensors.rightPTReading;
   targetLeft = sensors.leftPTReading;
-  thresholdSide = (targetRight + targetLeft) / 10;
+  thresholdSide = (targetRight + targetLeft) / 7;
   turnRightEncoderTicks();
   targetFront = sensors.frontPTReading;
   thresholdFront = targetFront / 10;

@@ -269,9 +269,7 @@ void newNavigate() {
       goForwardDist(ONECELLDISTANCE);
       break;
     case FRONT + RIGHT + LEFT:
-      turnMotorENOff;
       delay(100);
-      turnMotorENOn;
       turnRightEncoderTicks();
       delay(200);
       turnRightEncoderTicks();

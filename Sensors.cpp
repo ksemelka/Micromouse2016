@@ -1,6 +1,7 @@
 #include "Sensors.h"
 #include "LEDs.h"
 #include "State.h"
+#include "pwm.h"
 #include <Arduino.h>
 
 double sensorError;
