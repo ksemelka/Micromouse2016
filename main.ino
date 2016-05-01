@@ -15,7 +15,7 @@
 
 volatile int encoderValueLeft = 0;
 volatile int encoderValueRight = 0;
-
+bool rightHand = false;
 byte nextState = LEFT + RIGHT;
 Motors motors;
 Sensors sensors(leftPT, frontPT, rightPT);
@@ -49,6 +49,15 @@ void setup() {
     turnLEDOn();
   }
   turnLEDOff();
+  if (sensors.rightPTReading > 550) {
+      rightHand = true;
+      playTone(150, 50);
+      delay(150);
+      playTone(200, 50);
+      delay(150);
+      playTone(150, 50);
+      delay(150);
+  }
   chirp();
   delay(1000);
   turnMotorENOn;
@@ -58,9 +67,14 @@ void setup() {
 }
 
 void loop() {
-  step();
-  floodfill();
-  analyzePosition();
+  if (rightHand) {
+    newSolveRightHand();
+  }
+  else {
+    step();
+    floodfill();
+    analyzePosition();
+  }
 }
 
 void outputData(double data) {

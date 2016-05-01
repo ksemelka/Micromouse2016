@@ -388,8 +388,8 @@ void goForwardDist(int dist) {
   useSensors = true;
   wait = 0;
   distanceLeftX += dist;
-  Serial1.println("B: ");
-  Serial1.println(distanceLeftX);
+//  Serial1.println("B: ");
+//  Serial1.println(distanceLeftX);
   if (startingCell) {
     distanceLeftX += 200;
     startingCell = false;
