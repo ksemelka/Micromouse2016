@@ -25,21 +25,18 @@ void setup() {
   initializeOnboardLED();
   initializeBuzzer();
   bootTone();
-  //chirp();
   randomSeed(analogRead(0));  // Seeds using random analog noise on unconnected pin
   Serial.begin(9600);
-  //Serial1.print("Starting...\n");
+  Serial1.print("Starting...\n");
   turnMotorENOff;
   while (sensors.frontPTReading < 500) {  // Wait to enter loop
     blink(1);
   }
-  //chirp();
-  bootTone();
+//  chirp();
   delay(2000);
   turnMotorENOn;
   calibrateTargetValues();
   wait = 0;
-  startTone();
 }
 void loop() {
 //  turnMotorENOff;
@@ -156,12 +153,10 @@ void calibrateTargetValues() {
   resetSpeedProfile();
   targetRight = sensors.rightPTReading;
   targetLeft = sensors.leftPTReading;
-  thresholdSide = (targetRight + targetLeft) / 7;
-
+  thresholdSide = (targetRight + targetLeft) / 7.5;
   turnRightEncoderTicks();
   targetFront = sensors.frontPTReading;
   thresholdFront = targetFront / 10;
-  frontWallTone();
   turnLeftEncoderTicks();
 }
 

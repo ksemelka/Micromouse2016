@@ -5,15 +5,14 @@
 #include <cmath>
 #include <Arduino.h>
 
-
 extern Sensors sensors;
 extern volatile int encoderValueLeft;
 extern volatile int encoderValueRight;
 extern elapsedMillis wait;
 
-double accX = 165;
+double accX = 160;
 double accW = 1.5;
-double decX = 300;
+double decX = 400;
 double decW = 1.5;
 double curSpeedX = 0;
 double curSpeedW = 0;
@@ -30,7 +29,7 @@ int rightBaseSpeed = 0;
 double encoderFeedbackX = 0;
 double encoderFeedbackW = 0;
 double sensorFeedback = 0;
-double a_scale = 300;
+double a_scale = 200;
 bool useSensors = false;
 double kpX = .4;
 double kpW = 1;
@@ -388,24 +387,71 @@ void goForwardDist(int dist) {
   useSensors = true;
   wait = 0;
   distanceLeftX = dist;
-  if (startingCell) {                   //if we start from back, calibrate initial distance accordingly
+  if (startingCell) {
     distanceLeftX += 200;
     startingCell = false;
   }
   targetSpeedW = 0;
-  while(distanceLeftX > 500) {
+  while(distanceLeftX > 1000) {
     targetSpeedX = GOODTARGETSPEEDX;
     if (wait > 20) {
       Serial.println(distanceLeftX);
       wait -= 20;
     }
   }
-  while(distanceLeftX > 0) {
-    targetSpeedX = map(distanceLeftX, 150 , 500,
-                        0 , GOODTARGETSPEEDX);
+  while(distanceLeftX > 800) {
+    targetSpeedX = map(distanceLeftX, 0 , 1000,
+                        0 , 30);
     if (sensors.frontPTReading > targetFront) {
       distanceLeftX = 0;
-      frontWallTone();
+      break;
+    }
+    if (wait > 20) {
+      Serial.println(distanceLeftX);
+      wait -= 20;
+    }
+  }
+  while(distanceLeftX > 600) {
+    targetSpeedX = map(distanceLeftX, 0 , 800,
+                        0 , 20);
+    if (sensors.frontPTReading > targetFront) {
+      distanceLeftX = 0;
+      break;
+    }
+    if (wait > 20) {
+      Serial.println(distanceLeftX);
+      wait -= 20;
+    }
+  }
+  while(distanceLeftX > 400) {
+    targetSpeedX = map(distanceLeftX, 0 , 600,
+                        0 , 15);
+    if (sensors.frontPTReading > targetFront) {
+      distanceLeftX = 0;
+      break;
+    }
+    if (wait > 20) {
+      Serial.println(distanceLeftX);
+      wait -= 20;
+    }
+  }
+  while(distanceLeftX > 200) {
+    targetSpeedX = map(distanceLeftX, 0 , 400,
+                        0 , 10);
+    if (sensors.frontPTReading > targetFront) {
+      distanceLeftX = 0;
+      break;
+    }
+    if (wait > 20) {
+      Serial.println(distanceLeftX);
+      wait -= 20;
+    }
+  }
+  while(distanceLeftX > 0) {
+    targetSpeedX = map(distanceLeftX, 0 , 200,
+                        1 , 5);
+    if (sensors.frontPTReading > targetFront) {
+      distanceLeftX = 0;
       break;
     }
     if (wait > 20) {
