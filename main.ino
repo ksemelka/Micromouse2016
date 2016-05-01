@@ -46,8 +46,9 @@ void setup() {
   Serial1.print("Starting...\n");
   turnMotorENOff;
   while (sensors.frontPTReading < 500) {  // Wait to enter loop
-    blink(1);
+    turnLEDOn();
   }
+  turnLEDOff();
   chirp();
   delay(1000);
   turnMotorENOn;
@@ -55,25 +56,11 @@ void setup() {
   wait = 0;
   startTone();
 }
+
 void loop() {
-//  turnMotorENOff;
-//  if (wait > 500) {
-//    outputData(targetFront, thresholdFront);
-//    outputData(targetLeft, targetRight);
-//    outputData(thresholdSide);
-//    Serial.print("\n");
-//    wait -= 500;
-//  }
-
-//  newSolveRightHand();
-//  delay(200);
-
-//void loop(){
-//step();
-goForwardDist(ONECELLDISTANCE);
-floodfill();
-analyzePosition();
-
+  step();
+  floodfill();
+  analyzePosition();
 }
 
 void outputData(double data) {

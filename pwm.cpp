@@ -2,6 +2,7 @@
 #include "Encoder.h"
 #include "State.h"
 #include "Sensors.h"
+#include "Buzzer.h"
 #include <cmath>
 #include <Arduino.h>
 
@@ -386,22 +387,27 @@ void goForwardAndBackward() {
 void goForwardDist(int dist) {
   useSensors = true;
   wait = 0;
-  distanceLeftX = dist;
+  distanceLeftX += dist;
+  Serial1.println("B: ");
+  Serial1.println(distanceLeftX);
   if (startingCell) {
     distanceLeftX += 200;
     startingCell = false;
   }
   targetSpeedW = 0;
   while(distanceLeftX > 1000) {
+    playTone(1000, 10);
     targetSpeedX = GOODTARGETSPEEDX;
-    if (wait > 20) {
-      Serial.println(distanceLeftX);
-      wait -= 20;
+    if (wait > 50) {
+      Serial1.println(distanceLeftX);
+      wait -= 50;
     }
   }
   nextState = state();
   if (nextState != LEFT + RIGHT && nextState != RIGHT) {
+
   while(distanceLeftX > 800) {
+    playTone(500, 10);
     targetSpeedX = map(distanceLeftX, 0 , 1000,
                         0 , 30);
     if (sensors.frontPTReading > targetFront) {
@@ -409,7 +415,7 @@ void goForwardDist(int dist) {
       break;
     }
     if (wait > 20) {
-      Serial.println(distanceLeftX);
+      Serial1.println(distanceLeftX);
       wait -= 20;
     }
   }
@@ -421,7 +427,7 @@ void goForwardDist(int dist) {
       break;
     }
     if (wait > 20) {
-      Serial.println(distanceLeftX);
+      Serial1.println(distanceLeftX);
       wait -= 20;
     }
   }
@@ -433,7 +439,7 @@ void goForwardDist(int dist) {
       break;
     }
     if (wait > 20) {
-      Serial.println(distanceLeftX);
+      Serial1.println(distanceLeftX);
       wait -= 20;
     }
   }
@@ -445,7 +451,7 @@ void goForwardDist(int dist) {
       break;
     }
     if (wait > 20) {
-      Serial.println(distanceLeftX);
+      Serial1.println(distanceLeftX);
       wait -= 20;
     }
   }
@@ -457,23 +463,24 @@ void goForwardDist(int dist) {
       break;
     }
     if (wait > 20) {
-      Serial.println(distanceLeftX);
+      Serial1.println(distanceLeftX);
       wait -= 20;
     }
   }
   targetSpeedX = -2;
   while (distanceLeftX < 0) {
     if (wait > 20) {
-      Serial.println(distanceLeftX);
+      Serial1.println(distanceLeftX);
       wait -= 20;
     }
   }
   }
   else {
     while (distanceLeftX > 0) {
+      playTone(100, 5);
       targetSpeedX = GOODTARGETSPEEDX;
       if (wait > 20) {
-        Serial.println(distanceLeftX);
+        Serial1.println(distanceLeftX);
         wait -= 20;
       }
     }

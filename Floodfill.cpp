@@ -4,11 +4,13 @@
 #include "Sensors.h"
 #include "State.h"
 #include "pwm.h"
+#include "Buzzer.h"
 
 int facing = 0;
 
 extern Sensors sensors;
-
+Cell liveMaze[16][16];
+CellStack floodStack;
 
 int returnIncrementedFacing(){
   if (facing == 3){
@@ -26,12 +28,6 @@ int returnDecrementedFacing(){
 
 }
 
-
-Cell liveMaze[16][16];
-CellStack floodStack;
-
-
-
 bool outOfBounds(int x){
   if(x < 0 || x > 15)
     return true;
@@ -48,28 +44,36 @@ void pushSelfAndAdjacentCells(int x, int y){
 }
 
 void floodfill(){
-  sensors.leftPTReading = analogRead(leftPT);
-  sensors.rightPTReading = analogRead(rightPT);
-
   bool pushingCells = false;
-  if (!wallToTheRight() &&   // if there is NO WALL on east
-        !liveMaze[xPos][yPos].wallStatus(returnIncrementedFacing())){
+  if (wallToTheRight()) {
+//      &&   // if there is NO WALL on east
+//        !liveMaze[xPos][yPos].wallStatus(returnIncrementedFacing())){
         setNewWall(returnIncrementedFacing(), xPos, yPos);
         pushingCells = true;
+//        playTone(2000, 200);
   }
-  if (!wallToTheLeft() &&   // if there is NO WALL on west
-        !liveMaze[xPos][yPos].wallStatus(returnDecrementedFacing())){
+  if (wallToTheLeft()) {
+//  &&   // if there is NO WALL on west
+//        !liveMaze[xPos][yPos].wallStatus(returnDecrementedFacing())){
         setNewWall(returnDecrementedFacing(), xPos, yPos);
         pushingCells = true;
+        playTone(1400, 200);
   }
-  if (!wallToTheFront() &&   // if there is NO WALL on west
-        !liveMaze[xPos][yPos].wallStatus(facing)){
+  if (wallToTheFront()) {
+//  &&   // if there is NO WALL on north
+//        !liveMaze[xPos][yPos].wallStatus(facing)){
         setNewWall(facing, xPos, yPos);
         pushingCells = true;
-  }
+        playTone(500, 200);
 
+  }
   if(pushingCells)
     pushSelfAndAdjacentCells(xPos, yPos);
+
+  Serial1.print("xPos: ");
+  Serial1.println(xPos);
+  Serial1.print("yPos: ");
+  Serial1.println(yPos);
 
   while(!floodStack.isEmpty()){
     Cell cellCheck = floodStack.pop();
@@ -225,10 +229,6 @@ void analyzePosition(){
 //      mode = 1;
 //      noTone(speaker);
 //  }
-//Serial1.print("Facing: ");
-//Serial1.print(facing);
-//Serial1.print("minPosition: ");
-//Serial1.print(minPosition);
 //while(!Serial1.available()){}
 //Serial1.read();
   //Turn mouse here
@@ -286,4 +286,22 @@ void analyzePosition(){
       //do nothing
   }
   facing = minPosition;
+}
+
+void step() {
+  goForwardDist(ONECELLDISTANCE);
+  switch(facing) {
+    case 0:
+      xPos++;
+      break;
+    case 1:
+      yPos--;
+      break;
+    case 2:
+      xPos--;
+      break;
+    case 3:
+      yPos++;
+      break;
+  }
 }

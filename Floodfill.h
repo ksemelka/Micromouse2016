@@ -13,5 +13,6 @@ int returnDecrementedFacing();
 extern int facing;
 extern CellStack floodStack;
 //extern Cell** liveMaze;
+void step();
 
 #endif /*FLOODFILL_H*/

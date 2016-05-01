@@ -12,5 +12,6 @@ extern Cell liveMaze[][16];
 void setNewWall(int, int, int);
 void setLiveEastWestWalls(int, int);
 void mazeSetup();
+void printLiveMaze();
 
 #endif /*MAZE_H*/
