@@ -6,7 +6,7 @@
 #include "Encoder.h"
 #include <Arduino.h>
 
-extern PID PID;
+
 extern Sensors sensors;
 extern int encoderValueLeft;
 extern int encoderValueRight;
@@ -17,13 +17,13 @@ Motors::Motors() {
   pinMode(LEFTlogic1, OUTPUT);
   pinMode(LEFTlogic2, OUTPUT);
 
-  digitalWrite(LEFTMotorEN, LOW);
+
 
   pinMode(RIGHTMotorEN, OUTPUT);  // Initialize right motor
   pinMode(RIGHTlogic1, OUTPUT);
   pinMode(RIGHTlogic2, OUTPUT);
 
-  digitalWrite(RIGHTMotorEN, LOW);
+  turnMotorENOn;
 
   pinMode(encoderLEFT_A, INPUT);  // Initialize left encoder
   pinMode(encoderLEFT_B, INPUT);
@@ -149,7 +149,7 @@ void Motors::traverseCell() {
   encoderValueLeft = 0;
   encoderValueRight = 0;
   while (encoderValueLeft + encoderValueRight < encoderTicksPerCell) {
-    goForwardProportional(PID.calculateError());
+    // goForwardProportional(PID.calculateError());
     if (encoderValueLeft + encoderValueRight > encoderTicksPerCell - 500 &&
         encoderValueLeft + encoderValueRight < encoderTicksPerCell - 495) { // Call within a range
                                                                             // in case they increment
