@@ -9,7 +9,6 @@
 #include "pwm.h"
 #include "Buzzer.h"
 
-
 #include "Cell.h"
 #include "CellStack.h"
 
@@ -17,6 +16,7 @@
 volatile int encoderValueLeft = 0;
 volatile int encoderValueRight = 0;
 
+byte nextState = LEFT + RIGHT;
 Motors motors;
 Sensors sensors(leftPT, frontPT, rightPT);
 
@@ -68,6 +68,7 @@ void loop() {
 //  newSolveRightHand();
 //  delay(200);
 
+//void loop(){
 //step();
 goForwardDist(ONECELLDISTANCE);
 floodfill();

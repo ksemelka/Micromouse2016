@@ -6,14 +6,18 @@
 #include "Encoder.h"
 #include <Arduino.h>
 
+
 extern Sensors sensors;
 extern int encoderValueLeft;
 extern int encoderValueRight;
+extern byte nextState;
 
 Motors::Motors() {
   pinMode(LEFTMotorEN, OUTPUT);  // Initialize left motor
   pinMode(LEFTlogic1, OUTPUT);
   pinMode(LEFTlogic2, OUTPUT);
+
+
 
   pinMode(RIGHTMotorEN, OUTPUT);  // Initialize right motor
   pinMode(RIGHTlogic1, OUTPUT);
@@ -145,8 +149,15 @@ void Motors::traverseCell() {
   encoderValueLeft = 0;
   encoderValueRight = 0;
   while (encoderValueLeft + encoderValueRight < encoderTicksPerCell) {
-//    goForwardProportional(PID.calculateError());
+    // goForwardProportional(PID.calculateError());
+    if (encoderValueLeft + encoderValueRight > encoderTicksPerCell - 500 &&
+        encoderValueLeft + encoderValueRight < encoderTicksPerCell - 495) { // Call within a range
+                                                                            // in case they increment
+                                                                            // by more than 1 at a time
+        nextState = state();
+    }
     if (sensors.frontPTReading > targetFront) {
+      nextState = state();
       break;
     }
   }

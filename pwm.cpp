@@ -9,6 +9,7 @@ extern Sensors sensors;
 extern volatile int encoderValueLeft;
 extern volatile int encoderValueRight;
 extern elapsedMillis wait;
+extern byte nextState;
 
 double accX = 160;
 double accW = 1.5;
@@ -304,13 +305,13 @@ void turnLeftEncoderTicks() {
       wait -= 10;
     }
   } // Finish last half of turn
-  targetSpeedW = -1;
-  while (distanceLeftW < 0) {
-    if (wait > 10) {
-      Serial.println(distanceLeftW);
-      wait -= 10;
-    }
-  } // Finish last half of turn
+//  targetSpeedW = -1;
+//  while (distanceLeftW < 0) {
+//    if (wait > 10) {
+//      Serial.println(distanceLeftW);
+//      wait -= 10;
+//    }
+//  } // Finish last half of turn
   targetSpeedW = 0;
 }
 
@@ -322,10 +323,9 @@ void turnRightEncoderTicks() {
   targetSpeedX = 0;
   targetSpeedW = -50;
   Serial.println("Entering While 1");
-  while (distanceLeftW > TURNDISTANCERIGHT - 1200) {
+  while (distanceLeftW > TURNDISTANCERIGHT - 1300) {
     if (wait > 10) {
       Serial.println(distanceLeftW);
-      Serial.println(useSensors);
       wait -= 10;
     }
   } // Stuck in loop until about halfway
@@ -337,12 +337,12 @@ void turnRightEncoderTicks() {
       wait -= 10;
     }
   }
-  targetSpeedW = 1;
-  while (distanceLeftW < 0) {
-    if (wait > 10) {
-      Serial.println(distanceLeftW);
-    }
-  }
+//  targetSpeedW = 1;
+//  while (distanceLeftW < 0) {
+//    if (wait > 10) {
+//      Serial.println(distanceLeftW);
+//    }
+//  }
   turningRight = false;
 }
 
@@ -399,6 +399,8 @@ void goForwardDist(int dist) {
       wait -= 20;
     }
   }
+  nextState = state();
+  if (nextState != LEFT + RIGHT && nextState != RIGHT) {
   while(distanceLeftX > 800) {
     targetSpeedX = map(distanceLeftX, 0 , 1000,
                         0 , 30);
@@ -464,6 +466,16 @@ void goForwardDist(int dist) {
     if (wait > 20) {
       Serial.println(distanceLeftX);
       wait -= 20;
+    }
+  }
+  }
+  else {
+    while (distanceLeftX > 0) {
+      targetSpeedX = GOODTARGETSPEEDX;
+      if (wait > 20) {
+        Serial.println(distanceLeftX);
+        wait -= 20;
+      }
     }
   }
   useSensors = false;

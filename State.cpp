@@ -7,6 +7,7 @@
 
 extern Motors motors;
 extern Sensors sensors;
+extern byte nextState;
 int targetFront;
 int targetRight;
 int targetLeft;
@@ -49,7 +50,7 @@ byte state() {
 }
 
 void printState() {
-  switch (state()) {
+  switch (nextState) {
     case 0:
       Serial1.println("STATE: 0");
       break;
@@ -81,7 +82,7 @@ void printState() {
 
 void navigate() {
   printState();
-  switch (state()) {
+  switch (nextState) {
     case 0:       // Randomly choose left, right, or straight
     if (random(millis()) % 3 == 2) {
       delay(200);
@@ -165,7 +166,7 @@ void navigate() {
 
 void solveRightHand() {
   printState();
-  switch (state()) {
+  switch (nextState) {
     case 0:
       motors.turnRight();
       delay(100);
@@ -212,7 +213,7 @@ void solveRightHand() {
 
 void newNavigate() {
   printState();
-  switch (state()) {
+  switch (nextState) {
     case 0:       // Randomly choose left, right, or straight
     if (random(millis()) % 3 == 2) {
       turnRightEncoderTicks();
@@ -286,15 +287,15 @@ void newNavigate() {
 
 void newSolveRightHand() {
   printState();
-  switch (state()) {
+  switch (nextState) {
     case 0:
       turnRightEncoderTicks();
-      delay(100);
+//      delay(100);
       goForwardDist(ONECELLDISTANCE);
       break;
     case FRONT:
       turnRightEncoderTicks();
-      delay(200);
+//      delay(200);
       goForwardDist(ONECELLDISTANCE);
       break;
     case RIGHT:
@@ -302,12 +303,12 @@ void newSolveRightHand() {
       break;
     case LEFT:
       turnRightEncoderTicks();
-      delay(200);
+//      delay(200);
       goForwardDist(ONECELLDISTANCE);
       break;
     case FRONT + RIGHT:
       turnLeftEncoderTicks();
-      delay(200);
+//      delay(200);
       goForwardDist(ONECELLDISTANCE);
       break;
     case FRONT + LEFT:
@@ -320,9 +321,9 @@ void newSolveRightHand() {
       break;
     case FRONT + RIGHT + LEFT:
       turnRightEncoderTicks();
-      delay(200);
+//      delay(200);
       turnRightEncoderTicks();
-      delay(200);
+//      delay(200);
       goForwardDist(ONECELLDISTANCE);
       break;
     default:
