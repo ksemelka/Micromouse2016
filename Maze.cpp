@@ -1,3 +1,8 @@
+#include "Maze.h"
+
+int xPos = 0;
+int yPos = 0;
+
 void mazeSetup(){
   int j = 15;
   for(int i = 0; i < 16; ++i){

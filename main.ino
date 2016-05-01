@@ -2,16 +2,17 @@
 #include "Sensors.h"
 #include "LEDs.h"
 //#include "PID.h"
-// #include "Floodfill.h"
+#include "Floodfill.h"
 #include "State.h"
 #include "Maze.h"
 #include "Encoder.h"
 #include "pwm.h"
 #include "Buzzer.h"
 
+
 #include "Cell.h"
 #include "CellStack.h"
-#include "maze.c"
+
 
 volatile int encoderValueLeft = 0;
 volatile int encoderValueRight = 0;
@@ -30,7 +31,7 @@ void setup() {
   xPos = 0;
   yPos = 15;
 
-  facing = 0;
+
 
   floodStack.push(liveMaze[xPos][yPos]); //Push Current cell
 
@@ -41,7 +42,7 @@ void setup() {
   initializeBuzzer();
   bootTone();
   randomSeed(analogRead(0));  // Seeds using random analog noise on unconnected pin
-  Serial.begin(9600);
+  Serial1.begin(9600);
   Serial1.print("Starting...\n");
   turnMotorENOff;
   while (sensors.frontPTReading < 500) {  // Wait to enter loop
@@ -63,16 +64,14 @@ void loop() {
 //    Serial.print("\n");
 //    wait -= 500;
 //  }
-  newSolveRightHand();
-  delay(200);
 
+//  newSolveRightHand();
+//  delay(200);
 
-//void loop(){
 //step();
- //floodfill();
-  //analyzePosition();
-}
-
+goForwardDist(ONECELLDISTANCE);
+floodfill();
+analyzePosition();
 
 }
 

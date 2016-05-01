@@ -4,6 +4,7 @@ anava014@ucr.edu
 */
 
 #include "Cell.h"
+#include "Maze.h"
 
 Cell :: Cell(){
   cellDrawing = "";
