@@ -213,7 +213,7 @@ void solveRightHand() {
 
 void newNavigate() {
   printState();
-  switch (state()) {
+  switch (nextState) {
     case 0:       // Randomly choose left, right, or straight
     if (random(millis()) % 3 == 2) {
       turnRightEncoderTicks();
@@ -287,15 +287,15 @@ void newNavigate() {
 
 void newSolveRightHand() {
   printState();
-  switch (state()) {
+  switch (nextState) {
     case 0:
       turnRightEncoderTicks();
-      delay(100);
+//      delay(100);
       goForwardDist(ONECELLDISTANCE);
       break;
     case FRONT:
       turnRightEncoderTicks();
-      delay(200);
+//      delay(200);
       goForwardDist(ONECELLDISTANCE);
       break;
     case RIGHT:
@@ -303,12 +303,12 @@ void newSolveRightHand() {
       break;
     case LEFT:
       turnRightEncoderTicks();
-      delay(200);
+//      delay(200);
       goForwardDist(ONECELLDISTANCE);
       break;
     case FRONT + RIGHT:
       turnLeftEncoderTicks();
-      delay(200);
+//      delay(200);
       goForwardDist(ONECELLDISTANCE);
       break;
     case FRONT + LEFT:
@@ -321,9 +321,9 @@ void newSolveRightHand() {
       break;
     case FRONT + RIGHT + LEFT:
       turnRightEncoderTicks();
-      delay(200);
+//      delay(200);
       turnRightEncoderTicks();
-      delay(200);
+//      delay(200);
       goForwardDist(ONECELLDISTANCE);
       break;
     default:

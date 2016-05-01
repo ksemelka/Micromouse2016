@@ -11,7 +11,7 @@
 
 #include "Cell.h"
 #include "CellStack.h"
-#include "maze.c"
+//#include "maze.c"
 
 volatile int encoderValueLeft = 0;
 volatile int encoderValueRight = 0;
@@ -26,15 +26,15 @@ elapsedMillis wait;
 
 void setup() {
   //Consider all edges of the maze are already filled. Also, the starting cell has a right wall.
-  mazeSetup();
-
-  xPos = 0;
-  yPos = 15;
-
-  facing = 0;
-
-  floodStack.push(liveMaze[xPos][yPos]); //Push Current cell
-
+//  mazeSetup();
+//
+//  xPos = 0;
+//  yPos = 15;
+//
+//  facing = 0;
+//
+//  floodStack.push(liveMaze[xPos][yPos]); //Push Current cell
+//
 
   attachInterrupts();
   initializeTimers();
@@ -65,14 +65,13 @@ void loop() {
 //    wait -= 500;
 //  }
   newSolveRightHand();
-  delay(200);
+//  delay(200);
 
 
 //void loop(){
 //step();
  //floodfill();
   //analyzePosition();
-}
 
 
 }
