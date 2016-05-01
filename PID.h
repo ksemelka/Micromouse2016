@@ -1,5 +1,6 @@
 #ifndef PID_H
 #define PID_H
+#define VELOCITY_SAMPLE_TIME 100000  // Micros
 
 /******************************************************************************************************
 class PID {
@@ -33,11 +34,23 @@ class PID {
   public:
     PID(double, double, double);
     int calculateError();
-  private:
+    int calculateErrorSensors();
+    double calculateProportionalEncoderError();
+    void calculateVelocity();
+//  private:
     void SetTunings(double, double, double);  // Used in constructor
     double kp;
     double ki;
     double kd;
+    double velocityLeft = 0.0;
+    double velocityRight = 0.0;
+    double prevVelocityLeft = 0.0;
+    double prevVelocityRight = 0.0;
+    const double Kx = .8;      // FIXME: add proportional tuning value for encoders
+    double encoderErrorLeft = 0.0;
+    double encoderErrorRight = 0.0;
+    double encoderErrorBoth = 0.0;
+
     double ITerm;
     unsigned long SampleTime = 100.0;
 };
