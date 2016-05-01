@@ -1,13 +1,17 @@
 #include "Motors.h"
 #include "Sensors.h"
 #include "LEDs.h"
-#include "PID.h"
+//#include "PID.h"
 // #include "Floodfill.h"
 #include "State.h"
 #include "Maze.h"
 #include "Encoder.h"
 #include "pwm.h"
 #include "Buzzer.h"
+
+#include "Cell.h"
+#include "CellStack.h"
+#include "maze.c"
 
 volatile int encoderValueLeft = 0;
 volatile int encoderValueRight = 0;
@@ -20,6 +24,17 @@ IntervalTimer speedProfileTimer;
 elapsedMillis wait;
 
 void setup() {
+  //Consider all edges of the maze are already filled. Also, the starting cell has a right wall.
+  mazeSetup();
+
+  xPos = 0;
+  yPos = 15;
+
+  facing = 0;
+
+  floodStack.push(liveMaze[xPos][yPos]); //Push Current cell
+
+
   attachInterrupts();
   initializeTimers();
   initializeOnboardLED();
@@ -32,11 +47,12 @@ void setup() {
   while (sensors.frontPTReading < 500) {  // Wait to enter loop
     blink(1);
   }
-//  chirp();
-  delay(2000);
+  chirp();
+  delay(1000);
   turnMotorENOn;
   calibrateTargetValues();
   wait = 0;
+  startTone();
 }
 void loop() {
 //  turnMotorENOff;
@@ -49,6 +65,15 @@ void loop() {
 //  }
   newSolveRightHand();
   delay(200);
+
+
+//void loop(){
+//step();
+ //floodfill();
+  //analyzePosition();
+}
+
+
 }
 
 void outputData(double data) {

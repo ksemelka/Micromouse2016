@@ -31,37 +31,52 @@ void beep (int16_t frequencyInHertz, long timeInMilliseconds) {
 }
 
 void chirp() {  // Bird chirp
-  for(uint16_t i=320; i>280; i--)
-     playTone(i,9);
+ // for(uint16_t i=320; i>280; i--)
+   //  playTone(i,9);
+
+playTone(800, 40);
+playTone(700, 30);
+playTone(600, 40);
+playTone(650, 50);
+playTone(750, 20);
+delay(100);
+playTone(600, 40);
+playTone(400, 20);
+playTone(300, 60);
+playTone(200, 80);
 }
 
 void bootTone() {
-  playTone(527, 250);
-  //delay(20);
-  playTone(470, 250);
-  //delay(20);
-  playTone(419, 250);
-  //delay(20);
-  playTone(395, 250);
-  //delay(20);
-  playTone(352, 250);
-  //delay(20);
-  playTone(313, 250);
-  //delay(20);
-  playTone(279, 250);
-  //delay(20);
-  playTone(263, 250);
+playTone(1000, 50);
+playTone(2000, 40);
+playTone(1000, 50);
+//
+////delay(100);
+//
+//playTone(1500, 20);
+//playTone(2500, 20);
+//playTone(1500, 20);
+//
+////delay(100);
+//
+//playTone(800, 20);
+//playTone(900, 20);
+//playTone(6000, 20);
+//
+////delay(100);
+//
+//playTone(900, 20);
+//playTone(1000, 20);
+//playTone(1300, 20);
+
 }
 
 
 void startTone(){
-  playTone(1000, 500);
-  delay(100);
-  playTone(1000, 500);
-  delay(100);
-  playTone(1000, 500);
-  delay(100);
-  playTone(500, 1200);
+  playTone(900, 100);
+  delay(30);
+  playTone(1000, 100);
+
 }
 
 void frontWallTone(){
