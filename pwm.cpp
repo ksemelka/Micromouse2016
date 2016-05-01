@@ -12,7 +12,7 @@ extern elapsedMillis wait;
 
 double accX = 160;
 double accW = 1.5;
-double decX = 400;
+double decX = 350;
 double decW = 1.5;
 double curSpeedX = 0;
 double curSpeedW = 0;
