@@ -396,6 +396,9 @@ void goForwardDist(int dist) {
   }
   targetSpeedW = 0;
   while(distanceLeftX > 1000) {
+    if (!(encoderValueRight % 100)) { // Veering correction
+      encoderValueRight++;
+    }
     playTone(1000, 10);
     targetSpeedX = GOODTARGETSPEEDX;
     if (wait > 50) {
@@ -407,6 +410,9 @@ void goForwardDist(int dist) {
   if (nextState != LEFT + RIGHT && nextState != RIGHT) {
 
   while(distanceLeftX > 800) {
+    if (!(encoderValueRight % 100)) { // Veering correction
+      encoderValueRight++;
+    }
     playTone(500, 10);
     targetSpeedX = map(distanceLeftX, 0 , 1000,
                         0 , 30);
@@ -422,6 +428,9 @@ void goForwardDist(int dist) {
   while(distanceLeftX > 600) {
     targetSpeedX = map(distanceLeftX, 0 , 800,
                         0 , 20);
+    if (!(encoderValueRight % 100)) { // Veering correction
+      encoderValueRight++;
+    }
     if (sensors.frontPTReading > targetFront) {
       distanceLeftX = 0;
       break;
@@ -432,6 +441,9 @@ void goForwardDist(int dist) {
     }
   }
   while(distanceLeftX > 400) {
+    if (!(encoderValueRight % 100)) { // Veering correction
+      encoderValueRight++;
+    }
     targetSpeedX = map(distanceLeftX, 0 , 600,
                         0 , 15);
     if (sensors.frontPTReading > targetFront) {
@@ -444,6 +456,9 @@ void goForwardDist(int dist) {
     }
   }
   while(distanceLeftX > 200) {
+    if (!(encoderValueRight % 100)) { // Veering correction
+      encoderValueRight++;
+    }
     targetSpeedX = map(distanceLeftX, 0 , 400,
                         0 , 10);
     if (sensors.frontPTReading > targetFront) {
@@ -456,6 +471,9 @@ void goForwardDist(int dist) {
     }
   }
   while(distanceLeftX > 0) {
+    if (!(encoderValueRight % 100)) { // Veering correction
+      encoderValueRight++;
+    }
     targetSpeedX = map(distanceLeftX, 0 , 200,
                         1 , 5);
     if (sensors.frontPTReading > targetFront) {
@@ -477,6 +495,9 @@ void goForwardDist(int dist) {
   }
   else {
     while (distanceLeftX > 0) {
+      if (!(encoderValueRight % 100)) { // Veering correction
+        encoderValueRight++;
+      }
       playTone(100, 5);
       targetSpeedX = GOODTARGETSPEEDX;
       if (wait > 20) {
