@@ -179,10 +179,10 @@ void calibrateTargetValues() {
   resetSpeedProfile();
   targetRight = sensors.rightPTReading;
   targetLeft = sensors.leftPTReading;
-  thresholdSide = (targetRight + targetLeft) / 7.5;
+  thresholdSide = (targetRight + targetLeft) / 6; // 7.5
   turnRightEncoderTicks();
   targetFront = sensors.frontPTReading;
-  thresholdFront = targetFront / 10;
+  thresholdFront = targetFront / 12;  // 10
   turnLeftEncoderTicks();
 }
 
