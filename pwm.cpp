@@ -486,6 +486,7 @@ void goForwardDist(int dist) {
     }
   }
   targetSpeedX = -2;
+  useSensors = false;
   while (distanceLeftX < 0) {
     if (wait > 20) {
       Serial1.println(distanceLeftX);
