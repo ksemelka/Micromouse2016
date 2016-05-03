@@ -1,5 +1,8 @@
 #include "../inc/Maze.h"
 
+int xPos = 0;
+int yPos = 0;
+
 void mazeSetup(){
   xPos = 0;
   yPos = 15;

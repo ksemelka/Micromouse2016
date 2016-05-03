@@ -23,17 +23,8 @@ IntervalTimer speedProfileTimer;
 elapsedMillis wait;
 
 void setup() {
-  //Consider all edges of the maze are already filled. Also, the starting cell has a right wall.
   mazeSetup();
-
-  xPos = 0;
-  yPos = 15;
-
-
-
   floodStack.push(liveMaze[xPos][yPos]); //Push Current cell
-
-
   attachInterrupts();
   initializeTimers();
   initializeOnboardLED();
