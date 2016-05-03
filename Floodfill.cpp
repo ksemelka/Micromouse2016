@@ -57,14 +57,14 @@ void floodfill(){
 //        !liveMaze[xPos][yPos].wallStatus(returnDecrementedFacing())){
         setNewWall(returnDecrementedFacing(), xPos, yPos);
         pushingCells = true;
-        playTone(1400, 200);
+//        playTone(1400, 200);
   }
   if (wallToTheFront()) {
 //  &&   // if there is NO WALL on north
 //        !liveMaze[xPos][yPos].wallStatus(facing)){
         setNewWall(facing, xPos, yPos);
         pushingCells = true;
-        playTone(500, 200);
+//        playTone(500, 200);
 
   }
   if(pushingCells)
