@@ -56,7 +56,7 @@ void setup() {
       playTone(200, 50);
       delay(150);
       playTone(150, 50);
-      delay(150);
+      delay(500);
   }
   chirp();
   delay(1000);
