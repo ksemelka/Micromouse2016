@@ -3,8 +3,8 @@ Andrew Nava-Juarez
 anava014@ucr.edu
 */
 
-#include "Cell.h"
-#include "Maze.h"
+#include "../inc/Cell.h"
+#include "../inc/Maze.h"
 
 Cell :: Cell(){
   cellDrawing = "";

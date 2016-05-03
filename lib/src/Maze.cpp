@@ -1,9 +1,8 @@
-#include "Maze.h"
-
-int xPos = 0;
-int yPos = 0;
+#include "../inc/Maze.h"
 
 void mazeSetup(){
+  xPos = 0;
+  yPos = 15;
   int j = 15;
   for(int i = 0; i < 16; ++i){
     liveMaze[i][j].setWall("west"); //[k][15]

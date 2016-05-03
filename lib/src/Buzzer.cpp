@@ -1,4 +1,4 @@
-#include "Buzzer.h"
+#include "../inc/Buzzer.h"
 
 void initializeBuzzer() {
   pinMode(BUZZER, OUTPUT);

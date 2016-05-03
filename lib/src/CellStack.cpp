@@ -3,7 +3,7 @@ Andrew Nava-JuarezCa
 anava014@ucr.edu
 */
 
-#include "CellStack.h"
+#include "../inc/CellStack.h"
 
 CellStack :: CellStack(){
   top = -1;

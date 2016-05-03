@@ -3,7 +3,7 @@ Andrew Nava-Juarez
 anava014@ucr.edu
 */
 
-#include "Wall.h"
+#include "../inc/Wall.h"
 
 Wall :: Wall(bool iP){
   isPresent = iP;

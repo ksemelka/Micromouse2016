@@ -1,8 +1,8 @@
-#include "State.h"
-#include "Motors.h"
-#include "Sensors.h"
-#include "LEDs.h"
-#include "pwm.h"
+#include "../inc/State.h"
+#include "../inc/Motors.h"
+#include "../inc/Sensors.h"
+#include "../inc/LEDs.h"
+#include "../inc/pwm.h"
 #include <Arduino.h>
 
 extern Motors motors;

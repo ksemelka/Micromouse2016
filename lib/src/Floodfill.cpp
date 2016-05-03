@@ -1,10 +1,9 @@
-#include "Floodfill.h"
-//#include "Maze.h"
-#include "Cell.h"
-#include "Sensors.h"
-#include "State.h"
-#include "pwm.h"
-#include "Buzzer.h"
+#include "../inc/Floodfill.h"
+#include "../inc/Cell.h"
+#include "../inc/Sensors.h"
+#include "../inc/State.h"
+#include "../inc/pwm.h"
+#include "../inc/Buzzer.h"
 
 int facing = 0;
 

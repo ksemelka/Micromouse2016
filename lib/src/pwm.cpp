@@ -1,8 +1,8 @@
-#include "pwm.h"
-#include "Encoder.h"
-#include "State.h"
-#include "Sensors.h"
-#include "Buzzer.h"
+#include "../inc/pwm.h"
+#include "../inc/Encoder.h"
+#include "../inc/State.h"
+#include "../inc/Sensors.h"
+#include "../inc/Buzzer.h"
 #include <cmath>
 #include <Arduino.h>
 

@@ -1,4 +1,4 @@
-#include "Encoder.h"
+#include "../inc/Encoder.h"
 
 extern volatile int encoderValueLeft;
 extern volatile int encoderValueRight;

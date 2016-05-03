@@ -1,16 +1,14 @@
-#include "Motors.h"
-#include "Sensors.h"
-#include "LEDs.h"
-//#include "PID.h"
-#include "Floodfill.h"
-#include "State.h"
-#include "Maze.h"
-#include "Encoder.h"
-#include "pwm.h"
-#include "Buzzer.h"
-
-#include "Cell.h"
-#include "CellStack.h"
+#include "lib/inc/Motors.h"
+#include "lib/inc/Sensors.h"
+#include "lib/inc/LEDs.h"
+#include "lib/inc/Floodfill.h"
+#include "lib/inc/State.h"
+#include "lib/inc/Maze.h"
+#include "lib/inc/Encoder.h"
+#include "lib/inc/pwm.h"
+#include "lib/inc/Buzzer.h"
+#include "lib/inc/Cell.h"
+#include "lib/inc/CellStack.h"
 
 
 volatile int encoderValueLeft = 0;

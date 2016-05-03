@@ -1,9 +1,8 @@
-#include "Motors.h"
-#include "Sensors.h"
-#include "LEDs.h"
-
-#include "State.h"
-#include "Encoder.h"
+#include "../inc/Motors.h"
+#include "../inc/Sensors.h"
+#include "../inc/LEDs.h"
+#include "../inc/State.h"
+#include "../inc/Encoder.h"
 #include <Arduino.h>
 
 
