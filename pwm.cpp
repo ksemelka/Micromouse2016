@@ -2,6 +2,7 @@
 #include "Encoder.h"
 #include "State.h"
 #include "Sensors.h"
+#include "Buzzer.h"
 #include <cmath>
 #include <Arduino.h>
 
@@ -386,22 +387,33 @@ void goForwardAndBackward() {
 void goForwardDist(int dist) {
   useSensors = true;
   wait = 0;
-  distanceLeftX = dist;
+  distanceLeftX += dist;
+//  Serial1.println("B: ");
+//  Serial1.println(distanceLeftX);
   if (startingCell) {
     distanceLeftX += 200;
     startingCell = false;
   }
   targetSpeedW = 0;
   while(distanceLeftX > 1000) {
+    if (!(encoderValueRight % 100)) { // Veering correction
+      encoderValueRight++;
+    }
+    playTone(1000, 10);
     targetSpeedX = GOODTARGETSPEEDX;
-    if (wait > 20) {
-      Serial.println(distanceLeftX);
-      wait -= 20;
+    if (wait > 50) {
+      Serial1.println(distanceLeftX);
+      wait -= 50;
     }
   }
   nextState = state();
   if (nextState != LEFT + RIGHT && nextState != RIGHT) {
+
   while(distanceLeftX > 800) {
+    if (!(encoderValueRight % 100)) { // Veering correction
+      encoderValueRight++;
+    }
+    playTone(500, 10);
     targetSpeedX = map(distanceLeftX, 0 , 1000,
                         0 , 30);
     if (sensors.frontPTReading > targetFront) {
@@ -409,23 +421,29 @@ void goForwardDist(int dist) {
       break;
     }
     if (wait > 20) {
-      Serial.println(distanceLeftX);
+      Serial1.println(distanceLeftX);
       wait -= 20;
     }
   }
   while(distanceLeftX > 600) {
     targetSpeedX = map(distanceLeftX, 0 , 800,
                         0 , 20);
+    if (!(encoderValueRight % 100)) { // Veering correction
+      encoderValueRight++;
+    }
     if (sensors.frontPTReading > targetFront) {
       distanceLeftX = 0;
       break;
     }
     if (wait > 20) {
-      Serial.println(distanceLeftX);
+      Serial1.println(distanceLeftX);
       wait -= 20;
     }
   }
   while(distanceLeftX > 400) {
+    if (!(encoderValueRight % 100)) { // Veering correction
+      encoderValueRight++;
+    }
     targetSpeedX = map(distanceLeftX, 0 , 600,
                         0 , 15);
     if (sensors.frontPTReading > targetFront) {
@@ -433,11 +451,14 @@ void goForwardDist(int dist) {
       break;
     }
     if (wait > 20) {
-      Serial.println(distanceLeftX);
+      Serial1.println(distanceLeftX);
       wait -= 20;
     }
   }
   while(distanceLeftX > 200) {
+    if (!(encoderValueRight % 100)) { // Veering correction
+      encoderValueRight++;
+    }
     targetSpeedX = map(distanceLeftX, 0 , 400,
                         0 , 10);
     if (sensors.frontPTReading > targetFront) {
@@ -445,11 +466,14 @@ void goForwardDist(int dist) {
       break;
     }
     if (wait > 20) {
-      Serial.println(distanceLeftX);
+      Serial1.println(distanceLeftX);
       wait -= 20;
     }
   }
   while(distanceLeftX > 0) {
+    if (!(encoderValueRight % 100)) { // Veering correction
+      encoderValueRight++;
+    }
     targetSpeedX = map(distanceLeftX, 0 , 200,
                         1 , 5);
     if (sensors.frontPTReading > targetFront) {
@@ -457,23 +481,28 @@ void goForwardDist(int dist) {
       break;
     }
     if (wait > 20) {
-      Serial.println(distanceLeftX);
+      Serial1.println(distanceLeftX);
       wait -= 20;
     }
   }
   targetSpeedX = -2;
+  useSensors = false;
   while (distanceLeftX < 0) {
     if (wait > 20) {
-      Serial.println(distanceLeftX);
+      Serial1.println(distanceLeftX);
       wait -= 20;
     }
   }
   }
   else {
     while (distanceLeftX > 0) {
+      if (!(encoderValueRight % 100)) { // Veering correction
+        encoderValueRight++;
+      }
+      playTone(100, 5);
       targetSpeedX = GOODTARGETSPEEDX;
       if (wait > 20) {
-        Serial.println(distanceLeftX);
+        Serial1.println(distanceLeftX);
         wait -= 20;
       }
     }

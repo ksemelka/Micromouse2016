@@ -2,7 +2,7 @@
 #include "Sensors.h"
 #include "LEDs.h"
 //#include "PID.h"
-// #include "Floodfill.h"
+#include "Floodfill.h"
 #include "State.h"
 #include "Maze.h"
 #include "Encoder.h"
@@ -11,11 +11,11 @@
 
 #include "Cell.h"
 #include "CellStack.h"
-//#include "maze.c"
+
 
 volatile int encoderValueLeft = 0;
 volatile int encoderValueRight = 0;
-
+bool rightHand = false;
 byte nextState = LEFT + RIGHT;
 Motors motors;
 Sensors sensors(leftPT, frontPT, rightPT);
@@ -26,15 +26,15 @@ elapsedMillis wait;
 
 void setup() {
   //Consider all edges of the maze are already filled. Also, the starting cell has a right wall.
-//  mazeSetup();
-//
-//  xPos = 0;
-//  yPos = 15;
-//
-//  facing = 0;
-//
-//  floodStack.push(liveMaze[xPos][yPos]); //Push Current cell
-//
+  mazeSetup();
+
+  xPos = 0;
+  yPos = 15;
+
+
+
+  floodStack.push(liveMaze[xPos][yPos]); //Push Current cell
+
 
   attachInterrupts();
   initializeTimers();
@@ -42,11 +42,21 @@ void setup() {
   initializeBuzzer();
   bootTone();
   randomSeed(analogRead(0));  // Seeds using random analog noise on unconnected pin
-  Serial.begin(9600);
+  Serial1.begin(9600);
   Serial1.print("Starting...\n");
   turnMotorENOff;
   while (sensors.frontPTReading < 500) {  // Wait to enter loop
-    blink(1);
+    turnLEDOn();
+  }
+  turnLEDOff();
+  if (sensors.rightPTReading > 550) {
+      rightHand = true;
+      playTone(150, 50);
+      delay(150);
+      playTone(200, 50);
+      delay(150);
+      playTone(150, 50);
+      delay(150);
   }
   chirp();
   delay(1000);
@@ -55,25 +65,16 @@ void setup() {
   wait = 0;
   startTone();
 }
+
 void loop() {
-//  turnMotorENOff;
-//  if (wait > 500) {
-//    outputData(targetFront, thresholdFront);
-//    outputData(targetLeft, targetRight);
-//    outputData(thresholdSide);
-//    Serial.print("\n");
-//    wait -= 500;
-//  }
-  newSolveRightHand();
-//  delay(200);
-
-
-//void loop(){
-//step();
- //floodfill();
-  //analyzePosition();
-
-
+  if (rightHand) {
+    newSolveRightHand();
+  }
+  else {
+    step();
+    floodfill();
+    analyzePosition();
+  }
 }
 
 void outputData(double data) {
@@ -178,10 +179,10 @@ void calibrateTargetValues() {
   resetSpeedProfile();
   targetRight = sensors.rightPTReading;
   targetLeft = sensors.leftPTReading;
-  thresholdSide = (targetRight + targetLeft) / 7.5;
+  thresholdSide = (targetRight + targetLeft) / 6; // 7.5
   turnRightEncoderTicks();
   targetFront = sensors.frontPTReading;
-  thresholdFront = targetFront / 10;
+  thresholdFront = targetFront / 12;  // 10
   turnLeftEncoderTicks();
 }
 
