@@ -7,7 +7,7 @@ With thanks to: Andrew Nava and Emilio Barreiro
 ##Competitions
 + 3rd place at UCR Micromouse Competition (April 3rd)
 + 4th place at IEEE Region 6 Micromouse Competition at CSU Long Beach  (April 17)
-+ Will compete at UCLA All-American Micromouse Competition (May 1)
++ 3rd place at UCLA All-America Micromouse Competition (May 1)
 + Will compete at UCSD California Micromouse Competition (May 15)
   
 ##How It Works: Introduction
