@@ -4,9 +4,11 @@
 #include "../inc/State.h"
 #include "../inc/pwm.h"
 #include "../inc/Buzzer.h"
+#include "../inc/pwm.h"
 
 int facing = 0;
 
+extern bool rightHand;
 extern Sensors sensors;
 Cell liveMaze[16][16];
 CellStack floodStack;
@@ -140,12 +142,12 @@ void floodfill(){
 }
 
 void analyzePosition(){
-  if( ((Xpos == 7)||(Xpos == 8)) && ((Ypos == 7)||(Ypos==8)) ){
+  if( ((xPos == 7)||(xPos == 8)) && ((yPos == 7)||(yPos==8)) ){
     delay(1000);
     playTone(1000, 50);
     delay(1000);
   }
-  
+
   int minDistance = 99;
   int minPosition = -1;
   //Grabbing Minimum Distance
@@ -227,13 +229,15 @@ void analyzePosition(){
     }
   }
 
-//  if(minPosition == -1){    //ERROR SAFEGAURD
-//      halt();
-//      tone(speaker, 500);
-//      delay(1000);
-//      mode = 1;
-//      noTone(speaker);
-//  }
+ if(minPosition == -1){    //ERROR SAFEGAURD
+    turnMotorENOff;
+     playTone(500, 1000);
+     delay(1000);
+     rightHand = true;
+     printLiveMaze();
+     turnMotorENOn;
+     resetSpeedProfile();
+ }
 //while(!Serial1.available()){}
 //Serial1.read();
   //Turn mouse here

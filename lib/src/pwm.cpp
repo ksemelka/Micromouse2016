@@ -485,14 +485,6 @@ void goForwardDist(int dist) {
       wait -= 20;
     }
   }
-  targetSpeedX = -2;
-  useSensors = false;
-  while (distanceLeftX < 0) {
-    if (wait > 20) {
-      Serial1.println(distanceLeftX);
-      wait -= 20;
-    }
-  }
   if (wallToTheFront() && sensors.frontPTReading < targetFront) {
     useSensors = true;
     elapsedMillis wait1;
@@ -503,11 +495,21 @@ void goForwardDist(int dist) {
         wait -= 20;
       }
       targetSpeedX = 5;
-      if (wait1 > 1000) {
+      if (wait1 > 2000) {
         break;
       }
     }
     useSensors = false;
+  }
+  else {
+    targetSpeedX = -2;
+    useSensors = false;
+    while (distanceLeftX < 0) {
+      if (wait > 20) {
+        Serial1.println(distanceLeftX);
+        wait -= 20;
+      }
+    }
   }
   }
   else {
