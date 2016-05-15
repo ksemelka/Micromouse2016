@@ -31,7 +31,7 @@ int rightBaseSpeed = 0;
 double encoderFeedbackX = 0;
 double encoderFeedbackW = 0;
 double sensorFeedback = 0;
-double a_scale = 200;
+double a_scale = 50;
 bool useSensors = false;
 double kpX = .4;
 double kpW = 1;
@@ -492,6 +492,22 @@ void goForwardDist(int dist) {
       Serial1.println(distanceLeftX);
       wait -= 20;
     }
+  }
+  if (wallToTheFront() && sensors.frontPTReading < targetFront) {
+    useSensors = true;
+    elapsedMillis wait1;
+    wait1 = 0;
+    while (sensors.frontPTReading < targetFront) {
+      if (wait > 20) {
+        Serial1.println(distanceLeftX);
+        wait -= 20;
+      }
+      targetSpeedX = 5;
+      if (wait1 > 1000) {
+        break;
+      }
+    }
+    useSensors = false;
   }
   }
   else {
