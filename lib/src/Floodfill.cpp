@@ -140,6 +140,12 @@ void floodfill(){
 }
 
 void analyzePosition(){
+  if( ((Xpos == 7)||(Xpos == 8)) && ((Ypos == 7)||(Ypos==8)) ){
+    delay(1000);
+    playTone(1000, 50);
+    delay(1000);
+  }
+  
   int minDistance = 99;
   int minPosition = -1;
   //Grabbing Minimum Distance

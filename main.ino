@@ -34,6 +34,7 @@ void setup() {
   Serial1.begin(9600);
   Serial1.print("Starting...\n");
   turnMotorENOff;
+  
   while (sensors.frontPTReading < 500) {  // Wait to enter loop
     turnLEDOn();
   }
@@ -47,6 +48,100 @@ void setup() {
       playTone(150, 50);
       delay(500);
   }
+
+  if (sensors.leftPTReading > 550) {
+      playTone(1000, 50);
+      delay(200);
+      playTone(2000, 50);
+      delay(200);
+      playTone(1000, 50);
+      delay(200);
+      delay(2000);
+  
+    while(sensors.frontPTReading < 500){
+      //outputData(encoderValueLeft);
+      //delay(100);
+
+      if((encoderValueLeft > -250) && (encoderValueLeft <250)){
+//        Serial.println("C2");
+        playTone(527, 100);
+      }
+      
+      if((encoderValueLeft >= 250) && (encoderValueLeft <500)){
+//        Serial.println("D");
+        playTone(470, 100);
+      }
+      
+      if((encoderValueLeft >= 500) && (encoderValueLeft <750)){
+//        Serial.println("E");
+        playTone(419, 100);
+      }
+      
+      if((encoderValueLeft >= 750) && (encoderValueLeft <1000)){
+//        Serial.println("F");
+        playTone(395, 100);
+      }
+      
+      if((encoderValueLeft >= 1000) && (encoderValueLeft <1250)){
+//        Serial.println("G");
+        playTone(352, 100);
+      }
+      
+      if((encoderValueLeft >= 1250) && (encoderValueLeft <1500)){
+//        Serial.println("A");
+        playTone(314, 100);
+      }
+      
+      if((encoderValueLeft >= 1500) && (encoderValueLeft <1750)){
+//        Serial.println("B");
+        playTone(279, 100);
+      }
+      
+      if(encoderValueLeft >= 1750){
+//        Serial.println("CHigh");
+        playTone(264, 100);
+      }
+      
+    
+ if((encoderValueLeft > -500) && (encoderValueLeft <=-250)){
+//        Serial.println("Bminus");
+        playTone(559, 100);
+      }
+      
+      if((encoderValueLeft > -750) && (encoderValueLeft <=-500)){
+//        Serial.println("Aminus");
+        playTone(627, 100);
+      }
+      
+      if((encoderValueLeft > -1000) && (encoderValueLeft <=-750)){
+//        Serial.println("Gminus");
+        playTone(704, 100);
+      }
+      
+      if((encoderValueLeft > -1250) && (encoderValueLeft <=-1000)){
+//        Serial.println("Fminus");
+        playTone(790, 100);
+      }
+      
+      if((encoderValueLeft > -1500) && (encoderValueLeft <=-1250)){
+//        Serial.println("Eminus");
+        playTone(837, 100);
+      }
+      
+      if((encoderValueLeft > -1750) && (encoderValueLeft <=-1500)){
+//        Serial.println("D");
+        playTone(940, 100);
+      }
+      
+      if(encoderValueLeft <= -1750){
+//        Serial.println("CLow");
+        playTone(1055, 100);
+      }
+      
+    }
+
+  }
+  
   chirp();
   delay(1000);
   turnMotorENOn;
@@ -54,6 +149,9 @@ void setup() {
   wait = 0;
   startTone();
 }
+
+
+
 
 void loop() {
   if (rightHand) {
