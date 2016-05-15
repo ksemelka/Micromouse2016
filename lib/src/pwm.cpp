@@ -493,6 +493,22 @@ void goForwardDist(int dist) {
       wait -= 20;
     }
   }
+  if (wallToTheFront() && sensors.frontPTReading < targetFront) {
+    useSensors = true;
+    elapsedMillis wait1;
+    wait1 = 0;
+    while (sensors.frontPTReading < targetFront) {
+      if (wait > 20) {
+        Serial1.println(distanceLeftX);
+        wait -= 20;
+      }
+      targetSpeedX = 5;
+      if (wait1 > 1000) {
+        break;
+      }
+    }
+    useSensors = false;
+  }
   }
   else {
     while (distanceLeftX > 0) {
