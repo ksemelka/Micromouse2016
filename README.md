@@ -8,7 +8,7 @@ With thanks to: Andrew Nava and Emilio Barreiro
 + 3rd place at UCR Micromouse Competition (April 3rd)
 + 4th place at IEEE Region 6 Micromouse Competition at CSU Long Beach  (April 17)
 + 3rd place at UCLA All-America Micromouse Competition (May 1)
-+ Will compete at UCSD California Micromouse Competition (May 15)
++ 4th place/Best Beginner at UCSD California Micromouse Competition (May 15)
   
 ##How It Works: Introduction
 At the most basic, our "mouse" is really just a few motors being told how to rotate by a microcontroller. We make the motors turn forwards at the same rate, while correcting their movement using the information given to us by IR sensors. The sensors work by capturing the intensity of infrared light reflected back at the sensors from our LEDs emitting light at the walls of the maze. From this information, we can tell how far our mouse is from the walls to the front, left, and right, and we can use this correct our position. We can also tell if there is a wall or not in a certain direction. 
